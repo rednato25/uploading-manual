@@ -1,0 +1,118 @@
+---
+title: How to read MediaInfo
+description: MediaInfo tells you what is really inside a file. Here are the lines that matter for remuxes and encodes, and what normal values look like.
+sidebar:
+  order: 50
+level: beginner
+tools: ['MediaInfo']
+---
+
+import { Aside, Tabs, TabItem } from '@astrojs/starlight/components';
+import Shot from '../../../components/Shot.astro';
+
+MediaInfo reads a video file and lists every track in it. Trackers ask for it with every upload, and moderators read it before they read anything else.
+
+Get it from [mediaarea.net](https://mediaarea.net/en/MediaInfo). In the program, choose **View → Text** to see the plain text version used on this page.
+
+<Shot
+  name="basics/02-mediainfo-text-view.png"
+  alt="MediaInfo Text view showing the complete track list for a video file"
+  caption="MediaInfo in Text view. This is the text trackers ask you to paste."
+/>
+
+## A remux and an encode, side by side
+
+<Tabs>
+<TabItem label="1080p remux">
+
+```txt {5,9,11,19,20,22,26}
+General
+Format                                   : Matroska
+File size                                : 29.8 GiB
+Duration                                 : 2 h 14 min
+Overall bit rate                         : 31.8 Mb/s
+
+Video
+ID                                       : 1
+Format                                   : AVC
+Format profile                           : High@L4.1
+Bit rate                                 : 27.1 Mb/s
+Width                                    : 1 920 pixels
+Height                                   : 1 080 pixels
+Display aspect ratio                     : 16:9
+Frame rate                               : 23.976 (24000/1001) FPS
+Bit depth                                : 8 bits
+
+Audio #1
+Format                                   : DTS XLL
+Commercial name                          : DTS-HD Master Audio
+Channel(s)                               : 6 channels
+Language                                 : English
+
+Text #1
+Format                                   : PGS
+Language                                 : English
+```
+
+</TabItem>
+<TabItem label="1080p x264 encode">
+
+```txt {5,11,13,16,17}
+General
+Format                                   : Matroska
+File size                                : 9.12 GiB
+Duration                                 : 2 h 14 min
+Overall bit rate                         : 9 717 kb/s
+
+Video
+ID                                       : 1
+Format                                   : AVC
+Format profile                           : High@L4.1
+Bit rate                                 : 9 000 kb/s
+Width                                    : 1 920 pixels
+Height                                   : 800 pixels
+Frame rate                               : 23.976 (24000/1001) FPS
+Bit depth                                : 8 bits
+Writing library                          : x264 core 164 r3108 31e19f9
+Encoding settings                        : cabac=1 / ref=5 / deblock=1:-1:-1 / ... / rc=2pass / mbtree=1 / bitrate=9000 / ...
+```
+
+</TabItem>
+</Tabs>
+
+## The lines that matter
+
+| Line | What to look for |
+| --- | --- |
+| **Overall bit rate** | Total of all tracks. A quick size check. |
+| **Format** (Video) | `AVC` is H.264, `HEVC` is H.265. Older discs use `VC-1` or `MPEG Video` (MPEG-2). |
+| **Format profile** | `High@L4.1` for 1080p H.264. `Main 10@L5.1` is normal for 2160p HEVC. |
+| **Bit rate** (Video) | The best single quality signal. See the ranges below. |
+| **Width × Height** | The real picture size. A scope film is often 1920×800 once the black bars are cropped. |
+| **Frame rate** | `23.976` for most films. `25` for European TV, `29.97` for US TV. |
+| **Bit depth** | `8 bits` for SDR H.264. `10 bits` for HEVC and all HDR. |
+| **Writing library** and **Encoding settings** | Present on encodes made with x264 or x265. Normally absent on remuxes and WEB-DLs. |
+| **HDR format** | Only on HDR files. Shows Dolby Vision, HDR10 (SMPTE ST 2086) or HDR10+ (SMPTE ST 2094). |
+| **Audio Format / Commercial name** | `DTS XLL` is DTS-HD MA. `MLP FBA` is TrueHD. `MLP FBA 16-ch` is TrueHD with Atmos. |
+| **Language** | Every track should have one. A missing language is a common rejection reason. |
+
+## What normal bitrates look like
+
+The ranges are not rules. Old or long films sit lower.
+
+| Release | Typical video bitrate |
+| --- | --- |
+| 1080p Blu-ray remux (AVC) | 20 to 40 Mb/s |
+| 2160p UHD remux (HEVC) | 40 to 100 Mb/s |
+| 1080p x264 encode | 6 to 15 Mb/s |
+| 2160p x265 encode | 15 to 40 Mb/s |
+| 1080p WEB-DL | 4 to 10 Mb/s |
+| 2160p WEB-DL | 12 to 25 Mb/s |
+
+<Aside type="caution" title="A remux with Encoding settings is almost never a remux">
+  If MediaInfo shows an x264 or x265 settings line on a file called REMUX, someone re-encoded it. The rare exception is a disc that was itself authored with x264, and then the bitrate will still be at disc level.
+</Aside>
+
+## Check an encode in one step
+
+Paste the whole MediaInfo text into the [header checker](/tools/header-checker/). It reads the settings line for you and tells you the rate control, the likely preset, and anything a moderator would reject.

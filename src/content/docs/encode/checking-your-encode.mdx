@@ -1,0 +1,68 @@
+---
+title: Checking your encode
+description: The checks to run on a finished encode before you upload it. Settings, picture, sound and name.
+sidebar:
+  order: 40
+level: beginner
+tools: ['MediaInfo', 'mpv']
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+## Who this is for
+
+Anyone who has finished an x264 or x265 encode.
+
+## When you use this
+
+Every time, before the upload. It takes ten minutes and saves a rejected upload.
+
+## Before you start
+
+- The finished encode
+- The source it came from
+- MediaInfo
+
+## Steps
+
+<Steps>
+
+1. **Check the settings.** Copy the MediaInfo text of the encode into the [header checker](/tools/header-checker/). It must show CRF or 2-pass and no problems.
+
+   | Encoder | CRF shows | 2-pass shows |
+   | --- | --- | --- |
+   | x264 | `rc=crf` and `crf=` | `rc=2pass` and `bitrate=` |
+   | x265 | `rc=crf` and `crf=` | `rc=abr`, `bitrate=` and `stats-read=` above 0 |
+
+   x265 never writes `2pass`. An `rc=abr` line with `stats-read=0` is a 1-pass encode, which most trackers reject.
+
+2. **Check the video lines.** In MediaInfo: resolution is the cropped size, frame rate matches the source, bit depth is 8 (x264) or 10 (x265). For HDR, the mastering display values match the source.
+
+3. **Check the duration.** It must match the source to the second. A shorter file means the encode stopped early.
+
+4. **Watch the start, the middle and the end.** Look for green frames, blocks, or audio drifting from the lips.
+
+5. **Compare frames with the source.** Take screenshots of the same frames from source and encode, and compare them, for example on [slow.pics](https://slow.pics/). Look at faces, grain and dark scenes.
+
+6. **Check the name against the tracks.** Resolution, source, audio codec, channels and encoder in the name must match MediaInfo exactly.
+
+</Steps>
+
+<Aside title="Screenshots for the upload">
+  Most trackers ask for screenshots at the release's own resolution. Upload Assistant takes them for you. Pick frames with faces and detail, not black screens or credits.
+</Aside>
+
+## Stop and ask someone if
+
+- The header checker says 1-pass ABR, CBR or first pass and you did not choose that.
+- The duration is off by more than a second.
+- The encode looks clearly worse than the source in normal playback.
+
+## What good looks like
+
+The header checker is all green, durations match, playback is clean, and the name describes the file exactly.
+
+## Related
+
+- [Header checker](/tools/header-checker/)
+- [Encode checklist](/reference/checklists/#encode)

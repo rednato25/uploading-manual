@@ -1,0 +1,79 @@
+---
+title: Subtitles before upload
+description: Where to find subtitles, how to check them, and how to add them to the MKV. Many trackers require English subtitles for non-English films.
+sidebar:
+  order: 20
+level: beginner
+tools: ['Subtitle Edit', 'MKVToolNix GUI']
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+## Who this is for
+
+Anyone uploading a film or show where the main audio is not English, or where the tracker requires a subtitle track.
+
+## When you use this
+
+Before muxing the final file. Subtitles go inside the MKV, not as a separate file on the torrent page.
+
+## Before you start
+
+- The tracker's subtitle rule from the tracker page
+- [Subtitle Edit](https://www.nikse.dk/subtitleedit) and MKVToolNix
+
+## Where subtitles come from, best first
+
+| Source | Notes |
+| --- | --- |
+| The disc itself | Best timing and accuracy. PGS (image) tracks from the Blu-ray. |
+| Another release of the same edition | Check that the frame rate and cut match. |
+| Subtitle sites (Subdl, OpenSubtitles) | Quality varies. Always check sync and spelling. |
+
+## Steps
+
+<Steps>
+
+1. **Find the right subtitle** for your exact edition. Same runtime, same frame rate.
+
+2. **Open it in Subtitle Edit together with the video** (**Video → Open video file**). Check the first line, a line in the middle and the last line. They must appear when people speak.
+
+3. **Fix the sync if needed.** Use **Synchronization → Adjust all times** for a fixed offset, or **Point sync** if it drifts.
+
+4. **Save as SRT** with the language in the name, for example `film.en.srt`.
+
+5. **Add it in MKVToolNix.** Set Language to English. Set the Default flag the way the tracker asks: many want English subtitles on by default when the audio is not English.
+
+6. **Check the result:**
+
+   ```bash
+   mkvmerge -i film.mkv
+   ```
+
+</Steps>
+
+<Aside type="caution" title="Machine-made subtitles">
+  Subtitles made with speech-to-text (Whisper) or machine translation are rejected or must be labelled on many trackers. Check the rule before you use them, and say so in the description if you do.
+</Aside>
+
+## Burned-in subtitles
+
+Some sources have text burned into the picture (hardsubs). You cannot remove them. Many trackers reject non-English hardsubs. Check a frame from the middle of the film: text that is part of the picture and cannot be switched off in the player is burned in.
+
+## Silent films
+
+A silent film has no spoken audio, but its intertitles (the text cards) are in a language. If they are not in English, add an English subtitle track for them, or explain in the description why there is none.
+
+## Stop and ask someone if
+
+- The only subtitle you can find is for a different cut or frame rate.
+- The tracker's rule on forced or default subtitles is unclear for your case.
+
+## What good looks like
+
+An English (or required language) subtitle track inside the MKV, in sync from start to end, with the language set and the default flag as the tracker asks.
+
+## Related
+
+- [Fixing tracks in MKVToolNix](/remux/fixing-tracks/)
+- [Checklists](/reference/checklists/)

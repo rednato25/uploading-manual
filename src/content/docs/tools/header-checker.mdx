@@ -1,0 +1,24 @@
+---
+title: Encode header checker
+description: Paste MediaInfo or the x264/x265 settings string. See the rate control, likely preset and tune, and anything a moderator would reject.
+sidebar:
+  order: 10
+---
+
+import HeaderChecker from '../../../components/tools/HeaderChecker.vue';
+
+<HeaderChecker client:load />
+
+## What it checks
+
+- **Rate control.** CRF and 2-pass pass. 1-pass ABR, CBR, constant QP and first-pass output are flagged.
+- **x265 2-pass.** x265 writes `rc=abr` for both 1-pass and 2-pass. The checker tells them apart with `stats-read`, which is above 0 only on the final pass of a multi-pass encode.
+- **Preset (x264).** Each x264 preset sets a different `subme` value, so the checker can name the likely preset. A custom setting can fool it.
+- **Tune (x264).** Grain and film tunes leave a recognisable set of values.
+- **HDR (x265).** A PQ encode must have `hdr10` and mastering display metadata.
+
+Everything runs in your browser. Nothing is sent anywhere.
+
+## Where the rules come from
+
+The rate-control values are what x264 (`common/base.c`) and x265 (`source/common/param.cpp`) write into the file. The "usual range" warnings are rules of thumb, not tracker rules.

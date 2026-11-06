@@ -1,0 +1,7 @@
+services:
+  upload-manual:
+    build: .
+    container_name: upload-manual
+    restart: unless-stopped
+    ports:
+      - "8080:80"

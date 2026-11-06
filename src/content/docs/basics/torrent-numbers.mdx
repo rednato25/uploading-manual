@@ -1,0 +1,74 @@
+---
+title: What the numbers on a torrent mean
+description: Seeders, leechers, snatches, ratio, buffer, freeleech and hit and run, explained with what each one means for you.
+sidebar:
+  order: 20
+level: beginner
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import Shot from '../../../components/Shot.astro';
+
+Every torrent listing shows a row of numbers. Some tell you how healthy the torrent is. Others are about your own account.
+
+<Shot
+  name="basics/01-torrent-listing-row.png"
+  alt="A torrent listing row with size, seeders, leechers, snatches and age"
+  caption="A torrent row on a tracker listing. The numbers tell you how healthy the torrent is."
+/>
+
+## The torrent row
+
+| Column | What it counts | What it tells you |
+| --- | --- | --- |
+| **Size** | Total size of the files | How much counts against your download (unless it is freeleech). |
+| **Seeders** (S) | People connected right now who have the whole file and are uploading it | More seeders means a faster download. Zero seeders means nobody can give you the file. |
+| **Leechers** (L) | People connected right now who are still downloading | They are who you upload to. Many leechers and few seeders is where you earn upload fastest. |
+| **Snatches** or **Completed** (C) | How many times the torrent was fully downloaded, ever | Shows how popular it was over time. A high number with few seeders means people downloaded and left. |
+| **Age** | Time since upload | New torrents have the most leechers. |
+| **Peers** | Seeders plus leechers | Total people connected. |
+
+<Aside title="Reading health at a glance">
+  Lots of leechers and few seeders: high demand, and a good torrent to seed if you already have the file. Lots of seeders and no leechers: easy to download, but you will upload very little from it.
+</Aside>
+
+## Your account numbers
+
+| Number | Formula or meaning | Why it matters |
+| --- | --- | --- |
+| **Uploaded** | Total data you sent to others | The thing you build up. |
+| **Downloaded** | Total data you received (freeleech does not count) | The thing that costs you. |
+| **Ratio** | Uploaded ÷ Downloaded | Most trackers have a minimum, often somewhere between 0.4 and 1.0. Below it you get a warning and then lose download rights. Check the exact number on each tracker. |
+| **Buffer** | Uploaded minus Downloaded | How much you can download before your ratio drops below 1.0. A 50 GB buffer means you can grab 50 GB without going under. |
+| **Seed time** | How long you kept seeding a torrent | Many trackers require a minimum per torrent. |
+| **Seed size** | Total size of everything you seed right now | Some trackers reward this with bonus points. |
+| **Bonus points** (BP, seedbonus) | Points earned per hour of seeding | Usually spent on upload credit, freeleech tokens or invites. Large and poorly seeded torrents tend to earn more. |
+
+### A worked example
+
+You downloaded 200 GB and uploaded 150 GB.
+
+- Ratio = 150 ÷ 200 = 0.75
+- Buffer = 150 − 200 = −50 GB
+
+You are above a 0.6 minimum but below 1.0. If you now download a 40 GB remux that is not freeleech, your ratio becomes 150 ÷ 240 = 0.63. One more large download and you hit the minimum.
+
+## Torrent tags
+
+| Tag | Meaning |
+| --- | --- |
+| **Freeleech** (FL) | The download does not count. The upload still does. The cheapest way to build ratio. |
+| **50% freeleech** | Only half the size counts against you. |
+| **Double upload** (2x) | Your upload on this torrent counts twice. |
+| **Internal** | Made by the tracker's own release group. |
+| **Personal release** | The uploader made it themselves, not copied from elsewhere. |
+
+## Hit and run (HnR)
+
+A hit and run is downloading a torrent and stopping before you seeded it for the required time or ratio. Each tracker sets its own rule, for example "seed for 7 days or reach 1.0 on that torrent". Too many open HnRs and the account gets restricted.
+
+To avoid a hit and run, never delete a torrent from your client the day it finishes. Leave it seeding until the rule is met, or longer.
+
+## Uploading earns more than downloading
+
+When you upload a new release, you are the only seeder. Every leecher downloads from you, so a popular upload can earn many times its own size in the first days.

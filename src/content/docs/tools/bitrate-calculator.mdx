@@ -1,0 +1,22 @@
+---
+title: Bitrate and size calculator
+description: Turn a bitrate into a file size, or a target size into the bitrate for a 2-pass encode. Shows bits per pixel and the size tier some trackers use.
+sidebar:
+  order: 20
+---
+
+import BitrateCalculator from '../../../components/tools/BitrateCalculator.vue';
+
+<BitrateCalculator client:load />
+
+## How it works
+
+- **Size** = (video kbps + audio kbps) × seconds ÷ 8, plus about 0.5% for the MKV container.
+- **2-pass bitrate** works the same formula backwards: target size minus audio.
+- **Bits per pixel** = video bitrate ÷ (width × height × frame rate). Only useful to compare encodes of similar films at the same resolution. A grainy film needs more than a clean one.
+- **Resolution class** uses the width, so 1920×800 counts as 1080p.
+
+## Reading the result
+
+- Audio must be the total of every audio track you keep. A TrueHD 7.1 track can be 4,000 kbps or more, so read the real value from MediaInfo.
+- GB is what trackers show. GiB is what Windows calls GB. The same file shows a smaller number in Windows.

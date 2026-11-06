@@ -1,0 +1,95 @@
+---
+title: Encoding basics
+description: What CRF, 2-pass, presets, tunes, bit depth, crop and resize mean, and how to pick values with a test encode instead of guessing.
+sidebar:
+  order: 10
+level: beginner
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+An encoder takes a big source, like a 30 GB remux, and makes it smaller by throwing away detail you are unlikely to notice. Your settings decide how much it throws away and where. Read this page once before the [x264](/encode/x264/) or [x265](/encode/x265/) recipe.
+
+## x264 or x265
+
+| | x264 | x265 |
+| --- | --- | --- |
+| Produces | H.264 (AVC) | H.265 (HEVC) |
+| Speed | Fast | 3 to 10 times slower at similar settings |
+| Size for the same quality | Larger | Smaller, especially at 2160p |
+| Plays on | Everything | Most devices from the last ten years |
+| Used for | 1080p SDR from Blu-ray | 2160p, HDR, and on some trackers only from UHD sources |
+
+## Rate control: how the encoder spends bits
+
+This is the setting moderators check first.
+
+| Mode | You choose | You get | Accepted? |
+| --- | --- | --- | --- |
+| **CRF** (constant rate factor) | A quality level | Steady quality. The file size depends on the film. | Yes |
+| **2-pass** | A bitrate, so a file size | That exact size. Pass 1 studies the film, pass 2 spends bits where they help most. | Yes |
+| **1-pass ABR** | A bitrate | That size, but bits are spent badly because the encoder cannot look ahead | Rejected almost everywhere |
+| **CBR** | A fixed bitrate | Wasted bits on easy scenes, too few on hard ones | Rejected almost everywhere |
+
+At the same file size, CRF and 2-pass look about the same. Use **CRF** when you care about quality and not the exact size. Use **2-pass** when you need a set size or must stay under a tracker's size tier.
+
+### Reading CRF values
+
+- Lower CRF means better quality and a bigger file.
+- With x264, raising CRF by about 6 roughly halves the bitrate.
+- Usual release range: x264 at 1080p, 16 to 22. x265, 16 to 22 as well, but the same number does not mean the same quality as x264.
+
+## Preset: how hard the encoder works
+
+Presets go from `ultrafast` to `placebo`. Slower presets find better ways to compress, so you get a smaller file at the same quality, or better quality at the same size.
+
+For releases use **slow** as a minimum. **slower** and **veryslow** help a little more and take much longer. `placebo` takes far longer for almost no gain.
+
+## Tune: what kind of picture
+
+| Tune | Use for |
+| --- | --- |
+| `film` | Most live-action films (x264) |
+| `grain` | Films with heavy grain. Keeps the grain instead of smoothing it into blotches. |
+| `animation` | Cartoons and anime (x264) |
+| none | Fine for most x265 encodes. x265 has `grain` and `animation` too. |
+
+## Bit depth
+
+- **x264**: 8-bit. 10-bit H.264 plays on very few devices.
+- **x265**: always 10-bit, even for SDR. It reduces banding in skies and dark scenes at no cost.
+
+## Crop: remove the black bars
+
+Most films are wider than 16:9, so the disc adds black bars above and below. Encoding black bars wastes bits. Crop them before you encode.
+
+- Crop to the edge of the picture, not into it.
+- Keep width and height even numbers.
+- Check a dark scene and a bright scene. Some films change aspect ratio.
+- Some discs have a thin dark line at the edge (a dirty line). Do not crop into the picture to remove it unless you know what you are doing.
+
+Typical results: a 2.39:1 film on a 1080p disc becomes about 1920×800. A 1.85:1 film becomes about 1920×1040.
+
+## Resize: only down, never up
+
+- 1080p Blu-ray to 1080p encode: no resize.
+- UHD to 1080p encode: resize to 1920 wide, keeping the aspect ratio. Use a good resizer such as Spline36.
+- Never upscale. A 1080p source made into a 2160p file is a fake and gets rejected.
+
+## Filters: none by default
+
+A clean Blu-ray needs no denoising, sharpening or deinterlacing. Those filters remove grain and detail. Turn every filter off except crop, and only add one when you can name the problem it fixes.
+
+## Pick settings with a test encode
+
+Do not copy a bitrate from someone else. Every film compresses differently.
+
+1. Encode a sample of the film at CRF 18 and CRF 20. A sample is a few minutes made from short clips spread across the film. StaxRip and most tools can do this.
+2. Take screenshots of the same frames from the source and from each sample.
+3. Compare them side by side, for example on [slow.pics](https://slow.pics/). Look at faces, skin, grain, dark scenes and fast motion.
+4. Pick the highest CRF that still looks like the source to you.
+5. If the tracker has size tiers, put the sample's bitrate into the [bitrate calculator](/tools/bitrate-calculator/) to see where the full film lands.
+
+<Aside title="Checking your encode">
+  When the encode is done, paste its MediaInfo into the [header checker](/tools/header-checker/). It confirms the rate control and catches the settings moderators reject.
+</Aside>

@@ -1,0 +1,65 @@
+---
+/**
+ * Page title plus a small meta line: verification state, tools, video.
+ * Splash pages (the home page) get the plain title only.
+ */
+import Default from '@astrojs/starlight/components/PageTitle.astro';
+
+const { entry } = Astro.locals.starlightRoute;
+const data = entry.data as typeof entry.data & {
+  tools?: string[];
+  verifiedOn?: Date;
+  video?: string;
+};
+
+const STALE_DAYS = 180;
+const fmt = (d: Date) => d.toISOString().slice(0, 10);
+const tools = data.tools ?? [];
+const hasTools = tools.length > 0;
+const verified = data.verifiedOn;
+const ageDays = verified ? Math.floor((Date.now() - verified.getTime()) / 86_400_000) : null;
+const stale = ageDays !== null && ageDays > STALE_DAYS;
+const isSplash = data.template === 'splash';
+
+const summary = [
+  verified ? `Verified ${fmt(verified)}.` : 'Not verified yet.',
+  hasTools ? `Uses ${tools.join(', ')}.` : '',
+]
+  .filter(Boolean)
+  .join(' ');
+const hasMeta = Boolean(verified || hasTools);
+---
+
+<Default />
+{
+  !isSplash && (hasMeta || data.video) && (
+    <div class="page-meta not-content">
+      {hasMeta && (
+        <span>
+          {summary}
+          {stale && <span class="recheck"> Re-check: verified {ageDays} days ago.</span>}
+        </span>
+      )}
+      {data.video && (
+        <a href={data.video} target="_blank" rel="noreferrer">
+          Watch the walkthrough
+        </a>
+      )}
+    </div>
+  )
+}
+
+<style>
+  .page-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.75rem;
+    align-items: baseline;
+    margin-top: 0.75rem;
+    font-size: var(--sl-text-sm);
+    color: var(--sl-color-gray-3);
+  }
+  .recheck {
+    color: var(--sl-color-orange-high);
+  }
+</style>

@@ -1,0 +1,81 @@
+---
+title: Finding a good remux
+description: How to pick the best disc for a film, and how to check a remux file for the problems that make it a bad source.
+sidebar:
+  order: 10
+level: beginner
+tools: ['MediaInfo', 'blu-ray.com', 'DVDCompare', 'caps-a-holic']
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+
+## Who this is for
+
+Anyone about to upload a remux, or about to use one as the source for an encode.
+
+## When you use this
+
+Before you download, buy or rip anything. A bad source wastes every hour you put in after it.
+
+## Before you start
+
+- The film's IMDb or TMDb ID
+- [MediaInfo](https://mediaarea.net/en/MediaInfo) installed
+- The [MediaInfo guide](/basics/mediainfo/) read once
+
+## Steps
+
+### Part 1: pick the best disc
+
+<Steps>
+
+1. **List the discs that exist.** Search the film on [blu-ray.com](https://www.blu-ray.com/). Note every Blu-ray and UHD release, the label (Criterion, Arrow, BFI, Kino and so on), country and year.
+
+2. **Find out which ones differ.** Open the film on [DVDCompare](https://www.dvdcompare.net/). It lists runtime, audio tracks, subtitles and extras for each edition. Two discs with different runtimes can be different cuts, or one may run at 25 fps (PAL speed-up). Use the runtime to tell them apart.
+
+3. **Compare the picture.** Check [caps-a-holic](https://caps-a-holic.com/) for screenshot comparisons. Look for: newer restoration, no heavy noise removal (waxy faces), no edge sharpening (halos around edges), correct colours.
+
+4. **Read the blu-ray.com review.** The video and audio sections say if the transfer has problems. A score is less useful than the text.
+
+5. **Pick one.** Usually the newest restoration from a respected label. If the UHD and the Blu-ray use the same master, the UHD is the better source for encodes.
+
+</Steps>
+
+### Part 2: check the remux file
+
+Open the file in MediaInfo (**View → Text**) and go through this list.
+
+| Check | Good | Red flag |
+| --- | --- | --- |
+| Video format | `AVC`, `HEVC`, `VC-1` or `MPEG Video` | Anything else |
+| Encoding settings line | Absent | An x264 or x265 settings line. Someone re-encoded it. |
+| Video bitrate | 1080p: about 20 to 40 Mb/s. UHD: about 40 to 100 Mb/s. | Far below the range for no reason, for example 1080p at 8 Mb/s |
+| Resolution | 1920×1080 or 3840×2160, black bars included | Cropped. A remux keeps the full frame. |
+| HDR (UHD) | `HDR format` line present, matches the disc (HDR10 or Dolby Vision) | Missing on a UHD remux. Possibly stripped or a fake upscale. |
+| Main audio | Lossless: TrueHD, DTS-HD MA, LPCM or FLAC | Only lossy audio (AC3, DTS core) when the disc has lossless |
+| Audio tracks | Original language present. Original mix present for old films (often mono or 2.0). | Only a dub, or only a new 5.1 remix when the disc has the original mono |
+| Subtitles | PGS tracks from the disc, each with a language | Missing languages, or burned-in text |
+| Chapters | Present | Missing (minor, but a sign of a sloppy rip) |
+| Duration | Matches DVDCompare for that edition | Off by minutes: a different cut, or a broken file |
+
+Paste the same MediaInfo text into the [remux checker](/tools/remux-checker/) to run these checks automatically.
+
+### Part 3: watch it for one minute
+
+Skip to three places: the start, the middle and the last minutes. Check that picture and sound play, that audio is in sync with lips, and that nothing is cut off at the end.
+
+## Stop and ask someone if
+
+- Two discs have the same label but different runtimes and you cannot tell which cut is which.
+- MediaInfo shows a Dolby Vision profile you have not seen before.
+- The tracker already has a remux of this film and you are not sure yours is a different slot.
+
+## What good looks like
+
+A remux of the best available disc, with untouched video, lossless original audio, every subtitle track with a language, chapters, and a runtime that matches the edition.
+
+## Related
+
+- [Making a remux from a disc](/remux/making-a-remux/)
+- [Source types](/basics/source-types/)
+- [Remux checklist](/reference/checklists/#remux)

@@ -1,0 +1,64 @@
+---
+title: Checklists before upload
+description: One checklist per release type, plus the checks that apply to every upload. Each line has rejected an upload before.
+sidebar:
+  order: 10
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+Go through **Every upload** first, then the list for your release type. Tracker-specific rules are on each tracker page.
+
+## Every upload
+
+| # | Check | How |
+| --- | --- | --- |
+| 1 | The slot is free | Search the tracker by IMDb or TMDb ID. Compare resolution, codec, HDR, edition and tier. |
+| 2 | One `.mkv`, no folder (for single films) | Look at what you are about to upload |
+| 3 | Files not renamed, site title follows the tracker's naming rules | Original file name in qBittorrent, tracker page for the title format |
+| 4 | Name matches the tracks | Resolution, source, audio codec, channels and codec in the name match MediaInfo |
+| 5 | Every track has a language | MediaInfo |
+| 6 | Subtitle rules met | English subtitle inside the MKV if the tracker needs it |
+| 7 | Duration matches the edition | Compare with DVDCompare or TMDb |
+| 8 | The group is not banned on this tracker | Tracker's banned group list |
+| 9 | The file stays where it is | qBittorrent seeds from the upload path |
+
+## Remux
+
+| # | Check | How |
+| --- | --- | --- |
+| 1 | No x264 or x265 settings in the video | MediaInfo, Video section |
+| 2 | Full frame, black bars kept | 1920×1080 or 3840×2160 |
+| 3 | Video bitrate at disc level | About 20 to 40 Mb/s (1080p), 40 to 100 Mb/s (UHD) |
+| 4 | Main audio lossless where the disc has it, in the format the tracker requires (see the tracker page) | MediaInfo, then the tracker page |
+| 5 | Original audio mix kept | Mono or 2.0 originals on older films |
+| 6 | HDR present on UHD | `HDR format` line in MediaInfo |
+| 7 | Chapters present | MediaInfo, Menu section |
+
+## Encode
+
+| # | Check | How |
+| --- | --- | --- |
+| 1 | Source was a remux or disc, never another encode | You know where it came from |
+| 2 | Settings line present | MediaInfo shows Encoding settings |
+| 3 | CRF or 2-pass | [Header checker](/tools/header-checker/) |
+| 4 | Preset slow or slower | Header checker (x264) |
+| 5 | Cropped, even dimensions | MediaInfo width and height |
+| 6 | Not upscaled | Resolution is not higher than the source |
+| 7 | x265 from UHD if the tracker requires it | Your source |
+| 8 | HDR metadata matches the source (HDR encodes) | Compare MediaInfo of both |
+| 9 | Frames compared with the source | Screenshots side by side |
+| 10 | Size tier is the one you meant | [Bitrate calculator](/tools/bitrate-calculator/) |
+
+## WEB-DL
+
+| # | Check | How |
+| --- | --- | --- |
+| 1 | Untouched, as the service sent it | No x264/x265 settings, or the service's own |
+| 2 | Service named in the release name | `NF`, `AMZN`, `ATVP` and so on |
+| 3 | No burned-in subtitles in another language | Check a frame with dialogue |
+| 4 | Complete: no missing seconds at start or end | Watch the first and last minute |
+
+<Aside type="caution" title="Before you delete anything">
+  If your downloads and library share files through hard links, deleting one name does not free space, and writing over one name changes all of them. Check the link count first (`stat -c %h file` on Linux).
+</Aside>

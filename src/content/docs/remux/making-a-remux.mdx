@@ -1,0 +1,102 @@
+---
+title: Making a remux from a disc
+description: Rip the main film from a Blu-ray or UHD with MakeMKV, then clean up the tracks in MKVToolNix. No re-encoding at any point.
+sidebar:
+  order: 20
+level: beginner
+tools: ['MakeMKV', 'MKVToolNix GUI', 'MediaInfo']
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+import Shot from '../../../components/Shot.astro';
+
+## Who this is for
+
+Anyone with a Blu-ray, a UHD, or a full disc folder (BDMV or ISO) who wants a remux.
+
+## When you use this
+
+When the remux slot for the film is free, or when you need a clean source for an encode.
+
+## Before you start
+
+- [MakeMKV](https://www.makemkv.com/) (UHD discs need a compatible drive)
+- [MKVToolNix](https://mkvtoolnix.download/)
+- Free disk space: about twice the size of the disc
+- The film's runtime for this edition, from [DVDCompare](https://www.dvdcompare.net/)
+
+## Steps
+
+<Steps>
+
+1. **Open the source in MakeMKV.** A physical disc shows up on its own. For a folder, use **File → Open files** and pick `index.bdmv` inside the `BDMV` folder. For an ISO, open the ISO.
+
+2. **Find the main title.** MakeMKV lists every title with its length and size. The film is usually the longest one. If several titles have almost the same length, they are different cuts or decoy playlists. Pick the one whose runtime matches DVDCompare for your edition, and check that its chapter count is plausible.
+
+   <Shot
+     name="remux/03-makemkv-title-list.png"
+     alt="MakeMKV title list with runtime, size and chapter count"
+     caption="MakeMKV lists each title with its runtime, size and chapter count. Pick the one that matches the edition."
+   />
+
+3. **Untick everything else.** Keep only the main title.
+
+4. **Choose the tracks.** Expand the title. Keep:
+   - the video track (on UHD with Dolby Vision, keep everything MakeMKV lists under video)
+   - the original language audio, in its best format
+   - the original mix of old films, even if it is mono
+   - commentaries if you want them and the tracker allows them
+   - subtitle tracks you want to keep
+
+   Untick dubs you do not need. Each tracker has its own rule on which audio tracks are allowed, so check the tracker page.
+
+   <Shot
+     name="remux/04-makemkv-track-list.png"
+     alt="MakeMKV track list for the main title with video, audio and subtitle tracks"
+     caption="The track list inside the main title. Untick dubs and tracks you do not need."
+   />
+
+5. **Make the MKV.** Set the output folder and press **Make MKV**. This takes about as long as reading the disc.
+
+6. **Check the audio format.** Open the new file in MediaInfo. If a PCM track is mono or stereo, convert it to FLAC (step 7). For 5.1 or 7.1 PCM, the format depends on the tracker. Some trackers do not accept FLAC above 2.0. Check the tracker comparison. If everything is TrueHD, DTS-HD MA or already FLAC, skip to step 8.
+
+7. **Convert mono or stereo PCM to FLAC.** FLAC is lossless, so nothing is lost, and the file gets smaller. For 5.1 or 7.1 PCM, use the format the tracker requires. See the tracker comparison. With eac3to on Windows (track 2 here; eac3to lists the numbers when you run it with only the file name):
+
+   ```bash
+   eac3to "film.mkv" 2: "audio.flac"
+   ```
+
+   Or with ffmpeg, for the first audio track:
+
+   ```bash
+   ffmpeg -i film.mkv -map 0:a:0 -c:a flac -compression_level 8 audio.flac
+   ```
+
+8. **Clean up in MKVToolNix.** Add the MKV (and the `.flac` if you made one, unticking the old PCM track). For every track:
+   - set **Language**
+   - set **Track name** if useful, for example `Commentary with the director`
+   - set **Default track flag**: yes for the main video, main audio and (if needed) one subtitle track; no for the rest
+
+   Clear the **File title** field on the Output tab, or set it to the release name.
+
+9. **Name the output** with the release name from the [naming guide](/basics/release-names/) and press **Start multiplexing**.
+
+10. **Check the result** with the remux table in [Finding a good remux](/remux/finding-a-good-remux/#part-2-check-the-remux-file).
+
+</Steps>
+
+## Stop and ask someone if
+
+- MakeMKV shows dozens of titles with the same length. The disc uses decoy playlists, and picking the wrong one gives you scenes in the wrong order.
+- MediaInfo shows Dolby Vision on the source but not on your remux.
+- The runtime of your file does not match any edition on DVDCompare.
+
+## What good looks like
+
+One MKV with the untouched video, the original audio in lossless format, every kept track labelled with a language, sensible default flags, chapters, and a runtime that matches the edition.
+
+## Related
+
+- [Fixing tracks in MKVToolNix](/remux/fixing-tracks/)
+- [Audio: what to keep](/audio-subs/audio/)
+- [Remux checklist](/reference/checklists/#remux)

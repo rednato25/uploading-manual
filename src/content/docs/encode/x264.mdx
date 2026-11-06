@@ -1,0 +1,100 @@
+---
+title: x264 encode in StaxRip
+description: Step by step 1080p x264 encode from a Blu-ray remux, with settings, the filter traps and the checks to run before uploading.
+sidebar:
+  order: 20
+level: beginner
+tools: ['StaxRip 2.52', 'MediaInfo']
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+import Shot from '../../../components/Shot.astro';
+
+## Who this is for
+
+Anyone making a 1080p encode from a 1080p Blu-ray remux.
+
+## When you use this
+
+When the 1080p x264 slot is free on the tracker and you have a good remux. Read [Encoding basics](/encode/encoding-basics/) first.
+
+## Before you start
+
+- [StaxRip](https://github.com/staxrip/staxrip) installed
+- A remux that passed [Finding a good remux](/remux/finding-a-good-remux/)
+- The tracker's encode rules from the tracker page
+- Your CRF or bitrate, picked with a test encode
+
+## Settings
+
+| Setting | Value | Why |
+| --- | --- | --- |
+| Encoder | x264 | |
+| Rate control | CRF from your test (often 17 to 20), or 2-pass at the bitrate from the [calculator](/tools/bitrate-calculator/) | Both are accepted. 1-pass ABR and CBR are not. |
+| Preset | slow or slower | Faster presets waste bits |
+| Tune | film, or grain for grainy films | See [tunes](/encode/encoding-basics/#tune-what-kind-of-picture) |
+| Profile, level | High, 4.1 | Plays on everything that does 1080p |
+| Bit depth | 8-bit | 10-bit H.264 has poor device support |
+| Crop | On, to the picture edge | Black bars waste bits |
+| Resize | Off | Source is already 1080p |
+| Other filters | All off | No denoise, no deinterlace on progressive film |
+
+## Steps
+
+<Steps>
+
+1. **Load the remux.** Drag it into StaxRip.
+
+2. **Pick x264** from the video encoder menu and open its options.
+
+   <Shot
+     name="encode/06-staxrip-x264-options.png"
+     alt="StaxRip x264 options window with rate control, preset, tune, profile and level"
+     caption="The StaxRip x264 options. Set CRF or two pass, preset, tune, profile and level here."
+   />
+
+3. **Set rate control.** Choose CRF and type your value, or choose two pass and type the bitrate in kbps.
+
+4. **Set preset, tune, profile and level** as in the table.
+
+5. **Check the filters.** Open the filter list. Only Source and Crop should be on.
+
+   <Aside type="danger" title="StaxRip can switch filters on for you">
+     Depending on the profile, StaxRip may start with a deinterlace filter (Field, for example QTGMC) and a denoise filter (Noise, for example DFTTest). On a progressive Blu-ray, deinterlacing damages the picture and denoising removes the grain. Turn both off.
+   </Aside>
+
+6. **Crop.** Run auto crop, then step through a dark and a bright scene in the preview. Fix by hand if a bar is left or picture is cut.
+
+   <Shot
+     name="encode/07-staxrip-crop-filter-list.png"
+     alt="StaxRip filter list with only Source and Crop enabled"
+     caption="The StaxRip filter list. Only Source and Crop should be enabled."
+   />
+
+7. **Set the audio.** Follow the tracker's audio rule. Copy (mux) the track as it is, or convert it as required. Write down the final audio format, because the file name must match it.
+
+8. **Set subtitles.** Keep the tracks the tracker requires, with languages set.
+
+9. **Set the target file name** with the release name. If the audio is FLAC 2.0, the name says `FLAC.2.0`, not `AAC.2.0`.
+
+10. **Start the encode.** A 2-hour film at preset slow takes about an hour per pass on a modern 12-core CPU.
+
+11. **Check the encode** with the [checking guide](/encode/checking-your-encode/) before uploading.
+
+</Steps>
+
+## Stop and ask someone if
+
+- Auto crop gives an odd number, or very different results in different scenes.
+- The film switches between aspect ratios (some IMAX films do).
+- The source is interlaced or 25 fps when the film should be 23.976.
+
+## What good looks like
+
+MediaInfo shows `x264`, `High@L4.1`, the cropped resolution, and `rc=crf` or `rc=2pass` in the settings. The [header checker](/tools/header-checker/) shows no problems. The file name matches every track in the file.
+
+## Related
+
+- [Encoding basics](/encode/encoding-basics/)
+- [x265 encode](/encode/x265/)
+- [Encode checklist](/reference/checklists/#encode)

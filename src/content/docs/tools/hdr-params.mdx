@@ -1,0 +1,28 @@
+---
+title: HDR parameters for x265
+description: Paste the MediaInfo of a UHD source and get the x265 settings that carry its HDR10 metadata into your encode.
+sidebar:
+  order: 30
+---
+
+import { Aside } from '@astrojs/starlight/components';
+import HdrParams from '../../../components/tools/HdrParams.vue';
+
+<HdrParams client:load />
+
+## What it reads
+
+| MediaInfo line | Becomes |
+| --- | --- |
+| Transfer characteristics: PQ | `--transfer smpte2084` and the HDR10 flags |
+| Mastering display color primaries | The colour part of `--master-display` |
+| Mastering display luminance | The `L(max,min)` part of `--master-display` |
+| Maximum Content Light Level, Maximum Frame-Average Light Level | `--max-cll "MaxCLL,MaxFALL"` |
+| Chroma subsampling: 4:2:0 (Type 2) | `--chromaloc 2` |
+| Color range | `--range` |
+
+x265 wants the colour coordinates in steps of 0.00002 and the brightness in steps of 0.0001 cd/m². So a green x of 0.265 becomes 13250, and 1000 cd/m² becomes 10000000.
+
+<Aside type="caution">
+  This gives an HDR10 encode. Dolby Vision and HDR10+ in the source are not carried over. The tool tells you when the source has them.
+</Aside>

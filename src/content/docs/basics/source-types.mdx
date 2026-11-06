@@ -1,0 +1,49 @@
+---
+title: Source types, best to worst
+description: Full disc, remux, encode, WEB-DL, WEBRip, HDTV and DVD. What each one is and where it sits in quality.
+sidebar:
+  order: 40
+level: beginner
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+Quality only goes down as you move away from the original master. Every step below loses something, and nothing you do later can bring it back.
+
+## The ladder
+
+| Type | What it is | Typical size, 2-hour film | Quality |
+| --- | --- | --- | --- |
+| **Full disc** (BDMV, ISO) | The whole Blu-ray: menus, extras, every playlist, untouched | 25 to 50 GB (1080p), 50 to 100 GB (UHD) | Same as the disc |
+| **Remux** | The main film taken off the disc and put in an MKV. Video and audio are copied, not re-encoded. | 20 to 40 GB (1080p), 40 to 80 GB (UHD) | Same as the disc |
+| **Encode** | A remux or disc squeezed with x264 or x265 to a smaller size | 5 to 20 GB (1080p), 15 to 40 GB (UHD) | Close to the disc if done well |
+| **WEB-DL** | The file a streaming service sends, saved without changes | 4 to 10 GB (1080p), 12 to 25 GB (UHD) | Good, but the service already compressed it hard |
+| **WEBRip** | A screen capture or re-encode of a stream | Varies | Worse than WEB-DL |
+| **HDTV** | Recorded from a TV broadcast | Varies | Often has logos and lower bitrate |
+| **DVD** | DVD disc or remux of one | 4 to 9 GB | Standard definition only |
+
+The sizes are typical ranges, not rules. Long films, grainy films and animation all move them.
+
+## What you can make from what
+
+| You have | You can make |
+| --- | --- |
+| Full disc | Remux, encode |
+| Remux | Encode |
+| WEB-DL | Nothing new. Upload it as it is, or not at all. |
+| Someone else's encode | Nothing. An encode made from an encode is rejected everywhere. |
+
+<Aside title="Why the source decides everything">
+  A 1080p encode from a UHD disc usually looks better than one from the 1080p Blu-ray, because the UHD often has a newer master. That is also why some trackers only allow x265 encodes from UHD sources.
+</Aside>
+
+## Editions and masters
+
+The same film can have several Blu-rays from different labels, countries or years. They can differ in:
+
+- **Master**: a 2020 4K restoration and a 2008 transfer can look like different films.
+- **Cut**: theatrical, director's cut, extended.
+- **Audio**: original mono mix or a new 5.1 remix.
+- **Region**: some editions add or remove scenes, subtitles or audio tracks.
+
+[Finding a good remux](/remux/finding-a-good-remux/) shows how to compare editions before you pick one.

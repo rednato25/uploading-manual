@@ -1,0 +1,92 @@
+---
+title: Uploading with Upload Assistant
+description: Upload Assistant writes the description, takes screenshots and makes the torrent. You check what it gets wrong.
+sidebar:
+  order: 10
+level: beginner
+tools: ['Upload Assistant', 'qBittorrent']
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+import Shot from '../../../components/Shot.astro';
+
+## Who this is for
+
+Anyone uploading a finished release with [Upload Assistant](https://github.com/Audionut/Upload-Assistant) (UA).
+
+## When you use this
+
+After the file passed the [checklist](/reference/checklists/) for its type.
+
+## Before you start
+
+- The final file in the folder qBittorrent will seed it from. Do not move it after upload.
+- UA running, with your tracker API keys in its config
+- The tracker's rules from the tracker page
+
+## Steps
+
+<Steps>
+
+1. **Add the file path.** The path to the file, not the folder. One path per line, no empty lines between them.
+
+2. **Pick the trackers** with `-tk` or the tracker selector. Until you know each tracker's rules well, upload to one tracker per run. UA applies each tracker's rules separately, and one wrong guess can fail several uploads at once.
+
+3. **Check the title UA proposes.** It must follow the tracker's naming rules (some trackers have a name builder). Remove anything that does not belong, such as an AKA title the release does not use or an extra "The". Never rename the file itself to make it match.
+
+   <Shot
+     name="trackers/08-upload-assistant-title-confirm.png"
+     alt="Upload Assistant title confirmation screen with the proposed release name"
+     caption="The Upload Assistant title screen. Check the title here before you continue."
+   />
+
+4. **Read the duplicate check.** UA lists releases already on the tracker. If one fills your slot, stop.
+
+5. **Check the screenshots.** At least three, at the release's own resolution, showing real picture, not black frames.
+
+6. **Write the description notes** (below).
+
+7. **Confirm the options:**
+
+   | Option | Set to |
+   | --- | --- |
+   | Personal release | Only if you made it yourself |
+   | Anonymous | Your choice |
+   | Don't add to torrent client | Off. You need to seed. |
+
+8. **Upload, then check qBittorrent.** The torrent must appear there and start seeding from the file's current location.
+
+</Steps>
+
+## The description: what to always add
+
+```txt
+Source: <where the source came from, with a link if there is one>
+Encode: <for encodes: x264 2-pass 9000 kbps, preset slow, tune film>
+Notes:  <anything that could look wrong to a moderator: silent film, burned-in
+         intertitles, audio language zxx, edition differences, audio conversion>
+```
+
+<Aside title="The notes line saves uploads">
+  Moderators judge what they see. If you explain up front why the audio is `zxx` or why a subtitle track is missing, they do not have to ask, and the upload does not sit in the queue.
+</Aside>
+
+## After the upload
+
+- The torrent goes into the moderation queue. That can take hours.
+- When it is approved, check that qBittorrent shows it seeding at 100%. If it shows a tracker error, wait for approval, then force a recheck.
+- Seed for at least as long as the tracker requires. More is better: you are the only seeder at the start.
+
+## Stop and ask someone if
+
+- UA's duplicate check finds a release you think is a different slot.
+- UA keeps changing the title back after you edit it.
+
+## What good looks like
+
+The torrent is approved without questions, the site title follows the naming rules, the file keeps its original name, and qBittorrent seeds it from the original location.
+
+## Related
+
+- [Checklists](/reference/checklists/)
+- Tracker comparison

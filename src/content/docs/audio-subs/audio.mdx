@@ -1,0 +1,74 @@
+---
+title: 'Audio: what to keep and how'
+description: Lossless and lossy formats, what channel numbers mean, which conversions are safe and which ones get uploads rejected.
+sidebar:
+  order: 10
+level: beginner
+tools: ['MediaInfo', 'eac3to', 'ffmpeg']
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+## Lossless and lossy
+
+**Lossless** audio keeps every bit of the original. **Lossy** audio throws some away to save space. You can always go from lossless to lossy, never back.
+
+| Lossless | Lossy |
+| --- | --- |
+| TrueHD (with or without Atmos) | Dolby Digital (DD, AC3) |
+| DTS-HD Master Audio | Dolby Digital Plus (DDP, EAC3) |
+| LPCM | DTS (core) |
+| FLAC | AAC, Opus, MP3 |
+
+## Channel numbers
+
+| Name | Speakers |
+| --- | --- |
+| 1.0 | Mono |
+| 2.0 | Stereo |
+| 5.1 | Front left, centre, front right, two surrounds, subwoofer |
+| 7.1 | 5.1 plus two rear surrounds |
+| Atmos | Height information on top of a 7.1 bed. Stored inside TrueHD or DDP. |
+
+The `.1` is the low-frequency (subwoofer) channel.
+
+## What to keep in a remux
+
+- The main track in its original lossless format. TrueHD and DTS-HD MA stay as they are.
+- LPCM converted to FLAC for mono and stereo. Same sound, smaller file. For 5.1 or 7.1, the format depends on the tracker. Some trackers do not accept FLAC above 2.0. See [making a remux](/remux/making-a-remux/) and the tracker comparison.
+- The original mix of older films, even if it is mono or 2.0. A new 5.1 remix is not a replacement for it.
+- Commentaries and dubs only if the tracker allows them.
+
+## What to keep in an encode
+
+This depends on the tracker more than anything else. Common options:
+
+- Copy the original lossless track as it is.
+- Keep a lossy track that is already on the disc, such as the DD 5.1 core.
+- Convert the lossless track to a lossy format the tracker accepts.
+
+Some trackers forbid lossless multichannel audio on 1080p encodes.
+
+Check the audio rules on the tracker page before you choose.
+
+## Conversions
+
+| From | To | OK? |
+| --- | --- | --- |
+| LPCM | FLAC | Yes for mono and stereo. For 5.1 or 7.1, check the tracker first. Some trackers do not accept FLAC above 2.0. |
+| DTS-HD MA or TrueHD | FLAC | Lossless, but most trackers prefer the original format. Only if asked. |
+| Lossless | Lossy (DDP, AAC, Opus) | Yes, for encodes, when the tracker allows it. |
+| Lossy | Another lossy format (AC3 to AAC) | No. Quality drops twice. Usually rejected as a transcode. |
+| Lossy | Lossless (AC3 to FLAC) | No. It only makes a bigger file of the same lossy sound. |
+| 5.1 | 2.0 (downmix) | Only as an extra track, never instead of the original. |
+
+## Language tags
+
+Every audio track needs a language. Two special codes:
+
+- `zxx`: no spoken language, for example a silent film's music score.
+- `und`: language unknown. Avoid it. Find out the language and set it.
+
+<Aside title="Name it the way it is">
+  The release name lists the main audio track. If you converted it, the name must say the new format. If you did not, it must say the original. A mismatch is a common rejection reason.
+</Aside>

@@ -1,0 +1,198 @@
+/* Shared styles for the interactive tools. Built on Starlight's colour variables so light and dark both work. */
+
+.tool {
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  margin-block: 1.5rem;
+  background: var(--sl-color-gray-7, var(--sl-color-black));
+}
+.tool > * + * {
+  margin-top: 0.75rem;
+}
+.tool label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: var(--sl-text-sm);
+  color: var(--sl-color-gray-2);
+}
+.tool textarea,
+.tool input,
+.tool select {
+  width: 100%;
+  font: inherit;
+  font-family: var(--sl-font-mono);
+  font-size: var(--sl-text-sm);
+  color: var(--sl-color-white);
+  background: var(--sl-color-black);
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.65rem;
+}
+.tool textarea {
+  resize: vertical;
+}
+.tool :is(textarea, input, select, button):focus-visible {
+  outline: 2px solid var(--sl-color-accent);
+  outline-offset: 1px;
+}
+.tool button {
+  font: inherit;
+  font-size: var(--sl-text-sm);
+  cursor: pointer;
+  color: var(--sl-color-white);
+  background: var(--sl-color-gray-6);
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 0.5rem;
+  padding: 0.35rem 0.75rem;
+}
+.tool button[aria-pressed='true'] {
+  border-color: var(--sl-color-accent);
+  color: var(--sl-color-accent-high);
+}
+.tool-tabs,
+.tool-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.tool-chips button {
+  font-size: var(--sl-text-xs);
+}
+.tool-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
+  gap: 0.75rem;
+}
+.tool-result {
+  border-top: 1px solid var(--sl-color-gray-5);
+  padding-top: 0.75rem;
+}
+.tool-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: 0.75rem;
+  margin: 0;
+}
+.tool-grid dt {
+  font-size: var(--sl-text-xs);
+  color: var(--sl-color-gray-3);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.tool-grid dd {
+  margin: 0.15rem 0 0;
+  font-family: var(--sl-font-mono);
+  font-size: var(--sl-text-base);
+  color: var(--sl-color-white);
+}
+.tool-findings {
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0 0;
+}
+.tool-findings li {
+  padding: 0.4rem 0;
+  margin-top: 0.4rem;
+  font-size: var(--sl-text-sm);
+}
+.tool-findings li strong {
+  margin-right: 0.35rem;
+}
+.finding-ok strong {
+  color: var(--sl-color-green-high);
+}
+.finding-warn strong {
+  color: var(--sl-color-orange-high);
+}
+.finding-bad strong {
+  color: var(--sl-color-red-high);
+}
+.verdict {
+  padding: 0.05rem 0.45rem;
+  border-radius: 0.35rem;
+  border: 1px solid currentColor;
+  font-size: var(--sl-text-sm);
+}
+.verdict-ok {
+  color: var(--sl-color-green-high);
+}
+.verdict-warn {
+  color: var(--sl-color-orange-high);
+}
+.verdict-bad {
+  color: var(--sl-color-red-high);
+}
+.tool-output {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+.tool-output code {
+  flex: 1;
+  display: block;
+  white-space: pre-wrap;
+  word-break: break-all;
+  padding: 0.6rem;
+  border-radius: 0.5rem;
+  background: var(--sl-color-black);
+  border: 1px solid var(--sl-color-gray-5);
+}
+.tool details {
+  margin-top: 0.75rem;
+}
+.tool .muted {
+  color: var(--sl-color-gray-3);
+}
+.tool .small {
+  font-size: var(--sl-text-xs);
+}
+
+/* .tool opts out of Starlight's content styles (not-content), so tables and lists inside are styled here. */
+.tool table {
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+  font-size: var(--sl-text-sm);
+}
+.tool th,
+.tool td {
+  text-align: start;
+  padding: 0.3rem 0.75rem 0.3rem 0;
+  border-bottom: 1px solid var(--sl-color-gray-6);
+  vertical-align: top;
+}
+.tool th {
+  font-weight: 500;
+  color: var(--sl-color-gray-2);
+}
+.tool summary {
+  cursor: pointer;
+  font-size: var(--sl-text-sm);
+  color: var(--sl-color-gray-2);
+}
+.tool code {
+  font-family: var(--sl-font-mono);
+  font-size: 0.9em;
+}
+
+/* Wide layout: the content column grows when the viewport has room. */
+@media (min-width: 72rem) {
+  :root {
+    --sl-content-width: 64rem;
+  }
+}
+
+/* Wide reference tables scroll on phones and fill the column from 50rem up. */
+.sl-markdown-content table:not(:where(.not-content *)) {
+  display: block;
+  overflow-x: auto;
+}
+
+@media (min-width: 50rem) {
+  .sl-markdown-content table:not(:where(.not-content *)) {
+    display: table;
+    width: 100%;
+    overflow-x: visible;
+  }
+}

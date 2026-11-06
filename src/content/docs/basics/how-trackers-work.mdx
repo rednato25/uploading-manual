@@ -1,0 +1,57 @@
+---
+title: How private trackers organise releases
+description: Every film has one page. Every release on it takes a slot. Whether your upload is accepted depends on which slots are still free.
+sidebar:
+  order: 10
+level: beginner
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+A private tracker is a catalogue of versions. Each film or episode has one page. On that page, each release fills a **slot**. Two releases that would fill the same slot are **dupes**, and the second one is rejected.
+
+Before any work, check that the slot you want is still free.
+
+## What defines a slot
+
+Most trackers split slots along the same lines. The exact list differs per tracker, so check the tracker page before you start.
+
+| Axis | Examples | Why it makes a different slot |
+| --- | --- | --- |
+| Release type | Full disc, remux, encode, WEB-DL | Different size and quality |
+| Resolution | 720p, 1080p, 2160p | Different picture |
+| Video codec | x264, x265 | Different file and compatibility |
+| Dynamic range | SDR, HDR10, Dolby Vision | Different picture on HDR screens |
+| Edition | Theatrical, Director's Cut, Extended | Different film |
+| Size tier (some trackers) | Compact, Transparent | Different target audience |
+
+Example: a page that already has a 1080p x264 encode can still take a 2160p x265 HDR encode, because resolution, codec and dynamic range all differ.
+
+## Dupe, trump, REPACK
+
+| Word | Meaning |
+| --- | --- |
+| **Dupe** | Your release would fill a slot that is already taken. Rejected. |
+| **Trump** | A new release replaces an existing one in the same slot, and the old one is deleted. Each tracker lists what counts as a valid reason. Common ones: the old release is broken, has no seeders, or is worse in a way the rules name. |
+| **REPACK** | A fixed version from the same group, for example after a bad audio sync. It replaces the group's own release. |
+| **PROPER** | A fix by a different group for a broken release. |
+
+<Aside type="caution" title="Better quality is not always a valid trump">
+  Some trackers let a better encode replace a worse one. Others keep the first release in the slot unless it is broken. Read the trump rules on each tracker before you spend a weekend on an encode.
+</Aside>
+
+## Where uploads pay off the most
+
+| What | Why |
+| --- | --- |
+| Older and less known films | Often no release at all on the tracker, so every slot is free. |
+| Films you already have on disc | No cost to you beyond ripping time. |
+| A codec slot nobody filled | Example: a UHD disc exists but nobody made a 1080p or 2160p x265 encode from it. |
+| New releases | Only if you are fast. Many people race for these slots. |
+
+## Before you start any work
+
+1. Search the tracker for the film by IMDb or TMDb ID, not by title.
+2. Write down which slots exist. Check each one against the table above.
+3. Check the tracker's rules for your release type. The tracker comparison shows the basics side by side.
+4. Only then pick a source and start.

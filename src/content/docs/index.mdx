@@ -1,0 +1,42 @@
+---
+title: Uploading Manual
+description: Remux, encode and upload to private trackers. Written so a beginner can follow it.
+template: splash
+hero:
+  tagline: How to find a good source, turn it into a release that passes moderation, and upload it to the right trackers.
+  actions:
+    - text: Start with the basics
+      link: /basics/how-trackers-work/
+      icon: right-arrow
+    - text: Check an encode
+      link: /tools/header-checker/
+      variant: minimal
+---
+
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+## Read in this order
+
+<CardGrid>
+  <Card title="1. Basics" icon="open-book">
+    How trackers organise releases, what the numbers on a torrent mean, how to read a release name and MediaInfo.
+  </Card>
+  <Card title="2. Remux" icon="database">
+    What a remux is, how to tell a good one from a bad one, and how to make your own from a disc.
+  </Card>
+  <Card title="3. Encode" icon="setting">
+    CRF, 2-pass, presets and crop explained first. Then step by step recipes for x264 and x265.
+  </Card>
+  <Card title="4. Upload" icon="rocket">
+    Audio and subtitle checks, Upload Assistant, and the rules for each tracker side by side.
+  </Card>
+</CardGrid>
+
+## Tools
+
+<CardGrid>
+  <LinkCard title="Encode header checker" href="/tools/header-checker/" description="Paste MediaInfo. See the rate control, preset and anything a moderator would reject." />
+  <LinkCard title="Bitrate and size calculator" href="/tools/bitrate-calculator/" description="Bitrate to file size, or target size to 2-pass bitrate." />
+  <LinkCard title="HDR parameters" href="/tools/hdr-params/" description="Copy HDR10 metadata from a UHD source into x265 settings." />
+  <LinkCard title="Checklists" href="/reference/checklists/" description="One list per release type. Go through it before every upload." />
+</CardGrid>

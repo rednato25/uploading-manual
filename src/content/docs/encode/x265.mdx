@@ -1,0 +1,114 @@
+---
+title: x265 encode from a UHD source
+description: 2160p HDR and 1080p encodes from a UHD remux with x265, including how to carry the HDR metadata over correctly.
+sidebar:
+  order: 30
+level: intermediate
+tools: ['StaxRip 2.52', 'MediaInfo']
+---
+
+import { Aside, Steps, Tabs, TabItem } from '@astrojs/starlight/components';
+
+## Who this is for
+
+Anyone with a UHD remux who wants a 2160p or 1080p x265 encode. Do the [x264 guide](/encode/x264/) first if you have never encoded.
+
+## When you use this
+
+When an x265 slot is free. A UHD remux can give you two encodes: 2160p and 1080p, and these slots are often empty.
+
+<Aside type="caution" title="Check the tracker's x265 rule first">
+  Several trackers only accept x265 for live action when the source was UHD. A 1080p x265 made from a 1080p Blu-ray is rejected there. Animation is often an exception. See the tracker comparison.
+</Aside>
+
+## Before you start
+
+- A UHD remux that passed [Finding a good remux](/remux/finding-a-good-remux/)
+- Its MediaInfo text (Video section)
+- Your CRF or bitrate from a test encode
+
+## Settings
+
+| Setting | 2160p | 1080p from UHD |
+| --- | --- | --- |
+| Encoder | x265 | x265 |
+| Rate control | CRF (often 17 to 21) or 2-pass | CRF (often 17 to 21) or 2-pass |
+| Preset | slow | slow or slower |
+| Bit depth | 10-bit (Main 10) | 10-bit (Main 10) |
+| Crop | To the picture edge | To the picture edge |
+| Resize | Off | To 1920 wide, Spline36, even height |
+| HDR | Keep, with metadata copied from the source | Keep (1080p HDR), unless the tracker wants SDR |
+| Tune | none, or grain for grainy films | none, or grain |
+
+## Carry the HDR metadata over
+
+An HDR encode needs the same HDR information as the source. Without it, TVs show wrong brightness or do not switch to HDR at all.
+
+Paste the source's MediaInfo into the [HDR parameters tool](/tools/hdr-params/). It gives you a line like this:
+
+```txt
+--output-depth 10 --colorprim bt2020 --transfer smpte2084 --colormatrix bt2020nc --range limited
+--chromaloc 2 --hdr10 --hdr10-opt --repeat-headers
+--master-display "G(13250,34500)B(7500,3000)R(34000,16000)WP(15635,16450)L(10000000,50)"
+--max-cll "1000,400"
+```
+
+Paste it into the custom x265 options field in StaxRip. Do not type these values by hand and do not copy them from another film: every disc has its own.
+
+<Aside title="Dolby Vision">
+  These settings make an HDR10 encode. If the source also has Dolby Vision, the DV layer is not carried over. Keeping it means extracting and cropping the DV metadata with dovi_tool, which is outside this guide.
+</Aside>
+
+## Steps
+
+<Steps>
+
+1. **Load the UHD remux** in StaxRip and pick **x265** as the video encoder.
+
+2. **Set rate control, preset and bit depth** from the table.
+
+3. **Paste the HDR parameters** from the tool into the custom options.
+
+4. **Check the filters.** Same trap as x264: only Source, Crop and (for 1080p) Resize should be on.
+
+5. **Crop**, checking a dark and a bright scene.
+
+6. **For 1080p, set resize** to 1920 wide with an even height.
+
+7. **Audio and subtitles** as the tracker requires. Write down the final audio format for the file name.
+
+8. **Set the target name** with the release name, including `HDR` and `x265`.
+
+9. **Start the encode.** x265 at preset slow on 2160p takes many hours for a film.
+
+10. **Check the encode** with the [checking guide](/encode/checking-your-encode/).
+
+</Steps>
+
+## If the tracker wants an SDR 1080p
+
+Converting HDR to SDR is called tonemapping. It changes how the film looks, and many trackers either reject tonemapped encodes or treat them as a separate, lower slot. Only do it when a tracker's rules ask for it.
+
+If you need it, ffmpeg with libplacebo does it on the GPU:
+
+```txt
+libplacebo=w=1920:h=-2:tonemapping=bt.2446a:colorspace=bt709:color_primaries=bt709:color_trc=bt709:range=tv
+```
+
+Compare the result with the HDR source on an HDR screen before you upload.
+
+## Stop and ask someone if
+
+- The HDR tool says the source has no PQ transfer. It may be HLG or SDR.
+- MediaInfo shows HDR10+ or Dolby Vision and the tracker requires them to be kept.
+- The UHD and the Blu-ray have different cuts or framing.
+
+## What good looks like
+
+MediaInfo shows `HEVC`, `Main 10`, the cropped resolution, `HDR format` with SMPTE ST 2086 for HDR encodes, and the same mastering display values as the source. The [header checker](/tools/header-checker/) shows `rc=crf`, or `rc=abr` with `stats-read` set for 2-pass, and no problems.
+
+## Related
+
+- [HDR parameters tool](/tools/hdr-params/)
+- [Encoding basics](/encode/encoding-basics/)
+- [Encode checklist](/reference/checklists/#encode)

@@ -1,0 +1,14 @@
+# Only if you deploy to Netlify instead of the home server.
+# The site is private: turn on password protection in Netlify if you use this.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+    X-Content-Type-Options = "nosniff"

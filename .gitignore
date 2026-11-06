@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+.npm-cache/
+
+# Astro build output
+dist/
+.astro/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Editors / OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+.impeccable/
+rules-raw/

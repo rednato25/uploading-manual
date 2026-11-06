@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Uploading Manual">
+  <rect width="32" height="32" rx="3" fill="#fbfaf9"/>
+  <rect x="0.5" y="0.5" width="31" height="31" rx="2.5" fill="none" stroke="#cec9c2"/>
+  <g stroke="#e4e1dc" stroke-width="1.5">
+    <path d="M8 11h16M8 16h16M8 21h16"/>
+  </g>
+  <g stroke="#b03a2e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10 11l2 2 4-4"/>
+    <path d="M10 16l2 2 4-4"/>
+  </g>
+  <circle cx="22" cy="21" r="2.4" fill="none" stroke="#6c6f74" stroke-width="1.5"/>
+</svg>

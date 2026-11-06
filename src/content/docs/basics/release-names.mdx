@@ -1,0 +1,73 @@
+---
+title: How to read a release name
+description: Every part of a release name, what the numbers mean, and the mistakes that get an upload renamed or rejected.
+sidebar:
+  order: 30
+level: beginner
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+A release name is a short spec sheet.
+
+## Four real-world shapes
+
+```txt
+Remux     A.Sixth.Part.of.the.World.1926.1080p.BluRay.REMUX.AVC.FLAC.2.0-NoGroup
+Encode    A.Sixth.Part.of.the.World.1926.1080p.BluRay.FLAC.2.0.x264-NoGroup
+UHD remux Some.Film.2019.2160p.UHD.BluRay.REMUX.DV.HDR.HEVC.TrueHD.7.1.Atmos-GROUP
+WEB-DL    Some.Show.S01E01.1080p.NF.WEB-DL.DDP5.1.H.264-GROUP
+```
+
+The order follows the P2P convention most trackers use. Remuxes put the video codec before the audio. Encodes put the audio first and end with the encoder. Each tracker has its own exact rules, so check the tracker page before you name anything.
+
+## Every part, left to right
+
+| Part | Examples | What it means |
+| --- | --- | --- |
+| Title | `A.Sixth.Part.of.the.World` | As on TMDb or IMDb. Some trackers use dots, others spaces. |
+| Year | `1926` | Release year of the film. For series, the year is often left out. |
+| Episode | `S01E01`, `S01` | Season and episode. A season pack has only `S01`. |
+| Edition | `Directors.Cut`, `Extended` | Only real cuts of the film. "Remastered" or "Restoration" is usually not an edition. |
+| Resolution | `720p`, `1080p`, `2160p` | Resolution class. Based on the width, so a 1920×800 scope film is still `1080p`. |
+| Source | `BluRay`, `UHD.BluRay`, `WEB-DL`, `WEBRip`, `HDTV`, `DVD` | Where the video came from, not what you did to it. |
+| Streaming service | `NF`, `AMZN`, `ATVP`, `DSNP`, `HMAX` | Only for web sources. Netflix, Amazon, Apple TV+, Disney+, Max. |
+| Release type | `REMUX` | Present only for remuxes. |
+| HDR | `HDR`, `HDR10+`, `DV` | Dynamic range. `DV` is Dolby Vision. No tag means SDR. |
+| Video codec | `AVC`, `HEVC`, `VC-1`, `MPEG-2` | Used for untouched video (remux, full disc). Names the format. |
+| | `H.264`, `H.265` | Used for untouched web video. |
+| | `x264`, `x265` | Used for encodes. Names the encoder you ran. |
+| Audio codec | `FLAC`, `TrueHD`, `DTS-HD.MA`, `DD`, `DDP`, `AAC`, `Opus` | Main audio track. |
+| Channels | `1.0`, `2.0`, `5.1`, `7.1` | Speakers. The `.1` is the subwoofer channel (LFE). |
+| Atmos | `Atmos` | Height channels on top of TrueHD or DDP. |
+| Group | `-GROUP`, `-NoGroup` | Who made it. If you are not in a group, use what the tracker says, usually `NoGroup`. Never your username. |
+
+### The video codec rule in one line
+
+`AVC` or `HEVC` means the video is a straight copy. `x264` or `x265` means someone re-encoded it. A file called `REMUX` with `x264` in it is a contradiction and a red flag.
+
+## Common audio names
+
+| Name | Full name | Lossless? |
+| --- | --- | --- |
+| `TrueHD` | Dolby TrueHD | Yes |
+| `DTS-HD.MA` | DTS-HD Master Audio | Yes |
+| `FLAC` | Free Lossless Audio Codec | Yes |
+| `LPCM` | Uncompressed PCM | Yes, but large. Usually converted to FLAC. |
+| `DD` or `AC3` | Dolby Digital | No |
+| `DDP` or `EAC3` | Dolby Digital Plus | No |
+| `DTS` | DTS core | No |
+| `AAC`, `Opus` | | No |
+
+## Mistakes that get uploads renamed or rejected
+
+<Aside type="danger" title="Each of these has cost an upload">
+- The media file was renamed. Many trackers want the file exactly as the group released it, and build the site title separately.
+- An "AKA" title added by a tool when the file name has none.
+- A "The" added or removed.
+- Audio written differently from the file: `DTS-HD` instead of `DTS-HD.MA`.
+- The file name says one audio codec and the file has another. Example: name says `AAC.2.0`, file has FLAC.
+- A leftover suffix like `_new` or `(1)`.
+- Radarr or Sonarr renamed the file after download. Check the original name in qBittorrent.
+- The site title does not follow the tracker's naming rules. Some trackers have a name builder.
+</Aside>

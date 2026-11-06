@@ -1,0 +1,24 @@
+---
+title: Remux checker
+description: Paste a MediaInfo text dump and see whether a file is a real remux, and what to check before you upload it.
+sidebar:
+  order: 15
+---
+
+import RemuxChecker from '../../../components/tools/RemuxChecker.vue';
+
+<RemuxChecker client:load />
+
+## What it checks
+
+- **Video format.** AVC, HEVC, VC-1 and MPEG Video come from discs. Anything else is a red flag.
+- **Re-encode.** An x264 or x265 settings line means someone re-encoded the file.
+- **Video bitrate.** Below 15 Mb/s for 1080p or 30 Mb/s for UHD is low for a disc. This is a rule of thumb.
+- **Width.** A remux keeps the full frame, so the width should be 1920 or 3840.
+- **HDR.** A 2160p file should have an HDR format line.
+- **Lossless audio.** At least one TrueHD, DTS-HD MA, PCM or FLAC track.
+- **Languages.** Every audio and text track needs a language.
+- **PCM audio.** Convert PCM to FLAC to save space.
+- **Chapters.** The Menu section should be present.
+
+These are the same checks as [Part 2 of Finding a good remux](/remux/finding-a-good-remux/#part-2-check-the-remux-file), run for you. Everything runs in your browser. Nothing is sent anywhere.

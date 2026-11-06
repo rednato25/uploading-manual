@@ -1,0 +1,89 @@
+---
+title: Fixing tracks in MKVToolNix
+description: Add a subtitle, remove a dub, set a language or join parts. MKVToolNix repackages the file without re-encoding, so it takes seconds.
+sidebar:
+  order: 30
+level: beginner
+tools: ['MKVToolNix GUI', 'mkvmerge']
+---
+
+import { Aside, Steps } from '@astrojs/starlight/components';
+import Shot from '../../../components/Shot.astro';
+
+## Who this is for
+
+Anyone who has a good file with one thing wrong in it.
+
+## When you use this
+
+When a specific problem would get the upload rejected. Not as a routine step on every file.
+
+## Before you start
+
+- [MKVToolNix](https://mkvtoolnix.download/) installed
+- The file, and any track you want to add (for example `film.en.srt`)
+
+## Common fixes
+
+| Problem | Fix in MKVToolNix |
+| --- | --- |
+| Non-English audio and no English subtitle | Add the `.srt`. Set Language to English. Set Default track to yes if the tracker requires it. |
+| Extra dubs the tracker does not allow | Untick those audio tracks |
+| A track has no language | Select it, set Language |
+| The file is MP4 and the tracker wants MKV | Add it and multiplex to a new `.mkv`. Nothing is re-encoded. |
+| The film is split in two files | Join them with append (below) |
+| Wrong default flags | Select the track, set Default track flag |
+
+## Steps
+
+<Steps>
+
+1. **Add the source file.** Drag it into the **Input** tab. Drag any extra track files in too.
+
+2. **Untick tracks you want to drop.** Each track has a checkbox on the left.
+
+3. **Fix each track you keep.** Select it and check Language, Track name, Default track flag and Forced display flag on the right.
+
+   <Shot
+     name="remux/05-mkvtoolnix-track-panel.png"
+     alt="MKVToolNix track panel with language, track name and flag fields on the right"
+     caption="The MKVToolNix track panel. Language, track name and default flag are on the right."
+   />
+
+4. **Set the output.** On the **Output** tab, set the file name. Always write to a new file name, never over the source.
+
+5. **Press Start multiplexing.** A 20 GB file takes about a minute.
+
+6. **Check the result** in MediaInfo, or from a terminal:
+
+   ```bash
+   mkvmerge -i output.mkv
+   ```
+
+</Steps>
+
+### Joining two parts
+
+```bash
+mkvmerge -o full.mkv part1.mkv + part2.mkv
+```
+
+The `+` means append: part 2 is added after part 1 in the same tracks. Both parts need the same track layout.
+
+<Aside type="danger" title="Never write over a hard-linked file">
+  If your downloads and library share files through hard links, writing to one name changes every name that points to the same data. Check the link count first. On Linux: `stat -c %h file.mkv`. If it is 2 or more, write to a new file name.
+</Aside>
+
+## Stop and ask someone if
+
+- The two parts have different audio tracks or frame rates. Append will fail or go out of sync.
+- You need to change the video itself (crop, resize). That is an encode, not a mux.
+
+## What good looks like
+
+A new MKV with only the tracks you meant to keep, every track labelled, and a size within a few MB of the source plus whatever you added.
+
+## Related
+
+- [Subtitles](/audio-subs/subtitles/)
+- [Making a remux](/remux/making-a-remux/)
