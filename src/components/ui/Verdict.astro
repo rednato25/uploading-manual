@@ -1,0 +1,41 @@
+---
+/**
+ * One result line: pass, check or problem. Static use. The Vue tools render
+ * the same markup through ToolVerdict.vue and share the .ui-verdict classes.
+ */
+interface Props {
+  state: 'pass' | 'check' | 'problem';
+  title: string;
+  detail?: string;
+}
+
+const { state, title, detail } = Astro.props;
+const word = state === 'pass' ? 'OK' : state === 'check' ? 'Check' : 'Problem';
+---
+
+<div class="ui-verdict" data-state={state}>
+  {
+    state === 'pass' ? (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="10" />
+        <path d="m8 12 3 3 5-6" />
+      </svg>
+    ) : state === 'check' ? (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M12 7.5v5.5" />
+        <circle cx="12" cy="16.5" r="0.6" fill="currentColor" stroke="none" />
+      </svg>
+    ) : (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="10" />
+        <path d="m15 9-6 6M9 9l6 6" />
+      </svg>
+    )
+  }
+  <span class="ui-verdict-word">{word}</span>
+  <span class="ui-verdict-title">{title}</span>
+  {detail && <span class="ui-verdict-detail">{detail}</span>}
+</div>
+
+

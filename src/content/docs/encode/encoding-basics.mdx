@@ -6,13 +6,24 @@ sidebar:
 level: beginner
 ---
 
-import { Aside } from '@astrojs/starlight/components';
+import { Steps } from '@astrojs/starlight/components';
+import KeyFacts from '../../../components/ui/KeyFacts.astro';
+
+<KeyFacts
+  title="The short version"
+  items={[
+    { label: 'x264', value: 'H.264, 1080p SDR. Fast, plays everywhere.' },
+    { label: 'x265', value: 'H.265, 2160p and HDR. 3 to 10 times slower.' },
+    { label: 'Rate control', value: 'CRF for quality, 2-pass for a set size. 1-pass ABR and CBR are rejected almost everywhere.' },
+    { label: 'Preset', value: 'slow at minimum. slower and veryslow help a little more.' },
+  ]}
+/>
 
 An encoder takes a big source, like a 30 GB remux, and makes it smaller by throwing away detail you are unlikely to notice. Your settings decide how much it throws away and where. Read this page once before the [x264](/encode/x264/) or [x265](/encode/x265/) recipe.
 
 ## x264 or x265
 
-| | x264 | x265 |
+| What | x264 | x265 |
 | --- | --- | --- |
 | Produces | H.264 (AVC) | H.265 (HEVC) |
 | Speed | Fast | 3 to 10 times slower at similar settings |
@@ -24,12 +35,12 @@ An encoder takes a big source, like a 30 GB remux, and makes it smaller by throw
 
 This is the setting moderators check first.
 
-| Mode | You choose | You get | Accepted? |
-| --- | --- | --- | --- |
-| **CRF** (constant rate factor) | A quality level | Steady quality. The file size depends on the film. | Yes |
-| **2-pass** | A bitrate, so a file size | That exact size. Pass 1 studies the film, pass 2 spends bits where they help most. | Yes |
-| **1-pass ABR** | A bitrate | That size, but bits are spent badly because the encoder cannot look ahead | Rejected almost everywhere |
-| **CBR** | A fixed bitrate | Wasted bits on easy scenes, too few on hard ones | Rejected almost everywhere |
+| Mode | You choose and you get | Accepted? |
+| --- | --- | --- |
+| **CRF** (constant rate factor) | A quality level. Steady quality. The file size depends on the film. | Yes |
+| **2-pass** | A bitrate, so a file size. That exact size. Pass 1 studies the film, pass 2 spends bits where they help most. | Yes |
+| **1-pass ABR** | A bitrate. That size, but bits are spent badly because the encoder cannot look ahead. | Rejected almost everywhere |
+| **CBR** | A fixed bitrate. Wasted bits on easy scenes, too few on hard ones. | Rejected almost everywhere |
 
 At the same file size, CRF and 2-pass look about the same. Use **CRF** when you care about quality and not the exact size. Use **2-pass** when you need a set size or must stay under a tracker's size tier.
 
@@ -84,12 +95,18 @@ A clean Blu-ray needs no denoising, sharpening or deinterlacing. Those filters r
 
 Do not copy a bitrate from someone else. Every film compresses differently.
 
+<Steps>
+
 1. Encode a sample of the film at CRF 18 and CRF 20. A sample is a few minutes made from short clips spread across the film. StaxRip and most tools can do this.
+
 2. Take screenshots of the same frames from the source and from each sample.
+
 3. Compare them side by side, for example on [slow.pics](https://slow.pics/). Look at faces, skin, grain, dark scenes and fast motion.
+
 4. Pick the highest CRF that still looks like the source to you.
+
 5. If the tracker has size tiers, put the sample's bitrate into the [bitrate calculator](/tools/bitrate-calculator/) to see where the full film lands.
 
-<Aside title="Checking your encode">
-  When the encode is done, paste its MediaInfo into the [header checker](/tools/header-checker/). It confirms the rate control and catches the settings moderators reject.
-</Aside>
+</Steps>
+
+When the encode is done, paste its MediaInfo into the [header checker](/tools/header-checker/). It confirms the rate control and catches the settings moderators reject.

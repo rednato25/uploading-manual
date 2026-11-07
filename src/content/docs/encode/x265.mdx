@@ -7,7 +7,19 @@ level: intermediate
 tools: ['StaxRip 2.52', 'MediaInfo']
 ---
 
-import { Aside, Steps, Tabs, TabItem } from '@astrojs/starlight/components';
+import { Aside, Steps } from '@astrojs/starlight/components';
+import KeyFacts from '../../../components/ui/KeyFacts.astro';
+
+<KeyFacts
+  title="The short version"
+  items={[
+    { label: 'Source', value: 'A UHD remux.' },
+    { label: 'Outputs', value: '2160p or 1080p from the same source.' },
+    { label: 'HDR', value: 'HDR10 only. The DV layer is not carried over.' },
+    { label: 'Tracker rule', value: 'Check the tracker&apos;s x265 rule first. Several trackers only accept x265 for live action when the source was UHD. A 1080p x265 made from a 1080p Blu-ray is rejected there. Animation is often an exception. See the tracker comparison.' },
+    { label: 'SDR 1080p', value: 'Only when the tracker asks. Tonemapping changes the look and may be a lower slot.' },
+  ]}
+/>
 
 ## Who this is for
 
@@ -16,10 +28,6 @@ Anyone with a UHD remux who wants a 2160p or 1080p x265 encode. Do the [x264 gui
 ## When you use this
 
 When an x265 slot is free. A UHD remux can give you two encodes: 2160p and 1080p, and these slots are often empty.
-
-<Aside type="caution" title="Check the tracker's x265 rule first">
-  Several trackers only accept x265 for live action when the source was UHD. A 1080p x265 made from a 1080p Blu-ray is rejected there. Animation is often an exception. See the tracker comparison.
-</Aside>
 
 ## Before you start
 
@@ -46,12 +54,22 @@ An HDR encode needs the same HDR information as the source. Without it, TVs show
 
 Paste the source's MediaInfo into the [HDR parameters tool](/tools/hdr-params/). It gives you a line like this:
 
-```txt
+```txt wrap
 --output-depth 10 --colorprim bt2020 --transfer smpte2084 --colormatrix bt2020nc --range limited
 --chromaloc 2 --hdr10 --hdr10-opt --repeat-headers
 --master-display "G(13250,34500)B(7500,3000)R(34000,16000)WP(15635,16450)L(10000000,50)"
 --max-cll "1000,400"
 ```
+
+<KeyFacts
+  title="The line in four parts"
+  items={[
+    { label: 'Colour and range', value: '<code>--colorprim bt2020 --transfer smpte2084 --colormatrix bt2020nc --range limited --chromaloc 2</code>' },
+    { label: 'HDR flags', value: '<code>--hdr10 --hdr10-opt --repeat-headers</code>' },
+    { label: 'Mastering display', value: '<code>--master-display "G(13250,34500)B(7500,3000)R(34000,16000)WP(15635,16450)L(10000000,50)"</code>' },
+    { label: 'Light levels', value: '<code>--max-cll "1000,400"</code>' },
+  ]}
+/>
 
 Paste it into the custom x265 options field in StaxRip. Do not type these values by hand and do not copy them from another film: every disc has its own.
 
@@ -91,7 +109,7 @@ Converting HDR to SDR is called tonemapping. It changes how the film looks, and 
 
 If you need it, ffmpeg with libplacebo does it on the GPU:
 
-```txt
+```txt wrap
 libplacebo=w=1920:h=-2:tonemapping=bt.2446a:colorspace=bt709:color_primaries=bt709:color_trc=bt709:range=tv
 ```
 

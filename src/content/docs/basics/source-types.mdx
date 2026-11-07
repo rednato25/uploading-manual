@@ -7,20 +7,31 @@ level: beginner
 ---
 
 import { Aside } from '@astrojs/starlight/components';
+import KeyFacts from '../../../components/ui/KeyFacts.astro';
 
-Quality only goes down as you move away from the original master. Every step below loses something, and nothing you do later can bring it back.
+<KeyFacts
+  title="The short version"
+  items={[
+    { label: 'Same master', value: 'Full disc and remux keep the picture from the disc.' },
+    { label: 'Encode', value: 'Close to the disc if done well.' },
+    { label: 'WEB-DL', value: 'Good, but the service already compressed it hard.' },
+    { label: 'No upscale', value: 'An encode made from an encode is rejected everywhere.' },
+  ]}
+/>
+
+Quality only goes down as you move away from the original master. Nothing you do later can bring it back.
 
 ## The ladder
 
-| Type | What it is | Typical size, 2-hour film | Quality |
-| --- | --- | --- | --- |
-| **Full disc** (BDMV, ISO) | The whole Blu-ray: menus, extras, every playlist, untouched | 25 to 50 GB (1080p), 50 to 100 GB (UHD) | Same as the disc |
-| **Remux** | The main film taken off the disc and put in an MKV. Video and audio are copied, not re-encoded. | 20 to 40 GB (1080p), 40 to 80 GB (UHD) | Same as the disc |
-| **Encode** | A remux or disc squeezed with x264 or x265 to a smaller size | 5 to 20 GB (1080p), 15 to 40 GB (UHD) | Close to the disc if done well |
-| **WEB-DL** | The file a streaming service sends, saved without changes | 4 to 10 GB (1080p), 12 to 25 GB (UHD) | Good, but the service already compressed it hard |
-| **WEBRip** | A screen capture or re-encode of a stream | Varies | Worse than WEB-DL |
-| **HDTV** | Recorded from a TV broadcast | Varies | Often has logos and lower bitrate |
-| **DVD** | DVD disc or remux of one | 4 to 9 GB | Standard definition only |
+| Type | What it is and typical size (2-hour film) | Quality |
+| --- | --- | --- |
+| **Full disc** (BDMV, ISO) | The whole Blu-ray: menus, extras, every playlist, untouched. 25 to 50 GB (1080p), 50 to 100 GB (UHD). | Same as the disc |
+| **Remux** | The main film taken off the disc and put in an MKV. Video and audio are copied, not re-encoded. 20 to 40 GB (1080p), 40 to 80 GB (UHD). | Same as the disc |
+| **Encode** | A remux or disc squeezed with x264 or x265 to a smaller size. 5 to 20 GB (1080p), 15 to 40 GB (UHD). | Close to the disc if done well |
+| **WEB-DL** | The file a streaming service sends, saved without changes. 4 to 10 GB (1080p), 12 to 25 GB (UHD). | Good, but the service already compressed it hard |
+| **WEBRip** | A screen capture or re-encode of a stream. Varies. | Worse than WEB-DL |
+| **HDTV** | Recorded from a TV broadcast. Varies. | Often has logos and lower bitrate |
+| **DVD** | DVD disc or remux of one. 4 to 9 GB. | Standard definition only |
 
 The sizes are typical ranges, not rules. Long films, grainy films and animation all move them.
 

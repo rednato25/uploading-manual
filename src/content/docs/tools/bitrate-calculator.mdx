@@ -6,15 +6,19 @@ sidebar:
 ---
 
 import BitrateCalculator from '../../../components/tools/BitrateCalculator.vue';
+import KeyFacts from '../../../components/ui/KeyFacts.astro';
 
 <BitrateCalculator client:load />
 
-## How it works
-
-- **Size** = (video kbps + audio kbps) × seconds ÷ 8, plus about 0.5% for the MKV container.
-- **2-pass bitrate** works the same formula backwards: target size minus audio.
-- **Bits per pixel** = video bitrate ÷ (width × height × frame rate). Only useful to compare encodes of similar films at the same resolution. A grainy film needs more than a clean one.
-- **Resolution class** uses the width, so 1920×800 counts as 1080p.
+<KeyFacts
+  items={[
+    { label: 'Size', value: 'Video and audio kbps × seconds ÷ 8, plus about 0.5% for the MKV container.' },
+    { label: '2-pass', value: 'The same formula backwards: target size minus audio.' },
+    { label: 'Bits per pixel', value: 'Video bitrate ÷ (width × height × frame rate). Only compares encodes of similar films at the same resolution.' },
+    { label: 'Resolution class', value: 'Uses the width, so 1920×800 counts as 1080p.' },
+    { label: 'Units', value: 'GB is what trackers show. GiB is what Windows shows.' },
+  ]}
+/>
 
 ## Reading the result
 

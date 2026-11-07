@@ -1,24 +1,38 @@
-/* Shared styles for the interactive tools. Built on Starlight's colour variables so light and dark both work. */
+/* Tools: inputs, results and shared status lines. Built on Starlight tokens. */
 
 .tool {
-  border: 1px solid var(--sl-color-gray-5);
-  border-radius: 0.75rem;
-  padding: 1rem;
-  margin-block: 1.5rem;
-  background: var(--sl-color-gray-7, var(--sl-color-black));
-}
-.tool > * + * {
-  margin-top: 0.75rem;
-}
-.tool label {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 1rem;
+  margin-block: 2rem;
+}
+
+.tool-label {
   font-size: var(--sl-text-sm);
+  line-height: 1.5;
   color: var(--sl-color-gray-2);
 }
+
+.tool-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+}
+
+.tool-head .tool-label {
+  flex: 1 1 22rem;
+}
+
+.tool-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
 .tool textarea,
-.tool input,
+.tool input:not([type='radio']),
 .tool select {
   width: 100%;
   font: inherit;
@@ -28,15 +42,25 @@
   background: var(--sl-color-black);
   border: 1px solid var(--sl-color-gray-5);
   border-radius: 0.5rem;
-  padding: 0.5rem 0.65rem;
+  padding: 0.55rem 0.7rem;
 }
+
 .tool textarea {
+  display: block;
+  min-height: 9rem;
   resize: vertical;
 }
+
+.tool ::placeholder {
+  color: var(--sl-color-gray-3);
+  opacity: 1;
+}
+
 .tool :is(textarea, input, select, button):focus-visible {
   outline: 2px solid var(--sl-color-accent);
-  outline-offset: 1px;
+  outline-offset: 2px;
 }
+
 .tool button {
   font: inherit;
   font-size: var(--sl-text-sm);
@@ -45,135 +69,409 @@
   background: var(--sl-color-gray-6);
   border: 1px solid var(--sl-color-gray-5);
   border-radius: 0.5rem;
-  padding: 0.35rem 0.75rem;
+  padding: 0.4rem 0.75rem;
 }
-.tool button[aria-pressed='true'] {
-  border-color: var(--sl-color-accent);
+
+.tool button:hover {
+  border-color: var(--sl-color-gray-2);
+}
+
+.tool-hint,
+.tool-empty {
+  margin: 0;
+  font-size: var(--sl-text-sm);
+  line-height: 1.5;
+  color: var(--sl-color-gray-3);
+}
+
+.tool-mode {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.tool-mode legend {
+  padding: 0;
+  font-size: var(--sl-text-sm);
+  color: var(--sl-color-gray-2);
+}
+
+.tool-segmented {
+  display: inline-flex;
+  width: fit-content;
+  max-width: 100%;
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.tool-segmented label {
+  position: relative;
+  display: flex;
+  min-width: 0;
+}
+
+.tool-segmented label + label {
+  border-left: 1px solid var(--sl-color-gray-5);
+}
+
+.tool-segmented input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.tool-segmented span {
+  padding: 0.45rem 0.8rem;
+  font-size: var(--sl-text-sm);
+  line-height: 1.4;
+  color: var(--sl-color-gray-2);
+  white-space: nowrap;
+}
+
+.tool-segmented input:checked + span {
+  background: var(--sl-color-accent-low);
   color: var(--sl-color-accent-high);
 }
-.tool-tabs,
+
+.tool-segmented input:focus-visible + span {
+  outline: 2px solid var(--sl-color-accent);
+  outline-offset: -2px;
+}
+
+.tool-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+  gap: 0.85rem;
+}
+
+.tool-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
+  font-size: var(--sl-text-sm);
+  color: var(--sl-color-gray-2);
+}
+
 .tool-chips {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
 }
+
 .tool-chips button {
-  font-size: var(--sl-text-xs);
-}
-.tool-fields {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
-  gap: 0.75rem;
-}
-.tool-result {
-  border-top: 1px solid var(--sl-color-gray-5);
-  padding-top: 0.75rem;
-}
-.tool-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
-  gap: 0.75rem;
-  margin: 0;
-}
-.tool-grid dt {
-  font-size: var(--sl-text-xs);
-  color: var(--sl-color-gray-3);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-.tool-grid dd {
-  margin: 0.15rem 0 0;
-  font-family: var(--sl-font-mono);
-  font-size: var(--sl-text-base);
-  color: var(--sl-color-white);
-}
-.tool-findings {
-  list-style: none;
-  padding: 0;
-  margin: 0.75rem 0 0;
-}
-.tool-findings li {
-  padding: 0.4rem 0;
-  margin-top: 0.4rem;
-  font-size: var(--sl-text-sm);
-}
-.tool-findings li strong {
-  margin-right: 0.35rem;
-}
-.finding-ok strong {
-  color: var(--sl-color-green-high);
-}
-.finding-warn strong {
-  color: var(--sl-color-orange-high);
-}
-.finding-bad strong {
-  color: var(--sl-color-red-high);
-}
-.verdict {
-  padding: 0.05rem 0.45rem;
-  border-radius: 0.35rem;
-  border: 1px solid currentColor;
-  font-size: var(--sl-text-sm);
-}
-.verdict-ok {
-  color: var(--sl-color-green-high);
-}
-.verdict-warn {
-  color: var(--sl-color-orange-high);
-}
-.verdict-bad {
-  color: var(--sl-color-red-high);
-}
-.tool-output {
-  display: flex;
-  gap: 0.5rem;
-  align-items: flex-start;
-}
-.tool-output code {
-  flex: 1;
-  display: block;
-  white-space: pre-wrap;
-  word-break: break-all;
-  padding: 0.6rem;
-  border-radius: 0.5rem;
-  background: var(--sl-color-black);
-  border: 1px solid var(--sl-color-gray-5);
-}
-.tool details {
-  margin-top: 0.75rem;
-}
-.tool .muted {
-  color: var(--sl-color-gray-3);
-}
-.tool .small {
+  padding: 0.3rem 0.55rem;
   font-size: var(--sl-text-xs);
 }
 
-/* .tool opts out of Starlight's content styles (not-content), so tables and lists inside are styled here. */
-.tool table {
-  border-collapse: collapse;
-  margin-top: 0.5rem;
+.tool-result {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  border-top: 1px solid var(--sl-color-gray-5);
+  padding-top: 1.25rem;
+}
+
+.tool-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.6rem;
+  margin: 0;
+  font-size: 1.125rem;
+  line-height: 1.5;
+  color: var(--sl-color-white);
+}
+
+.tool-summary strong {
+  font-family: var(--sl-font-mono);
+  font-weight: 600;
+}
+
+.tool-summary-tier {
   font-size: var(--sl-text-sm);
-}
-.tool th,
-.tool td {
-  text-align: start;
-  padding: 0.3rem 0.75rem 0.3rem 0;
-  border-bottom: 1px solid var(--sl-color-gray-6);
-  vertical-align: top;
-}
-.tool th {
-  font-weight: 500;
   color: var(--sl-color-gray-2);
 }
-.tool summary {
+
+.tool-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 0.9rem 1.5rem;
+  margin: 0;
+}
+
+.tool-facts div {
+  min-width: 0;
+}
+
+.tool-facts dt {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--sl-color-gray-3);
+}
+
+.tool-facts dd {
+  margin: 0.2rem 0 0;
+  font-family: var(--sl-font-mono);
+  font-size: var(--sl-text-base);
+  color: var(--sl-color-white);
+  overflow-wrap: anywhere;
+}
+
+.tool-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.tool-group-title {
+  margin: 0;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--sl-color-gray-3);
+}
+
+.tool-findings {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tool-findings li {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.55rem;
+  align-items: start;
+  font-size: var(--sl-text-sm);
+  line-height: 1.5;
+  color: var(--sl-color-gray-2);
+}
+
+.tool-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-family: var(--sl-font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.tool-status svg {
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.tool-status[data-state='ok'] {
+  color: var(--sl-color-gray-2);
+}
+
+.tool-status[data-state='warn'] {
+  color: var(--sl-color-orange-high);
+}
+
+.tool-status[data-state='bad'] {
+  color: var(--sl-color-red-high);
+}
+
+.tool-details {
+  border-top: 1px solid var(--sl-color-gray-5);
+  padding-top: 0.75rem;
+}
+
+.tool-details summary {
   cursor: pointer;
   font-size: var(--sl-text-sm);
   color: var(--sl-color-gray-2);
 }
-.tool code {
+
+.tool-details summary:hover {
+  color: var(--sl-color-white);
+}
+
+.tool-details[open] summary {
+  margin-bottom: 0.85rem;
+}
+
+.tool-help {
+  margin: 0;
+  font-size: var(--sl-text-sm);
+  line-height: 1.5;
+  color: var(--sl-color-gray-3);
+}
+
+.tool-output-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.tool-output-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.tool-output-group ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tool-output-group code {
+  display: block;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 0.375rem;
+  background: var(--sl-color-black);
   font-family: var(--sl-font-mono);
-  font-size: 0.9em;
+  font-size: var(--sl-text-sm);
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.tool-copy {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.tool-live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Verdict line, shared by src/components/ui/Verdict.astro and ToolVerdict.vue. */
+.ui-verdict {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.55rem;
+  margin-block: 1.5rem;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 0.5rem;
+  background: var(--sl-color-gray-7);
+  font-size: var(--sl-text-base);
+  line-height: 1.5;
+}
+
+.tool-result .ui-verdict {
+  margin-block: 0;
+}
+
+.ui-verdict svg {
+  width: 1.15em;
+  height: 1.15em;
+  align-self: center;
+  flex-shrink: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ui-verdict-word {
+  font-family: var(--sl-font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.ui-verdict-title {
+  color: var(--sl-color-white);
+}
+
+.ui-verdict-detail {
+  font-size: var(--sl-text-sm);
+  color: var(--sl-color-gray-3);
+}
+
+.ui-verdict[data-state='pass'] svg,
+.ui-verdict[data-state='pass'] .ui-verdict-word {
+  color: var(--sl-color-green-high);
+}
+
+.ui-verdict[data-state='check'] svg,
+.ui-verdict[data-state='check'] .ui-verdict-word {
+  color: var(--sl-color-orange-high);
+}
+
+.ui-verdict[data-state='problem'] svg,
+.ui-verdict[data-state='problem'] .ui-verdict-word {
+  color: var(--sl-color-red-high);
+}
+
+/* Design 1: type scale and spacing. Body 17 / 1.6, page H1 36, H2 26, H3 19. */
+:root {
+  --sl-text-base: 1.0625rem;
+  --sl-line-height: 1.6;
+  --sl-text-h1: 2.25rem;
+  --sl-text-h2: 1.625rem;
+  --sl-text-h3: 1.1875rem;
+  --sl-text-h4: 1.0625rem;
+}
+
+body {
+  font-size: var(--sl-text-base);
+  line-height: var(--sl-line-height);
+}
+
+.sl-markdown-content .sl-heading-wrapper.level-h2 {
+  margin-top: 3rem;
+}
+
+.sl-markdown-content .sl-heading-wrapper.level-h3 {
+  margin-top: 2rem;
+}
+
+.sl-markdown-content .sl-heading-wrapper.level-h4 {
+  margin-top: 1.5rem;
+}
+
+.sl-markdown-content p {
+  margin-block: 1.25rem;
+}
+
+.sl-markdown-content :is(table, figure) {
+  margin-block: 2rem;
 }
 
 /* Wide layout: the content column grows when the viewport has room. */
@@ -183,16 +481,138 @@
   }
 }
 
-/* Wide reference tables scroll on phones and fill the column from 50rem up. */
+/* Design 1: accent is blue, for links, current page, focus and primary action. */
+:root {
+  --sl-hue-accent: 274;
+  --sl-color-accent-low: #17264f;
+  --sl-color-accent: #3369ff;
+  --sl-color-accent-high: #b3c7ff;
+}
+
+:root[data-theme='light'] {
+  --sl-color-accent-low: #cfd4fc;
+  --sl-color-accent: #3d50f5;
+  --sl-color-accent-high: #0f1c8a;
+}
+
+.sl-markdown-content a:not(:where(.not-content *)) {
+  color: var(--sl-color-text-accent);
+}
+
+.sl-link-button.primary {
+  background-color: var(--sl-color-accent-low);
+  border: 1px solid var(--sl-color-accent);
+  color: var(--sl-color-accent-high);
+}
+
+.sl-link-button.primary:is(:hover, :focus-visible) {
+  border-color: var(--sl-color-accent-high);
+  color: var(--sl-color-accent-high);
+}
+
+/* Note and tip asides are neutral. Only caution and danger carry colour. */
+.starlight-aside--note,
+.starlight-aside--tip {
+  --sl-color-asides-text-accent: var(--sl-color-gray-2);
+  --sl-color-asides-border: var(--sl-color-gray-4);
+  --sl-rapide-asides-link-color: var(--sl-color-text-accent);
+  --sl-rapide-asides-link-hover-color: var(--sl-color-accent-high);
+  background-color: var(--sl-color-gray-7);
+}
+
+/* Home: a 56 px title and a shorter gap above the reading path. */
+.hero {
+  padding-block: clamp(2rem, 1rem + 7vmin, 8rem) 0.5rem;
+}
+
+.hero h1 {
+  font-size: clamp(2.5rem, 1.6rem + 2.4vw, 3.5rem);
+  line-height: 1.1;
+}
+
+.tagline {
+  font-size: 1.25rem;
+  line-height: 1.5;
+}
+
+/* Tables: cells wrap, long names break, and tall tables keep their header. */
 .sl-markdown-content table:not(:where(.not-content *)) {
   display: block;
   overflow-x: auto;
+  white-space: normal;
+}
+
+.sl-markdown-content th:not(:where(.not-content *)) {
+  white-space: normal;
+  overflow-wrap: break-word;
+  line-height: 1.75;
+}
+
+.sl-markdown-content td:not(:where(.not-content *)) {
+  white-space: normal;
+  overflow-wrap: break-word;
+  line-height: 1.75;
+}
+
+/* Long tokens in code break anywhere rather than overflow the page. */
+.sl-markdown-content code:not(:where(.not-content *)) {
+  overflow-wrap: anywhere;
+}
+
+.sl-markdown-content :is(th, td):not(:where(.not-content *)) code {
+  overflow-wrap: break-word;
+}
+
+/* The matrix wrapper must not clip. The table scrolls on its own on phones. */
+.sl-markdown-content .matrix-wrap {
+  overflow-x: visible;
+}
+
+.sl-markdown-content .matrix {
+  white-space: normal;
+}
+
+.sl-markdown-content .matrix :is(th, td):last-child {
+  min-width: 10rem;
+}
+
+/* The unchecked value has to stay readable, AA in both themes. */
+.sl-markdown-content .matrix .unk {
+  color: var(--sl-color-gray-2);
 }
 
 @media (min-width: 50rem) {
   .sl-markdown-content table:not(:where(.not-content *)) {
     display: table;
     width: 100%;
+    table-layout: auto;
     overflow-x: visible;
+  }
+
+  .sl-markdown-content table:not(:where(.not-content *)):has(tbody tr:nth-child(9)) thead th {
+    position: sticky;
+    top: var(--sl-nav-height);
+    z-index: 1;
+    background-color: var(--sl-color-bg);
+    box-shadow: inset 0 -1px 0 var(--sl-color-gray-4);
+  }
+}
+
+/* Sidebar: quiet uppercase group labels, roomier rows on touch widths. */
+.sidebar-pane .group-label > .large {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--sl-color-gray-2);
+}
+
+@media (max-width: 49.99rem) {
+  .sidebar-pane a {
+    padding-block: 0.55rem;
+  }
+
+  .sidebar-pane summary {
+    padding-block: calc(0.2em + 5px);
   }
 }

@@ -1,0 +1,40 @@
+---
+/** An inline rule level: a thin left rule and the word, no fill. */
+interface Props {
+  level: 'MUST' | 'SHOULD' | 'RECOMMENDED';
+}
+
+const { level } = Astro.props;
+---
+
+<span class="rule-level" data-level={level}>{level}</span>
+
+<style>
+  .rule-level {
+    display: inline-block;
+    padding-left: 0.45rem;
+    border-left: 2px solid var(--sl-color-gray-4);
+    font-family: var(--sl-font-mono);
+    font-size: 0.6875rem;
+    line-height: 1.2;
+    letter-spacing: 0.04em;
+    color: var(--sl-color-gray-3);
+    white-space: nowrap;
+  }
+
+  .rule-level[data-level='MUST'] {
+    border-color: var(--sl-color-gray-2);
+    color: var(--sl-color-white);
+    font-weight: 600;
+  }
+
+  .rule-level[data-level='SHOULD'] {
+    border-color: var(--sl-color-gray-3);
+    color: var(--sl-color-gray-2);
+  }
+
+  .rule-level[data-level='RECOMMENDED'] {
+    border-color: var(--sl-color-gray-4);
+    color: var(--sl-color-gray-3);
+  }
+</style>

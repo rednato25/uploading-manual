@@ -8,6 +8,7 @@ tools: ['MediaInfo']
 ---
 
 import { Aside, Tabs, TabItem } from '@astrojs/starlight/components';
+import KeyFacts from '../../../components/ui/KeyFacts.astro';
 import Shot from '../../../components/Shot.astro';
 
 MediaInfo reads a video file and lists every track in it. Trackers ask for it with every upload, and moderators read it before they read anything else.
@@ -18,6 +19,18 @@ Get it from [mediaarea.net](https://mediaarea.net/en/MediaInfo). In the program,
   name="basics/02-mediainfo-text-view.png"
   alt="MediaInfo Text view showing the complete track list for a video file"
   caption="MediaInfo in Text view. This is the text trackers ask you to paste."
+/>
+
+## Check these five first
+
+<KeyFacts
+  items={[
+    { label: 'Overall bit rate', value: 'Total of all tracks. A quick size check.' },
+    { label: 'Format', value: '<code>AVC</code> is H.264, <code>HEVC</code> is H.265.' },
+    { label: 'Bit rate', value: 'The best single quality signal. See the ranges below.' },
+    { label: 'Writing library and Encoding settings', value: 'Present on encodes made with x264 or x265. Normally absent on remuxes and WEB-DLs.' },
+    { label: 'Language', value: 'Every track should have one. A missing language is a common rejection reason.' },
+  ]}
 />
 
 ## A remux and an encode, side by side

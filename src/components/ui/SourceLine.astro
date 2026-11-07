@@ -1,0 +1,71 @@
+---
+/**
+ * One muted line under the page title: where the rules came from and when
+ * they were checked. Replaces the old Source aside.
+ */
+interface Props {
+  label: string;
+  href: string;
+  checked: string;
+  note?: string;
+}
+
+const { label, href, checked, note } = Astro.props;
+---
+
+<p class="source-line">
+  <a href={href}>{label}</a>
+  <span class="sep" aria-hidden="true">·</span>
+  <span>Checked <time datetime={checked}>{checked}</time></span>
+  {note && (
+    <span class="tail">
+      <span class="sep" aria-hidden="true">·</span>
+      <span class="note">{note}</span>
+    </span>
+  )}
+</p>
+
+<style>
+  .source-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4rem 0.55rem;
+    margin: 0.75rem 0 1.5rem;
+    font-size: var(--sl-text-sm);
+    line-height: 1.5;
+    color: var(--sl-color-gray-3);
+  }
+
+  a {
+    color: var(--sl-color-text-accent);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  a:hover,
+  a:focus-visible {
+    color: var(--sl-color-accent-high);
+  }
+
+  time {
+    font-family: var(--sl-font-mono);
+    font-size: 0.8125rem;
+  }
+
+  .sep {
+    color: var(--sl-color-gray-4);
+  }
+
+  .tail {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4rem 0.55rem;
+  }
+
+  .note {
+    flex: 1 1 16rem;
+    min-width: 0;
+  }
+</style>

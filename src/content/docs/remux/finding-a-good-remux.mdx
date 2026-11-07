@@ -7,7 +7,20 @@ level: beginner
 tools: ['MediaInfo', 'blu-ray.com', 'DVDCompare', 'caps-a-holic']
 ---
 
-import { Aside, Steps } from '@astrojs/starlight/components';
+import { Steps } from '@astrojs/starlight/components';
+import GoodBad from '../../../components/ui/GoodBad.astro';
+import KeyFacts from '../../../components/ui/KeyFacts.astro';
+import Verdict from '../../../components/ui/Verdict.astro';
+
+<KeyFacts
+  title="The short version"
+  items={[
+    { label: 'Best disc', value: 'Usually the newest restoration from a respected label.' },
+    { label: 'Keep', value: 'Full frame, untouched video, lossless original audio, subtitles with languages.' },
+    { label: 'Check', value: 'Run the remux checker on the MediaInfo text.' },
+    { label: 'Runtime', value: 'Must match the edition on DVDCompare.' },
+  ]}
+/>
 
 ## Who this is for
 
@@ -45,20 +58,34 @@ Before you download, buy or rip anything. A bad source wastes every hour you put
 
 Open the file in MediaInfo (**View → Text**) and go through this list.
 
-| Check | Good | Red flag |
-| --- | --- | --- |
-| Video format | `AVC`, `HEVC`, `VC-1` or `MPEG Video` | Anything else |
-| Encoding settings line | Absent | An x264 or x265 settings line. Someone re-encoded it. |
-| Video bitrate | 1080p: about 20 to 40 Mb/s. UHD: about 40 to 100 Mb/s. | Far below the range for no reason, for example 1080p at 8 Mb/s |
-| Resolution | 1920×1080 or 3840×2160, black bars included | Cropped. A remux keeps the full frame. |
-| HDR (UHD) | `HDR format` line present, matches the disc (HDR10 or Dolby Vision) | Missing on a UHD remux. Possibly stripped or a fake upscale. |
-| Main audio | Lossless: TrueHD, DTS-HD MA, LPCM or FLAC | Only lossy audio (AC3, DTS core) when the disc has lossless |
-| Audio tracks | Original language present. Original mix present for old films (often mono or 2.0). | Only a dub, or only a new 5.1 remix when the disc has the original mono |
-| Subtitles | PGS tracks from the disc, each with a language | Missing languages, or burned-in text |
-| Chapters | Present | Missing (minor, but a sign of a sloppy rip) |
-| Duration | Matches DVDCompare for that edition | Off by minutes: a different cut, or a broken file |
-
 Paste the same MediaInfo text into the [remux checker](/tools/remux-checker/) to run these checks automatically.
+
+<GoodBad goodLabel="Good" badLabel="Red flag">
+  <ul slot="good">
+    <li><strong>Video format:</strong> <code>AVC</code>, <code>HEVC</code>, <code>VC-1</code> or <code>MPEG Video</code>.</li>
+    <li><strong>Encoding settings line:</strong> absent.</li>
+    <li><strong>Video bitrate:</strong> 1080p about 20 to 40 Mb/s. UHD about 40 to 100 Mb/s.</li>
+    <li><strong>Resolution:</strong> 1920×1080 or 3840×2160, black bars included.</li>
+    <li><strong>HDR (UHD):</strong> <code>HDR format</code> line present, matches the disc (HDR10 or Dolby Vision).</li>
+    <li><strong>Main audio:</strong> lossless TrueHD, DTS-HD MA, LPCM or FLAC.</li>
+    <li><strong>Audio tracks:</strong> original language present. Original mix present for old films (often mono or 2.0).</li>
+    <li><strong>Subtitles:</strong> PGS tracks from the disc, each with a language.</li>
+    <li><strong>Chapters:</strong> present.</li>
+    <li><strong>Duration:</strong> matches DVDCompare for that edition.</li>
+  </ul>
+  <ul slot="bad">
+    <li><strong>Video format:</strong> anything else.</li>
+    <li><strong>Encoding settings line:</strong> an x264 or x265 settings line. Someone re-encoded it.</li>
+    <li><strong>Video bitrate:</strong> far below the range for no reason, for example 1080p at 8 Mb/s.</li>
+    <li><strong>Resolution:</strong> cropped. A remux keeps the full frame.</li>
+    <li><strong>HDR (UHD):</strong> missing on a UHD remux. Possibly stripped or a fake upscale.</li>
+    <li><strong>Main audio:</strong> only lossy audio (AC3, DTS core) when the disc has lossless.</li>
+    <li><strong>Audio tracks:</strong> only a dub, or only a new 5.1 remix when the disc has the original mono.</li>
+    <li><strong>Subtitles:</strong> missing languages, or burned-in text.</li>
+    <li><strong>Chapters:</strong> missing (minor, but a sign of a sloppy rip).</li>
+    <li><strong>Duration:</strong> off by minutes: a different cut, or a broken file.</li>
+  </ul>
+</GoodBad>
 
 ### Part 3: watch it for one minute
 
@@ -72,7 +99,7 @@ Skip to three places: the start, the middle and the last minutes. Check that pic
 
 ## What good looks like
 
-A remux of the best available disc, with untouched video, lossless original audio, every subtitle track with a language, chapters, and a runtime that matches the edition.
+<Verdict state="pass" title="A good remux" detail="A remux of the best available disc, with untouched video, lossless original audio, every subtitle track with a language, chapters, and a runtime that matches the edition." />
 
 ## Related
 

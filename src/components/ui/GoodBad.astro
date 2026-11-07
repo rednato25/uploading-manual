@@ -1,0 +1,117 @@
+---
+/**
+ * A good example and a bad example, side by side. Each side keeps an icon and
+ * the word, so colour is never the only signal.
+ */
+interface Props {
+  goodLabel?: string;
+  badLabel?: string;
+}
+
+const { goodLabel = 'Right', badLabel = 'Wrong' } = Astro.props;
+---
+
+<div class="good-bad">
+  <div class="side good">
+    <p class="heading">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="m8 12 3 3 5-6"></path>
+      </svg>
+      <span>{goodLabel}</span>
+    </p>
+    <div class="body"><slot name="good" /></div>
+  </div>
+  <div class="side bad">
+    <p class="heading">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="m15 9-6 6M9 9l6 6"></path>
+      </svg>
+      <span>{badLabel}</span>
+    </p>
+    <div class="body"><slot name="bad" /></div>
+  </div>
+</div>
+
+<style>
+  .good-bad {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    margin-block: 1.5rem;
+  }
+
+  .side {
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.5rem;
+    background: var(--sl-color-gray-7);
+    padding: 1rem 1.25rem;
+    min-width: 0;
+  }
+
+  .heading {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin: 0 0 0.6rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .heading svg {
+    width: 1.1rem;
+    height: 1.1rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+  }
+
+  .good .heading {
+    color: var(--sl-color-green-high);
+  }
+
+  .bad .heading {
+    color: var(--sl-color-red-high);
+  }
+
+  .body {
+    color: var(--sl-color-white);
+    font-size: var(--sl-text-base);
+    line-height: 1.5;
+  }
+
+  .body :global(p) {
+    margin: 0;
+  }
+
+  .body :global(p + p) {
+    margin-top: 0.5rem;
+  }
+
+  .body :global(ul),
+  .body :global(ol) {
+    margin: 0;
+    padding-inline-start: 1.1rem;
+  }
+
+  .body :global(li + li) {
+    margin-top: 0.35rem;
+  }
+
+  .body :global(code) {
+    font-size: 0.9em;
+  }
+
+  @media (min-width: 50rem) {
+    .good-bad {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+  }
+</style>

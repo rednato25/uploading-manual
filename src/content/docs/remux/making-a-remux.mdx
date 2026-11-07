@@ -7,8 +7,19 @@ level: beginner
 tools: ['MakeMKV', 'MKVToolNix GUI', 'MediaInfo']
 ---
 
-import { Aside, Steps } from '@astrojs/starlight/components';
+import { Steps, Tabs, TabItem } from '@astrojs/starlight/components';
+import KeyFacts from '../../../components/ui/KeyFacts.astro';
 import Shot from '../../../components/Shot.astro';
+
+<KeyFacts
+  title="The short version"
+  items={[
+    { label: 'Rip with', value: 'MakeMKV.' },
+    { label: 'Clean up with', value: 'MKVToolNix.' },
+    { label: 'Disk space', value: 'About twice the size of the disc.' },
+    { label: 'Output', value: 'One MKV. No re-encode at any point.' },
+  ]}
+/>
 
 ## Who this is for
 
@@ -26,6 +37,8 @@ When the remux slot for the film is free, or when you need a clean source for an
 - The film's runtime for this edition, from [DVDCompare](https://www.dvdcompare.net/)
 
 ## Steps
+
+### Rip
 
 <Steps>
 
@@ -58,30 +71,47 @@ When the remux slot for the film is free, or when you need a clean source for an
 
 5. **Make the MKV.** Set the output folder and press **Make MKV**. This takes about as long as reading the disc.
 
-6. **Check the audio format.** Open the new file in MediaInfo. If a PCM track is mono or stereo, convert it to FLAC (step 7). For 5.1 or 7.1 PCM, the format depends on the tracker. Some trackers do not accept FLAC above 2.0. Check the tracker comparison. If everything is TrueHD, DTS-HD MA or already FLAC, skip to step 8.
+</Steps>
 
-7. **Convert mono or stereo PCM to FLAC.** FLAC is lossless, so nothing is lost, and the file gets smaller. For 5.1 or 7.1 PCM, use the format the tracker requires. See the tracker comparison. With eac3to on Windows (track 2 here; eac3to lists the numbers when you run it with only the file name):
+### Clean up
 
-   ```bash
+<Steps>
+
+1. **Check the audio format.** Open the new file in MediaInfo. If a PCM track is mono or stereo, convert it to FLAC (step 2). For 5.1 or 7.1 PCM, the format depends on the tracker. Some trackers do not accept FLAC above 2.0. Check the tracker comparison. If everything is TrueHD, DTS-HD MA or already FLAC, skip to step 4.
+
+2. **Convert mono or stereo PCM to FLAC.** FLAC is lossless, so nothing is lost, and the file gets smaller. For 5.1 or 7.1 PCM, use the format the tracker requires. See the tracker comparison.
+
+   <Tabs>
+   <TabItem label="eac3to">
+
+   With eac3to on Windows (track 2 here; eac3to lists the numbers when you run it with only the file name):
+
+   ```bash wrap
    eac3to "film.mkv" 2: "audio.flac"
    ```
 
+   </TabItem>
+   <TabItem label="ffmpeg">
+
    Or with ffmpeg, for the first audio track:
 
-   ```bash
+   ```bash wrap
    ffmpeg -i film.mkv -map 0:a:0 -c:a flac -compression_level 8 audio.flac
    ```
 
-8. **Clean up in MKVToolNix.** Add the MKV (and the `.flac` if you made one, unticking the old PCM track). For every track:
+   </TabItem>
+   </Tabs>
+
+3. **Clean up in MKVToolNix.** Add the MKV (and the `.flac` if you made one, unticking the old PCM track). For every track:
    - set **Language**
    - set **Track name** if useful, for example `Commentary with the director`
    - set **Default track flag**: yes for the main video, main audio and (if needed) one subtitle track; no for the rest
 
    Clear the **File title** field on the Output tab, or set it to the release name.
 
-9. **Name the output** with the release name from the [naming guide](/basics/release-names/) and press **Start multiplexing**.
+4. **Name the output** with the release name from the [naming guide](/basics/release-names/) and press **Start multiplexing**.
 
-10. **Check the result** with the remux table in [Finding a good remux](/remux/finding-a-good-remux/#part-2-check-the-remux-file).
+5. **Check the result** with the remux table in [Finding a good remux](/remux/finding-a-good-remux/#part-2-check-the-remux-file).
 
 </Steps>
 

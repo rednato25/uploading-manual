@@ -6,8 +6,17 @@ sidebar:
 ---
 
 import HeaderChecker from '../../../components/tools/HeaderChecker.vue';
+import KeyFacts from '../../../components/ui/KeyFacts.astro';
 
 <HeaderChecker client:load />
+
+<KeyFacts
+  items={[
+    { label: 'Accepts', value: 'MediaInfo text, the Encoding settings line, or the raw x264/x265 string.' },
+    { label: 'Runs', value: 'In your browser. Nothing is sent anywhere.' },
+    { label: 'Returns', value: 'A verdict first, then the checks that need attention.' },
+  ]}
+/>
 
 ## What it checks
 
@@ -16,8 +25,6 @@ import HeaderChecker from '../../../components/tools/HeaderChecker.vue';
 - **Preset (x264).** Each x264 preset sets a different `subme` value, so the checker can name the likely preset. A custom setting can fool it.
 - **Tune (x264).** Grain and film tunes leave a recognisable set of values.
 - **HDR (x265).** A PQ encode must have `hdr10` and mastering display metadata.
-
-Everything runs in your browser. Nothing is sent anywhere.
 
 ## Where the rules come from
 

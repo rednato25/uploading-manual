@@ -7,8 +7,20 @@ level: beginner
 tools: ['StaxRip 2.52', 'MediaInfo']
 ---
 
-import { Aside, Steps } from '@astrojs/starlight/components';
+import { Steps } from '@astrojs/starlight/components';
+import GoodBad from '../../../components/ui/GoodBad.astro';
+import KeyFacts from '../../../components/ui/KeyFacts.astro';
 import Shot from '../../../components/Shot.astro';
+
+<KeyFacts
+  title="The short version"
+  items={[
+    { label: 'Encoder', value: 'x264. H.264, 1080p SDR.' },
+    { label: 'Rate control', value: 'CRF or 2-pass. 1-pass ABR and CBR are rejected.' },
+    { label: 'Preset', value: 'slow or slower.' },
+    { label: 'Crop', value: 'On, to the picture edge. All other filters off.' },
+  ]}
+/>
 
 ## Who this is for
 
@@ -27,17 +39,24 @@ When the 1080p x264 slot is free on the tracker and you have a good remux. Read 
 
 ## Settings
 
-| Setting | Value | Why |
-| --- | --- | --- |
-| Encoder | x264 | |
-| Rate control | CRF from your test (often 17 to 20), or 2-pass at the bitrate from the [calculator](/tools/bitrate-calculator/) | Both are accepted. 1-pass ABR and CBR are not. |
-| Preset | slow or slower | Faster presets waste bits |
-| Tune | film, or grain for grainy films | See [tunes](/encode/encoding-basics/#tune-what-kind-of-picture) |
-| Profile, level | High, 4.1 | Plays on everything that does 1080p |
-| Bit depth | 8-bit | 10-bit H.264 has poor device support |
-| Crop | On, to the picture edge | Black bars waste bits |
-| Resize | Off | Source is already 1080p |
-| Other filters | All off | No denoise, no deinterlace on progressive film |
+| Setting | Value and why |
+| --- | --- |
+| Encoder | x264. |
+| Rate control | CRF from your test (often 17 to 20), or 2-pass at the bitrate from the [calculator](/tools/bitrate-calculator/). Both are accepted. 1-pass ABR and CBR are not. |
+| Preset | slow or slower. Faster presets waste bits. |
+| Tune | film, or grain for grainy films. See [tunes](/encode/encoding-basics/#tune-what-kind-of-picture). |
+| Profile, level | High, 4.1. Plays on everything that does 1080p. |
+| Bit depth | 8-bit. 10-bit H.264 has poor device support. |
+| Crop | On, to the picture edge. Black bars waste bits. |
+| Resize | Off. Source is already 1080p. |
+| Other filters | All off. No denoise, no deinterlace on progressive film. |
+
+## Filters
+
+<GoodBad>
+  <p slot="good">Only Source and Crop are on.</p>
+  <p slot="bad">StaxRip can switch filters on for you. Depending on the profile, StaxRip may start with a deinterlace filter (Field, for example QTGMC) and a denoise filter (Noise, for example DFTTest). On a progressive Blu-ray, deinterlacing damages the picture and denoising removes the grain. Turn both off.</p>
+</GoodBad>
 
 ## Steps
 
@@ -58,10 +77,6 @@ When the 1080p x264 slot is free on the tracker and you have a good remux. Read 
 4. **Set preset, tune, profile and level** as in the table.
 
 5. **Check the filters.** Open the filter list. Only Source and Crop should be on.
-
-   <Aside type="danger" title="StaxRip can switch filters on for you">
-     Depending on the profile, StaxRip may start with a deinterlace filter (Field, for example QTGMC) and a denoise filter (Noise, for example DFTTest). On a progressive Blu-ray, deinterlacing damages the picture and denoising removes the grain. Turn both off.
-   </Aside>
 
 6. **Crop.** Run auto crop, then step through a dark and a bright scene in the preview. Fix by hand if a bar is left or picture is cut.
 

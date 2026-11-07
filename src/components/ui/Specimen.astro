@@ -1,0 +1,96 @@
+---
+/**
+ * A release name split into labelled tokens. Tokens wrap as whole units, so
+ * the name never scrolls sideways on a phone. A token that starts with a
+ * hyphen carries its own separator, as release group names do.
+ */
+interface Part {
+  text: string;
+  label: string;
+}
+
+interface Props {
+  parts: Part[];
+  separator?: ' ' | '.';
+}
+
+const { parts, separator = ' ' } = Astro.props;
+---
+
+<div class="specimen">
+  {
+    parts.map((part, index) => (
+      <span class="token-wrap">
+        {index > 0 && !part.text.startsWith('-') && (
+          <span class:list={['sep', { space: separator === ' ' }]} aria-hidden="true">
+            {separator === ' ' ? '' : separator}
+          </span>
+        )}
+        <span class="token">
+          <span class="text">{part.text}</span>
+          <span class="label">{part.label}</span>
+        </span>
+      </span>
+    ))
+  }
+</div>
+
+<style>
+  .specimen {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 0.9rem 0;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.5rem;
+    background: var(--sl-color-gray-7);
+    padding: 1rem 1.25rem;
+    margin-block: 1.5rem;
+  }
+
+  .token-wrap {
+    display: inline-flex;
+    align-items: flex-start;
+    min-width: 0;
+    padding-right: 0.6rem;
+  }
+
+  .sep {
+    flex-shrink: 0;
+    padding-inline: 0.08rem;
+    font-family: var(--sl-font-mono);
+    font-size: 1.125rem;
+    line-height: 1.4;
+    color: var(--sl-color-gray-4);
+  }
+
+  .sep.space {
+    display: inline-block;
+    width: 0.6rem;
+    padding-inline: 0;
+  }
+
+  .token {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .text {
+    font-family: var(--sl-font-mono);
+    font-size: 1.125rem;
+    line-height: 1.4;
+    color: var(--sl-color-white);
+    overflow-wrap: anywhere;
+  }
+
+  .label {
+    margin-top: 0.15rem;
+    font-size: var(--sl-text-xs);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--sl-color-gray-3);
+    white-space: nowrap;
+  }
+</style>

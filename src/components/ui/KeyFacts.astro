@@ -1,0 +1,84 @@
+---
+/**
+ * A compact panel of label and value pairs. Values may contain inline HTML,
+ * so inline code works with `set:html`.
+ */
+interface Props {
+  items: { label: string; value: string }[];
+  title?: string;
+}
+
+const { items, title } = Astro.props;
+---
+
+<div class="key-facts">
+  {title && <p class="title">{title}</p>}
+  <dl class="grid">
+    {
+      items.map((item) => (
+        <div class="fact">
+          <dt>{item.label}</dt>
+          <dd set:html={item.value} />
+        </div>
+      ))
+    }
+  </dl>
+</div>
+
+<style>
+  .key-facts {
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 0.5rem;
+    background: var(--sl-color-gray-7);
+    padding: 1rem 1.25rem;
+    margin-block: 1.5rem;
+  }
+
+  .title {
+    margin: 0 0 0.85rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--sl-color-gray-3);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin: 0;
+  }
+
+  .fact {
+    min-width: 0;
+    margin: 0;
+  }
+
+  dt {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--sl-color-gray-3);
+  }
+
+  dd {
+    margin: 0.2rem 0 0;
+    font-size: var(--sl-text-base);
+    line-height: 1.5;
+    color: var(--sl-color-white);
+    overflow-wrap: anywhere;
+  }
+
+  dd :global(code) {
+    font-size: 0.9em;
+  }
+
+  @media (min-width: 50rem) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem 2rem;
+    }
+  }
+</style>

@@ -8,6 +8,18 @@ tools: ['Subtitle Edit', 'MKVToolNix GUI']
 ---
 
 import { Aside, Steps } from '@astrojs/starlight/components';
+import GoodBad from '../../../components/ui/GoodBad.astro';
+import KeyFacts from '../../../components/ui/KeyFacts.astro';
+
+<KeyFacts
+  title="The short version"
+  items={[
+    { label: 'Needed when', value: 'The main audio is not English, or the tracker requires a subtitle track.' },
+    { label: 'Best source', value: 'The disc itself. It has the best timing and accuracy.' },
+    { label: 'Check first', value: 'Burned-in text cannot be removed. Silent films need English intertitles.' },
+    { label: 'Result', value: 'An English (or required language) subtitle track inside the MKV, in sync and with the language set.' },
+  ]}
+/>
 
 ## Who this is for
 
@@ -30,6 +42,21 @@ Before muxing the final file. Subtitles go inside the MKV, not as a separate fil
 | Another release of the same edition | Check that the frame rate and cut match. |
 | Subtitle sites (Subdl, OpenSubtitles) | Quality varies. Always check sync and spelling. |
 
+## Burned-in subtitles
+
+<GoodBad goodLabel="Soft subtitle" badLabel="Burned in">
+  <p slot="good">A soft subtitle sits in its own track. The player can switch it off.</p>
+  <p slot="bad">Some sources have text burned into the picture (hardsubs). You cannot remove them. Many trackers reject non-English hardsubs. Check a frame from the middle of the film: text that is part of the picture and cannot be switched off in the player is burned in.</p>
+</GoodBad>
+
+## Silent films
+
+A silent film has no spoken audio, but its intertitles (the text cards) are in a language. If they are not in English, add an English subtitle track for them, or explain in the description why there is none.
+
+<Aside type="caution" title="Machine-made subtitles">
+  Subtitles made with speech-to-text (Whisper) or machine translation are rejected or must be labelled on many trackers. Check the rule before you use them, and say so in the description if you do.
+</Aside>
+
 ## Steps
 
 <Steps>
@@ -51,18 +78,6 @@ Before muxing the final file. Subtitles go inside the MKV, not as a separate fil
    ```
 
 </Steps>
-
-<Aside type="caution" title="Machine-made subtitles">
-  Subtitles made with speech-to-text (Whisper) or machine translation are rejected or must be labelled on many trackers. Check the rule before you use them, and say so in the description if you do.
-</Aside>
-
-## Burned-in subtitles
-
-Some sources have text burned into the picture (hardsubs). You cannot remove them. Many trackers reject non-English hardsubs. Check a frame from the middle of the film: text that is part of the picture and cannot be switched off in the player is burned in.
-
-## Silent films
-
-A silent film has no spoken audio, but its intertitles (the text cards) are in a language. If they are not in English, add an English subtitle track for them, or explain in the description why there is none.
 
 ## Stop and ask someone if
 

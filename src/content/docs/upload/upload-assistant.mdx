@@ -8,7 +8,19 @@ tools: ['Upload Assistant', 'qBittorrent']
 ---
 
 import { Aside, Steps } from '@astrojs/starlight/components';
+import GoodBad from '../../../components/ui/GoodBad.astro';
+import KeyFacts from '../../../components/ui/KeyFacts.astro';
 import Shot from '../../../components/Shot.astro';
+
+<KeyFacts
+  title="The short version"
+  items={[
+    { label: 'One tracker per run', value: 'Until you know each tracker&apos;s rules well, upload to one tracker per run. One wrong guess can fail several uploads at once.' },
+    { label: 'Title', value: 'Check the title UA proposes. Remove anything that does not belong. Never rename the file.' },
+    { label: 'Duplicate check', value: 'If a release already fills your slot, stop.' },
+    { label: 'Screenshots', value: 'At least three, at the release&apos;s own resolution, showing real picture.' },
+  ]}
+/>
 
 ## Who this is for
 
@@ -58,9 +70,16 @@ After the file passed the [checklist](/reference/checklists/) for its type.
 
 </Steps>
 
+## Title examples
+
+<GoodBad>
+  <p slot="good">The site title follows the tracker's naming rules. The file keeps its original name.</p>
+  <p slot="bad">An AKA title the release does not use, or an extra "The". The file was renamed to make it match.</p>
+</GoodBad>
+
 ## The description: what to always add
 
-```txt
+```txt title="Description template" wrap
 Source: <where the source came from, with a link if there is one>
 Encode: <for encodes: x264 2-pass 9000 kbps, preset slow, tune film>
 Notes:  <anything that could look wrong to a moderator: silent film, burned-in

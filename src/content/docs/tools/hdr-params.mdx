@@ -5,10 +5,19 @@ sidebar:
   order: 30
 ---
 
-import { Aside } from '@astrojs/starlight/components';
 import HdrParams from '../../../components/tools/HdrParams.vue';
+import KeyFacts from '../../../components/ui/KeyFacts.astro';
 
 <HdrParams client:load />
+
+<KeyFacts
+  items={[
+    { label: 'Reads', value: 'The Video section of a UHD source in MediaInfo.' },
+    { label: 'Output', value: 'x265 HDR10 settings in four groups, with one Copy all.' },
+    { label: 'Not carried over', value: 'Dolby Vision and HDR10+.' },
+    { label: 'Runs', value: 'In your browser. Nothing is sent anywhere.' },
+  ]}
+/>
 
 ## What it reads
 
@@ -22,7 +31,3 @@ import HdrParams from '../../../components/tools/HdrParams.vue';
 | Color range | `--range` |
 
 x265 wants the colour coordinates in steps of 0.00002 and the brightness in steps of 0.0001 cd/m². So a green x of 0.265 becomes 13250, and 1000 cd/m² becomes 10000000.
-
-<Aside type="caution">
-  This gives an HDR10 encode. Dolby Vision and HDR10+ in the source are not carried over. The tool tells you when the source has them.
-</Aside>

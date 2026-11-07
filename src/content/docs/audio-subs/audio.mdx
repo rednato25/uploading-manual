@@ -8,10 +8,24 @@ tools: ['MediaInfo', 'eac3to', 'ffmpeg']
 ---
 
 import { Aside } from '@astrojs/starlight/components';
+import KeyFacts from '../../../components/ui/KeyFacts.astro';
+
+<KeyFacts
+  title="The short version"
+  items={[
+    { label: 'Keep lossless', value: 'The main track stays in its original lossless format. TrueHD and DTS-HD MA stay as they are.' },
+    { label: 'Original mix', value: 'Keep the original mix of older films, even if it is mono or 2.0.' },
+    { label: 'FLAC', value: 'Some trackers do not accept FLAC above 2.0 outside full discs. Check the tracker.' },
+    { label: 'Language', value: 'Every track needs one. Use <code>zxx</code> for no spoken language, <code>und</code> only if you cannot find out.' },
+    { label: 'Name', value: 'The release name lists the main audio track. If you converted it, the name must say the new format. If you did not, it must say the original. A mismatch is a common rejection reason.' },
+  ]}
+/>
 
 ## Lossless and lossy
 
 **Lossless** audio keeps every bit of the original. **Lossy** audio throws some away to save space. You can always go from lossless to lossy, never back.
+
+Encodes convert lossless audio to a lossy codec, usually Dolby Digital Plus (DD+), to save space: a lossless track can be larger than the encoded video.
 
 | Lossless | Lossy |
 | --- | --- |
@@ -35,13 +49,13 @@ The `.1` is the low-frequency (subwoofer) channel.
 ## What to keep in a remux
 
 - The main track in its original lossless format. TrueHD and DTS-HD MA stay as they are.
-- LPCM converted to FLAC for mono and stereo. Same sound, smaller file. For 5.1 or 7.1, the format depends on the tracker. Some trackers do not accept FLAC above 2.0. See [making a remux](/remux/making-a-remux/) and the tracker comparison.
+- LPCM converted to FLAC for mono and stereo. Same sound, smaller file. For 5.1 or 7.1, the format depends on the tracker. See [making a remux](/remux/making-a-remux/) and the tracker comparison.
 - The original mix of older films, even if it is mono or 2.0. A new 5.1 remix is not a replacement for it.
 - Commentaries and dubs only if the tracker allows them.
 
 ## What to keep in an encode
 
-This depends on the tracker more than anything else. Common options:
+It depends on the tracker. Common options:
 
 - Copy the original lossless track as it is.
 - Keep a lossy track that is already on the disc, such as the DD 5.1 core.
@@ -53,14 +67,14 @@ Check the audio rules on the tracker page before you choose.
 
 ## Conversions
 
-| From | To | OK? |
-| --- | --- | --- |
-| LPCM | FLAC | Yes for mono and stereo. For 5.1 or 7.1, check the tracker first. Some trackers do not accept FLAC above 2.0. |
-| DTS-HD MA or TrueHD | FLAC | Lossless, but most trackers prefer the original format. Only if asked. |
-| Lossless | Lossy (DDP, AAC, Opus) | Yes, for encodes, when the tracker allows it. |
-| Lossy | Another lossy format (AC3 to AAC) | No. Quality drops twice. Usually rejected as a transcode. |
-| Lossy | Lossless (AC3 to FLAC) | No. It only makes a bigger file of the same lossy sound. |
-| 5.1 | 2.0 (downmix) | Only as an extra track, never instead of the original. |
+| Conversion | OK? |
+| --- | --- |
+| LPCM to FLAC | Yes for mono and stereo. For 5.1 or 7.1, check the tracker first. |
+| DTS-HD MA or TrueHD to FLAC | Lossless, but most trackers prefer the original format. Only if asked. |
+| Lossless to lossy (DDP, AAC, Opus) | Yes, for encodes, when the tracker allows it. |
+| Lossy to another lossy format (AC3 to AAC) | No. Quality drops twice. Usually rejected as a transcode. |
+| Lossy to lossless (AC3 to FLAC) | No. It only makes a bigger file of the same lossy sound. |
+| 5.1 to 2.0 (downmix) | Only as an extra track, never instead of the original. |
 
 ## Language tags
 
@@ -71,4 +85,8 @@ Every audio track needs a language. Two special codes:
 
 <Aside title="Name it the way it is">
   The release name lists the main audio track. If you converted it, the name must say the new format. If you did not, it must say the original. A mismatch is a common rejection reason.
+</Aside>
+
+<Aside title="If it does not play">
+  Some phone apps cannot decode DD or DD+ for licensing reasons. Use a player that supports them, such as VLC or mpv.
 </Aside>

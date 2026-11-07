@@ -6,11 +6,18 @@ sidebar:
 level: beginner
 ---
 
-import { Aside } from '@astrojs/starlight/components';
+import { Aside, Steps } from '@astrojs/starlight/components';
+import KeyFacts from '../../../components/ui/KeyFacts.astro';
 
-A private tracker is a catalogue of versions. Each film or episode has one page. On that page, each release fills a **slot**. Two releases that would fill the same slot are **dupes**, and the second one is rejected.
-
-Before any work, check that the slot you want is still free.
+<KeyFacts
+  title="The short version"
+  items={[
+    { label: 'One page per film', value: 'Each film or episode has one page on the tracker.' },
+    { label: 'One slot per release', value: 'Each release fills a <strong>slot</strong>. Two releases that would fill the same slot are <strong>dupes</strong>, and the second one is rejected.' },
+    { label: 'Check first', value: 'Before any work, check that the slot you want is still free.' },
+    { label: 'Trump', value: 'A new release can replace one in the same slot when the tracker rules allow it.' },
+  ]}
+/>
 
 ## What defines a slot
 
@@ -40,6 +47,20 @@ Example: a page that already has a 1080p x264 encode can still take a 2160p x265
   Some trackers let a better encode replace a worse one. Others keep the first release in the slot unless it is broken. Read the trump rules on each tracker before you spend a weekend on an encode.
 </Aside>
 
+## Before you start any work
+
+<Steps>
+
+1. Search the tracker for the film by IMDb or TMDb ID, not by title.
+
+2. Write down which slots exist. Check each one against the table above.
+
+3. Check the tracker's rules for your release type. The tracker comparison shows the basics side by side.
+
+4. Only then pick a source and start.
+
+</Steps>
+
 ## Where uploads pay off the most
 
 | What | Why |
@@ -48,10 +69,3 @@ Example: a page that already has a 1080p x264 encode can still take a 2160p x265
 | Films you already have on disc | No cost to you beyond ripping time. |
 | A codec slot nobody filled | Example: a UHD disc exists but nobody made a 1080p or 2160p x265 encode from it. |
 | New releases | Only if you are fast. Many people race for these slots. |
-
-## Before you start any work
-
-1. Search the tracker for the film by IMDb or TMDb ID, not by title.
-2. Write down which slots exist. Check each one against the table above.
-3. Check the tracker's rules for your release type. The tracker comparison shows the basics side by side.
-4. Only then pick a source and start.

@@ -8,7 +8,18 @@ tools: ['MKVToolNix GUI', 'mkvmerge']
 ---
 
 import { Aside, Steps } from '@astrojs/starlight/components';
+import KeyFacts from '../../../components/ui/KeyFacts.astro';
 import Shot from '../../../components/Shot.astro';
+
+<KeyFacts
+  title="The short version"
+  items={[
+    { label: 'Use for', value: 'A good file with one thing wrong in it. Not a routine step on every file.' },
+    { label: 'Tools', value: 'MKVToolNix and <code>mkvmerge</code>.' },
+    { label: 'Output', value: 'A new file name. Never over the source.' },
+    { label: 'Check', value: '<code>mkvmerge -i output.mkv</code>' },
+  ]}
+/>
 
 ## Who this is for
 
@@ -22,6 +33,10 @@ When a specific problem would get the upload rejected. Not as a routine step on 
 
 - [MKVToolNix](https://mkvtoolnix.download/) installed
 - The file, and any track you want to add (for example `film.en.srt`)
+
+<Aside type="danger" title="Never write over a hard-linked file">
+  If your downloads and library share files through hard links, writing to one name changes every name that points to the same data. Check the link count first. On Linux: `stat -c %h file.mkv`. If it is 2 or more, write to a new file name.
+</Aside>
 
 ## Common fixes
 
@@ -64,15 +79,11 @@ When a specific problem would get the upload rejected. Not as a routine step on 
 
 ### Joining two parts
 
-```bash
+```bash wrap
 mkvmerge -o full.mkv part1.mkv + part2.mkv
 ```
 
 The `+` means append: part 2 is added after part 1 in the same tracks. Both parts need the same track layout.
-
-<Aside type="danger" title="Never write over a hard-linked file">
-  If your downloads and library share files through hard links, writing to one name changes every name that points to the same data. Check the link count first. On Linux: `stat -c %h file.mkv`. If it is 2 or more, write to a new file name.
-</Aside>
 
 ## Stop and ask someone if
 

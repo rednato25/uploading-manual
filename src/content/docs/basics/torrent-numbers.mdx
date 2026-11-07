@@ -6,15 +6,23 @@ sidebar:
 level: beginner
 ---
 
-import { Aside } from '@astrojs/starlight/components';
+import KeyFacts from '../../../components/ui/KeyFacts.astro';
 import Shot from '../../../components/Shot.astro';
-
-Every torrent listing shows a row of numbers. Some tell you how healthy the torrent is. Others are about your own account.
 
 <Shot
   name="basics/01-torrent-listing-row.png"
   alt="A torrent listing row with size, seeders, leechers, snatches and age"
   caption="A torrent row on a tracker listing. The numbers tell you how healthy the torrent is."
+/>
+
+<KeyFacts
+  title="The four numbers that matter most"
+  items={[
+    { label: 'Seeders (S)', value: 'People with the whole file. More seeders means a faster download. Zero seeders means nobody can give you the file.' },
+    { label: 'Leechers (L)', value: 'People still downloading. They are who you upload to.' },
+    { label: 'Ratio', value: 'Uploaded ÷ Downloaded. Most trackers set a minimum, often between 0.4 and 1.0.' },
+    { label: 'Buffer', value: 'Uploaded minus Downloaded. How much you can download before your ratio drops below 1.0.' },
+  ]}
 />
 
 ## The torrent row
@@ -28,9 +36,13 @@ Every torrent listing shows a row of numbers. Some tell you how healthy the torr
 | **Age** | Time since upload | New torrents have the most leechers. |
 | **Peers** | Seeders plus leechers | Total people connected. |
 
-<Aside title="Reading health at a glance">
-  Lots of leechers and few seeders: high demand, and a good torrent to seed if you already have the file. Lots of seeders and no leechers: easy to download, but you will upload very little from it.
-</Aside>
+<KeyFacts
+  title="Reading health at a glance"
+  items={[
+    { label: 'High demand', value: 'Lots of leechers and few seeders: high demand, and a good torrent to seed if you already have the file.' },
+    { label: 'Low upload', value: 'Lots of seeders and no leechers: easy to download, but you will upload very little from it.' },
+  ]}
+/>
 
 ## Your account numbers
 

@@ -30,6 +30,10 @@ const size = computed(() => sizeFromBitrate(effectiveVideo.value, Number(audioKb
 const bpp = computed(() => bitsPerPixel(effectiveVideo.value, width.value, height.value, fpsNum.value));
 const resClass = computed(() => resolutionClass(width.value));
 const tier = computed(() => tierFor(resClass.value, effectiveVideo.value / 1000));
+const fmt = (n: number, d = 2) => n.toLocaleString('en-GB', { maximumFractionDigits: d, minimumFractionDigits: d });
+const announcement = computed(
+  () => `${fmt(size.value.gb)} GB, ${tier.value ? `${tier.value.toLowerCase()} tier` : 'no tracker tier'}, ${resClass.value}.`,
+);
 
 const presets = [
   { label: '1080p full frame', w: 1920, h: 1080 },
@@ -42,22 +46,30 @@ const setRes = (w: number, h: number) => {
   width.value = w;
   height.value = h;
 };
-const fmt = (n: number, d = 2) => n.toLocaleString('en-GB', { maximumFractionDigits: d, minimumFractionDigits: d });
 </script>
 
 <template>
   <div class="tool not-content">
-    <div class="tool-tabs" role="radiogroup" aria-label="Calculator mode">
-      <button type="button" :aria-pressed="mode === 'size'" @click="mode = 'size'">I know the bitrate</button>
-      <button type="button" :aria-pressed="mode === 'bitrate'" @click="mode = 'bitrate'">I want a file size</button>
-    </div>
+    <fieldset class="tool-mode">
+      <legend>Mode</legend>
+      <div class="tool-segmented">
+        <label>
+          <input v-model="mode" type="radio" name="calc-mode" value="size" />
+          <span>I know the bitrate</span>
+        </label>
+        <label>
+          <input v-model="mode" type="radio" name="calc-mode" value="bitrate" />
+          <span>I want a file size</span>
+        </label>
+      </div>
+    </fieldset>
 
     <div class="tool-fields">
-      <label>Runtime (hours)<input v-model.number="hours" type="number" min="0" max="10" /></label>
-      <label>Runtime (minutes)<input v-model.number="minutes" type="number" min="0" max="59" /></label>
-      <label>Width<input v-model.number="width" type="number" min="1" /></label>
-      <label>Height<input v-model.number="height" type="number" min="1" /></label>
-      <label
+      <label class="tool-field">Runtime (hours)<input v-model.number="hours" type="number" min="0" max="10" /></label>
+      <label class="tool-field">Runtime (minutes)<input v-model.number="minutes" type="number" min="0" max="59" /></label>
+      <label class="tool-field">Width<input v-model.number="width" type="number" min="1" /></label>
+      <label class="tool-field">Height<input v-model.number="height" type="number" min="1" /></label>
+      <label class="tool-field"
         >Frame rate
         <select v-model="fps">
           <option>23.976</option>
@@ -68,24 +80,41 @@ const fmt = (n: number, d = 2) => n.toLocaleString('en-GB', { maximumFractionDig
           <option>59.94</option>
         </select>
       </label>
-      <label>Audio, all tracks (kbps)<input v-model.number="audioKbps" type="number" min="0" /></label>
-      <label v-if="mode === 'size'">Video bitrate (kbps)<input v-model.number="videoKbps" type="number" min="0" /></label>
-      <label v-else>Target size (GB)<input v-model.number="targetGb" type="number" min="0" step="0.1" /></label>
+      <label class="tool-field">Audio, all tracks (kbps)<input v-model.number="audioKbps" type="number" min="0" /></label>
+      <label v-if="mode === 'size'" class="tool-field"
+        >Video bitrate (kbps)<input v-model.number="videoKbps" type="number" min="0"
+      /></label>
+      <label v-else class="tool-field"
+        >Target size (GB)<input v-model.number="targetGb" type="number" min="0" step="0.1"
+      /></label>
     </div>
 
     <div class="tool-chips">
-      <button v-for="p in presets" :key="p.label" type="button" @click="setRes(p.w, p.h)">{{ p.label }}</button>
+      <button v-for="preset in presets" :key="preset.label" type="button" @click="setRes(preset.w, preset.h)">
+        {{ preset.label }}
+      </button>
     </div>
 
-    <div class="tool-result" aria-live="polite">
-      <dl class="tool-grid">
+    <p class="tool-hint">The starting values are a 2 hour 1080p film. Change them for your release.</p>
+
+    <p class="tool-live" aria-live="polite">{{ announcement }}</p>
+
+    <div class="tool-result">
+      <p class="tool-summary">
+        <strong>{{ fmt(size.gb) }} GB</strong>
+        <span>{{ resClass }} at {{ fmt(effectiveVideo / 1000) }} Mb/s video</span>
+        <span v-if="tier" class="tool-summary-tier">{{ tier }} tier</span>
+        <span v-else class="tool-summary-tier">No tracker tier for this resolution</span>
+      </p>
+
+      <dl class="tool-facts">
         <div v-if="mode === 'bitrate'">
           <dt>Video bitrate for 2-pass</dt>
           <dd>{{ effectiveVideo.toLocaleString('en-GB') }} kbps</dd>
         </div>
         <div>
           <dt>File size</dt>
-          <dd>{{ fmt(size.gb) }} GB <span class="muted">({{ fmt(size.gib) }} GiB)</span></dd>
+          <dd>{{ fmt(size.gb) }} GB ({{ fmt(size.gib) }} GiB)</dd>
         </div>
         <div>
           <dt>Resolution class</dt>
@@ -95,13 +124,13 @@ const fmt = (n: number, d = 2) => n.toLocaleString('en-GB', { maximumFractionDig
           <dt>Bits per pixel</dt>
           <dd>{{ fmt(bpp, 3) }}</dd>
         </div>
-        <div v-if="tier">
-          <dt>Compact tier on some trackers (up to 12 Mbps at 1080p, 18 at 2160p)</dt>
-          <dd>{{ tier }}</dd>
-        </div>
       </dl>
-      <p class="muted small">
-        Audio here means every audio track added together. Size includes about 0.5% for the MKV container. The tier uses the video bitrate only.
+
+      <p class="tool-help">
+        Audio means every audio track added together. Size includes about 0.5% for the MKV container.
+      </p>
+      <p v-if="tier" class="tool-help">
+        Compact is up to 12 Mb/s at 1080p and 18 Mb/s at 2160p on trackers that use these tiers.
       </p>
     </div>
   </div>

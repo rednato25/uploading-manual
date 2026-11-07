@@ -6,9 +6,19 @@ sidebar:
 level: beginner
 ---
 
-import { Aside } from '@astrojs/starlight/components';
+import GoodBad from '../../../components/ui/GoodBad.astro';
+import KeyFacts from '../../../components/ui/KeyFacts.astro';
+import Specimen from '../../../components/ui/Specimen.astro';
 
-A release name is a short spec sheet.
+<KeyFacts
+  title="The short version"
+  items={[
+    { label: 'Remux', value: 'Video codec before audio.' },
+    { label: 'Encode', value: 'Audio before video, and the encoder last.' },
+    { label: 'Video codec', value: '<code>AVC</code> or <code>HEVC</code> means a straight copy. <code>x264</code> or <code>x265</code> means a re-encode.' },
+    { label: 'Group', value: 'If you are not in a group, use what the tracker says, usually <code>NoGroup</code>. Never your username.' },
+  ]}
+/>
 
 ## Four real-world shapes
 
@@ -19,32 +29,54 @@ UHD remux Some.Film.2019.2160p.UHD.BluRay.REMUX.DV.HDR.HEVC.TrueHD.7.1.Atmos-GRO
 WEB-DL    Some.Show.S01E01.1080p.NF.WEB-DL.DDP5.1.H.264-GROUP
 ```
 
-The order follows the P2P convention most trackers use. Remuxes put the video codec before the audio. Encodes put the audio first and end with the encoder. Each tracker has its own exact rules, so check the tracker page before you name anything.
+Most trackers use this P2P order. Remuxes put the video codec before the audio. Encodes put the audio first and end with the encoder. Each tracker has its own exact rules, so check the tracker page before you name anything.
 
 ## Every part, left to right
 
-| Part | Examples | What it means |
-| --- | --- | --- |
-| Title | `A.Sixth.Part.of.the.World` | As on TMDb or IMDb. Some trackers use dots, others spaces. |
-| Year | `1926` | Release year of the film. For series, the year is often left out. |
-| Episode | `S01E01`, `S01` | Season and episode. A season pack has only `S01`. |
-| Edition | `Directors.Cut`, `Extended` | Only real cuts of the film. "Remastered" or "Restoration" is usually not an edition. |
-| Resolution | `720p`, `1080p`, `2160p` | Resolution class. Based on the width, so a 1920×800 scope film is still `1080p`. |
-| Source | `BluRay`, `UHD.BluRay`, `WEB-DL`, `WEBRip`, `HDTV`, `DVD` | Where the video came from, not what you did to it. |
-| Streaming service | `NF`, `AMZN`, `ATVP`, `DSNP`, `HMAX` | Only for web sources. Netflix, Amazon, Apple TV+, Disney+, Max. |
-| Release type | `REMUX` | Present only for remuxes. |
-| HDR | `HDR`, `HDR10+`, `DV` | Dynamic range. `DV` is Dolby Vision. No tag means SDR. |
-| Video codec | `AVC`, `HEVC`, `VC-1`, `MPEG-2` | Used for untouched video (remux, full disc). Names the format. |
-| | `H.264`, `H.265` | Used for untouched web video. |
-| | `x264`, `x265` | Used for encodes. Names the encoder you ran. |
-| Audio codec | `FLAC`, `TrueHD`, `DTS-HD.MA`, `DD`, `DDP`, `AAC`, `Opus` | Main audio track. |
-| Channels | `1.0`, `2.0`, `5.1`, `7.1` | Speakers. The `.1` is the subwoofer channel (LFE). |
-| Atmos | `Atmos` | Height channels on top of TrueHD or DDP. |
-| Group | `-GROUP`, `-NoGroup` | Who made it. If you are not in a group, use what the tracker says, usually `NoGroup`. Never your username. |
+<Specimen
+  separator="."
+  parts={[
+    { text: 'A.Sixth.Part.of.the.World', label: 'Title' },
+    { text: '1926', label: 'Year' },
+    { text: '1080p', label: 'Resolution' },
+    { text: 'BluRay', label: 'Source' },
+    { text: 'REMUX', label: 'Release type' },
+    { text: 'AVC', label: 'Video codec' },
+    { text: 'FLAC', label: 'Audio codec' },
+    { text: '2.0', label: 'Channels' },
+    { text: '-NoGroup', label: 'Group' },
+  ]}
+/>
+
+| Part and examples | What it means |
+| --- | --- |
+| **Title** `A.Sixth.Part.of.the.World` | As on TMDb or IMDb. Some trackers use dots, others spaces. |
+| **Year** `1926` | Release year of the film. For series, the year is often left out. |
+| **Episode** `S01E01`, `S01` | Season and episode. A season pack has only `S01`. |
+| **Edition** `Directors.Cut`, `Extended` | Only real cuts of the film. "Remastered" or "Restoration" is usually not an edition. |
+| **Resolution** `720p`, `1080p`, `2160p` | Resolution class. Based on the width, so a 1920×800 scope film is still `1080p`. |
+| **Source** `BluRay`, `UHD.BluRay`, `WEB-DL`, `WEBRip`, `HDTV`, `DVD` | Where the video came from, not what you did to it. |
+| **Streaming service** `NF`, `AMZN`, `ATVP`, `DSNP`, `HMAX` | Only for web sources. Netflix, Amazon, Apple TV+, Disney+, Max. |
+| **Release type** `REMUX` | Present only for remuxes. |
+| **HDR** `HDR`, `HDR10+`, `DV` | Dynamic range. `DV` is Dolby Vision. No tag means SDR. |
+| **Video codec** `AVC`, `HEVC`, `VC-1`, `MPEG-2` | Used for untouched video (remux, full disc). Names the format. |
+| `H.264`, `H.265` | Used for untouched web video. |
+| `x264`, `x265` | Used for encodes. Names the encoder you ran. |
+| **Audio codec** `FLAC`, `TrueHD`, `DTS-HD.MA`, `DD`, `DDP`, `AAC`, `Opus` | Main audio track. |
+| **Channels** `1.0`, `2.0`, `5.1`, `7.1` | Speakers. The `.1` is the subwoofer channel (LFE). |
+| **Atmos** `Atmos` | Height channels on top of TrueHD or DDP. |
+| **Group** `-GROUP`, `-NoGroup` | Who made it. If you are not in a group, use what the tracker says, usually `NoGroup`. Never your username. |
 
 ### The video codec rule in one line
 
 `AVC` or `HEVC` means the video is a straight copy. `x264` or `x265` means someone re-encoded it. A file called `REMUX` with `x264` in it is a contradiction and a red flag.
+
+<GoodBad>
+  <p slot="good"><code>1080p NF WEB-DL DDP 5.1 H.264</code></p>
+  <p slot="bad"><code>1080p NF WEB-DL x264 DDP 5.1</code></p>
+</GoodBad>
+
+Untouched web video is `H.264`. `x264` means it was re-encoded, so the bad example is a WEBRip or misnamed.
 
 ## Common audio names
 
@@ -55,19 +87,32 @@ The order follows the P2P convention most trackers use. Remuxes put the video co
 | `FLAC` | Free Lossless Audio Codec | Yes |
 | `LPCM` | Uncompressed PCM | Yes, but large. Usually converted to FLAC. |
 | `DD` or `AC3` | Dolby Digital | No |
-| `DDP` or `EAC3` | Dolby Digital Plus | No |
+| `DD+`, `DDP` or `EAC3` | Dolby Digital Plus | No |
 | `DTS` | DTS core | No |
 | `AAC`, `Opus` | | No |
 
+Site titles on the shared template write `DD+`. File names usually write `DDP`.
+
 ## Mistakes that get uploads renamed or rejected
 
-<Aside type="danger" title="Each of these has cost an upload">
-- The media file was renamed. Many trackers want the file exactly as the group released it, and build the site title separately.
-- An "AKA" title added by a tool when the file name has none.
-- A "The" added or removed.
-- Audio written differently from the file: `DTS-HD` instead of `DTS-HD.MA`.
-- The file name says one audio codec and the file has another. Example: name says `AAC.2.0`, file has FLAC.
-- A leftover suffix like `_new` or `(1)`.
-- Radarr or Sonarr renamed the file after download. Check the original name in qBittorrent.
-- The site title does not follow the tracker's naming rules. Some trackers have a name builder.
-</Aside>
+Each of these has cost an upload. Many trackers want the media file exactly as the group released it and build the site title separately. Some trackers have a name builder.
+
+<GoodBad>
+  <p slot="good">The file keeps the group's original name, with no extra suffix.</p>
+  <p slot="bad">The file was renamed, or has a leftover suffix like <code>_new</code> or <code>(1)</code>.</p>
+</GoodBad>
+
+<GoodBad>
+  <p slot="good">The title matches the file name. No AKA is added and no The is added or removed.</p>
+  <p slot="bad">An "AKA" title added by a tool when the file name has none, or a "The" that is not in the file name.</p>
+</GoodBad>
+
+<GoodBad>
+  <p slot="good">The name and the file say the same audio codec, for example <code>DTS-HD.MA</code> in both.</p>
+  <p slot="bad">The name says <code>DTS-HD</code> when the file has <code>DTS-HD.MA</code>, or <code>AAC.2.0</code> when the file has FLAC.</p>
+</GoodBad>
+
+<GoodBad>
+  <p slot="good">The original name from qBittorrent is kept, and the site title follows the tracker's naming rules.</p>
+  <p slot="bad">Radarr or Sonarr renamed the file, or the site title ignores the tracker's naming rules.</p>
+</GoodBad>
