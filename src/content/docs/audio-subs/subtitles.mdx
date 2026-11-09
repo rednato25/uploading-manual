@@ -7,17 +7,24 @@ level: beginner
 tools: ['Subtitle Edit', 'MKVToolNix GUI']
 ---
 
-import { Aside, Steps } from '@astrojs/starlight/components';
+import { Steps } from '@astrojs/starlight/components';
+import Callout from '../../../components/ui/Callout.astro';
 import GoodBad from '../../../components/ui/GoodBad.astro';
 import KeyFacts from '../../../components/ui/KeyFacts.astro';
+import Scale from '../../../components/ui/Scale.astro';
+import Verdict from '../../../components/ui/Verdict.astro';
+
+<Callout variant="answer">
+  Add a soft subtitle track in sync and with the language set, and check for burned-in text before you start.
+</Callout>
 
 <KeyFacts
   title="The short version"
   items={[
-    { label: 'Needed when', value: 'The main audio is not English, or the tracker requires a subtitle track.' },
-    { label: 'Best source', value: 'The disc itself. It has the best timing and accuracy.' },
-    { label: 'Check first', value: 'Burned-in text cannot be removed. Silent films need English intertitles.' },
-    { label: 'Result', value: 'An English (or required language) subtitle track inside the MKV, in sync and with the language set.' },
+    { label: 'Needed when', tone: 'info', value: 'The main audio is not English, or the tracker requires a subtitle track.' },
+    { label: 'Best source', tone: 'good', value: 'The disc itself. It has the best timing and accuracy.' },
+    { label: 'Check first', tone: 'careful', value: 'Burned-in text cannot be removed. Silent films need English intertitles.' },
+    { label: 'Result', tone: 'good', value: 'An English (or required language) subtitle track inside the MKV, in sync and with the language set.' },
   ]}
 />
 
@@ -36,11 +43,14 @@ Before muxing the final file. Subtitles go inside the MKV, not as a separate fil
 
 ## Where subtitles come from, best first
 
-| Source | Notes |
-| --- | --- |
-| The disc itself | Best timing and accuracy. PGS (image) tracks from the Blu-ray. |
-| Another release of the same edition | Check that the frame rate and cut match. |
-| Subtitle sites (Subdl, OpenSubtitles) | Quality varies. Always check sync and spelling. |
+<Scale
+  kind="steps"
+  items={[
+    { label: 'The disc itself', tone: 'good', text: 'Best timing and accuracy. PGS (image) tracks from the Blu-ray.' },
+    { label: 'Another release of the same edition', tone: 'careful', text: 'Check that the frame rate and cut match.' },
+    { label: 'Subtitle sites (Subdl, OpenSubtitles)', tone: 'careful', text: 'Quality varies. Always check sync and spelling.' },
+  ]}
+/>
 
 ## Burned-in subtitles
 
@@ -53,9 +63,9 @@ Before muxing the final file. Subtitles go inside the MKV, not as a separate fil
 
 A silent film has no spoken audio, but its intertitles (the text cards) are in a language. If they are not in English, add an English subtitle track for them, or explain in the description why there is none.
 
-<Aside type="caution" title="Machine-made subtitles">
+<Callout tone="careful" label="Check" title="Machine-made subtitles">
   Subtitles made with speech-to-text (Whisper) or machine translation are rejected or must be labelled on many trackers. Check the rule before you use them, and say so in the description if you do.
-</Aside>
+</Callout>
 
 ## Steps
 
@@ -86,7 +96,7 @@ A silent film has no spoken audio, but its intertitles (the text cards) are in a
 
 ## What good looks like
 
-An English (or required language) subtitle track inside the MKV, in sync from start to end, with the language set and the default flag as the tracker asks.
+<Verdict state="pass" title="A clean subtitle track" detail="An English (or required language) subtitle track inside the MKV, in sync from start to end, with the language set and the default flag as the tracker asks." />
 
 ## Related
 

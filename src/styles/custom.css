@@ -1,5 +1,68 @@
 /* Tools: inputs, results and shared status lines. Built on Starlight tokens. */
 
+/*
+ * Semantic colour.
+ * A colour means one thing on every page:
+ *   good    green   do this, pass, accepted, lossless, yes
+ *   bad     red     do not, fail, rejected, banned, no
+ *   careful amber   check this, SHOULD, depends, warning
+ *   info    blue    neutral fact, tip, link, RECOMMENDED
+ * Each role has a solid fill, a tinted surface, a border and an ink for text
+ * and icons on the tint. `on` is the text colour for a solid fill.
+ * All pairs below pass WCAG AA in both themes.
+ */
+:root {
+  --c-good-solid: oklch(66% 0.15 164);
+  --c-good-tint: oklch(21% 0.04 164);
+  --c-good-border: oklch(38% 0.07 164);
+  --c-good-ink: oklch(84% 0.1 164);
+  --c-good-on: oklch(15% 0.02 164);
+
+  --c-bad-solid: oklch(64% 0.17 13);
+  --c-bad-tint: oklch(21% 0.045 13);
+  --c-bad-border: oklch(38% 0.08 13);
+  --c-bad-ink: oklch(84% 0.11 13);
+  --c-bad-on: oklch(15% 0.02 13);
+
+  --c-careful-solid: oklch(74% 0.14 84);
+  --c-careful-tint: oklch(22% 0.035 84);
+  --c-careful-border: oklch(40% 0.055 84);
+  --c-careful-ink: oklch(88% 0.1 84);
+  --c-careful-on: oklch(16% 0.02 84);
+
+  --c-info-solid: oklch(64% 0.16 274);
+  --c-info-tint: oklch(21% 0.04 274);
+  --c-info-border: oklch(38% 0.07 274);
+  --c-info-ink: oklch(84% 0.09 274);
+  --c-info-on: oklch(15% 0.02 274);
+}
+
+:root[data-theme='light'] {
+  --c-good-solid: oklch(46% 0.12 164);
+  --c-good-tint: oklch(96.5% 0.025 164);
+  --c-good-border: oklch(80% 0.08 164);
+  --c-good-ink: oklch(34% 0.09 164);
+  --c-good-on: oklch(99% 0.005 164);
+
+  --c-bad-solid: oklch(47% 0.16 13);
+  --c-bad-tint: oklch(96.5% 0.02 13);
+  --c-bad-border: oklch(80% 0.07 13);
+  --c-bad-ink: oklch(36% 0.13 13);
+  --c-bad-on: oklch(99% 0.005 13);
+
+  --c-careful-solid: oklch(42% 0.09 84);
+  --c-careful-tint: oklch(96.5% 0.03 84);
+  --c-careful-border: oklch(80% 0.09 84);
+  --c-careful-ink: oklch(32% 0.07 84);
+  --c-careful-on: oklch(99% 0.005 84);
+
+  --c-info-solid: oklch(47% 0.16 274);
+  --c-info-tint: oklch(96.5% 0.02 274);
+  --c-info-border: oklch(80% 0.07 274);
+  --c-info-ink: oklch(36% 0.12 274);
+  --c-info-on: oklch(99% 0.005 274);
+}
+
 .tool {
   display: flex;
   flex-direction: column;
@@ -213,11 +276,11 @@
 }
 
 .tool-facts dt {
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--sl-color-gray-3);
+  color: var(--sl-color-gray-2);
 }
 
 .tool-facts dd {
@@ -236,11 +299,11 @@
 
 .tool-group-title {
   margin: 0;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--sl-color-gray-3);
+  color: var(--sl-color-gray-2);
 }
 
 .tool-findings {
@@ -267,9 +330,9 @@
   align-items: center;
   gap: 0.3rem;
   font-family: var(--sl-font-mono);
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
   white-space: nowrap;
 }
@@ -289,11 +352,11 @@
 }
 
 .tool-status[data-state='warn'] {
-  color: var(--sl-color-orange-high);
+  color: var(--c-careful-ink);
 }
 
 .tool-status[data-state='bad'] {
-  color: var(--sl-color-red-high);
+  color: var(--c-bad-ink);
 }
 
 .tool-details {
@@ -383,9 +446,9 @@
   align-items: baseline;
   gap: 0.35rem 0.55rem;
   margin-block: 1.5rem;
-  padding: 0.65rem 0.9rem;
+  padding: 0.75rem 1rem;
   border: 1px solid var(--sl-color-gray-5);
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   background: var(--sl-color-gray-7);
   font-size: var(--sl-text-base);
   line-height: 1.5;
@@ -409,9 +472,9 @@
 
 .ui-verdict-word {
   font-family: var(--sl-font-mono);
-  font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
@@ -421,22 +484,37 @@
 
 .ui-verdict-detail {
   font-size: var(--sl-text-sm);
-  color: var(--sl-color-gray-3);
+  color: var(--sl-color-gray-2);
+}
+
+.ui-verdict[data-state='pass'] {
+  border-color: var(--c-good-border);
+  background: var(--c-good-tint);
+}
+
+.ui-verdict[data-state='check'] {
+  border-color: var(--c-careful-border);
+  background: var(--c-careful-tint);
+}
+
+.ui-verdict[data-state='problem'] {
+  border-color: var(--c-bad-border);
+  background: var(--c-bad-tint);
 }
 
 .ui-verdict[data-state='pass'] svg,
 .ui-verdict[data-state='pass'] .ui-verdict-word {
-  color: var(--sl-color-green-high);
+  color: var(--c-good-ink);
 }
 
 .ui-verdict[data-state='check'] svg,
 .ui-verdict[data-state='check'] .ui-verdict-word {
-  color: var(--sl-color-orange-high);
+  color: var(--c-careful-ink);
 }
 
 .ui-verdict[data-state='problem'] svg,
 .ui-verdict[data-state='problem'] .ui-verdict-word {
-  color: var(--sl-color-red-high);
+  color: var(--c-bad-ink);
 }
 
 /* Design 1: type scale and spacing. Body 17 / 1.6, page H1 36, H2 26, H3 19. */
@@ -600,9 +678,9 @@ body {
 
 /* Sidebar: quiet uppercase group labels, roomier rows on touch widths. */
 .sidebar-pane .group-label > .large {
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--sl-color-gray-2);
 }
@@ -616,3 +694,66 @@ body {
     padding-block: calc(0.2em + 5px);
   }
 }
+
+/* Shared icon set for the semantic UI. Stroke only, one weight. */
+.ui-icon {
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vertical-align: -0.125em;
+}
+
+/* L4 reference: a collapsed, muted block for lookup detail. */
+.sl-markdown-content details.ui-reference:not(:where(.not-content *)) {
+  margin-block: 1.5rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 0.5rem;
+  background: var(--sl-color-gray-7);
+  color: var(--sl-color-gray-2);
+}
+
+.sl-markdown-content details.ui-reference > summary:not(:where(.not-content *)) {
+  margin-inline-start: 0;
+  padding: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--sl-color-gray-2);
+}
+
+.sl-markdown-content details.ui-reference > summary:not(:where(.not-content *)):is(:hover, :focus-visible) {
+  color: var(--sl-color-white);
+}
+
+.sl-markdown-content details.ui-reference[open] > summary:not(:where(.not-content *)) {
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid var(--sl-color-gray-5);
+}
+
+.sl-markdown-content details.ui-reference :is(th, td):not(:where(.not-content *)) {
+  font-size: 0.9375rem;
+}
+
+/* A yes, no or limited value inside a table keeps its icon and word. */
+.sl-markdown-content td:not(:where(.not-content *)) .ui-status {
+  vertical-align: 0.05em;
+}
+
+/*
+ * MediaInfo samples are fixed-width reports with values padded far to the
+ * right. At 390 the padding pushes every value off screen, so the label and
+ * value flow instead. Other code samples keep their formatting and scroll.
+ */
+@media (max-width: 47.99rem) {
+  .mediainfo-sample .expressive-code pre[data-language='txt'] .ec-line .code {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}
+

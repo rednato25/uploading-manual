@@ -5,29 +5,44 @@ sidebar:
   order: 30
 ---
 
+import Callout from '../../../components/ui/Callout.astro';
+import DefinitionTable from '../../../components/ui/DefinitionTable.astro';
 import HdrParams from '../../../components/tools/HdrParams.vue';
 import KeyFacts from '../../../components/ui/KeyFacts.astro';
+
+<Callout variant="answer">
+  Paste the Video section of a UHD source to get the x265 HDR10 flags that carry its mastering display and light levels.
+</Callout>
 
 <HdrParams client:load />
 
 <KeyFacts
   items={[
-    { label: 'Reads', value: 'The Video section of a UHD source in MediaInfo.' },
-    { label: 'Output', value: 'x265 HDR10 settings in four groups, with one Copy all.' },
-    { label: 'Not carried over', value: 'Dolby Vision and HDR10+.' },
-    { label: 'Runs', value: 'In your browser. Nothing is sent anywhere.' },
+    { label: 'Reads', tone: 'info', value: 'The Video section of a UHD source in MediaInfo.' },
+    { label: 'Output', tone: 'good', value: 'x265 HDR10 settings in four groups, with one Copy all.' },
+    { label: 'Not carried over', tone: 'careful', value: 'Dolby Vision and HDR10+.' },
+    { label: 'Runs', tone: 'good', value: 'In your browser. Nothing is sent anywhere.' },
   ]}
 />
 
 ## What it reads
 
-| MediaInfo line | Becomes |
-| --- | --- |
-| Transfer characteristics: PQ | `--transfer smpte2084` and the HDR10 flags |
-| Mastering display color primaries | The colour part of `--master-display` |
-| Mastering display luminance | The `L(max,min)` part of `--master-display` |
-| Maximum Content Light Level, Maximum Frame-Average Light Level | `--max-cll "MaxCLL,MaxFALL"` |
-| Chroma subsampling: 4:2:0 (Type 2) | `--chromaloc 2` |
-| Color range | `--range` |
+<details class="ui-reference">
+<summary>What it reads (reference)</summary>
+
+<DefinitionTable
+  label="What it reads"
+  columns={['MediaInfo line', 'Becomes']}
+  rows={[
+    ['Transfer characteristics: PQ', '<code>--transfer smpte2084</code> and the HDR10 flags'],
+    ['Mastering display color primaries', 'The colour part of <code>--master-display</code>'],
+    ['Mastering display luminance', 'The <code>L(max,min)</code> part of <code>--master-display</code>'],
+    ['Maximum Content Light Level, Maximum Frame-Average Light Level', '<code>--max-cll "MaxCLL,MaxFALL"</code>'],
+    ['Chroma subsampling: 4:2:0 (Type 2)', '<code>--chromaloc 2</code>'],
+    ['Color range', '<code>--range</code>'],
+  ]}
+/>
+
+</details>
 
 x265 wants the colour coordinates in steps of 0.00002 and the brightness in steps of 0.0001 cd/m². So a green x of 0.265 becomes 13250, and 1000 cd/m² becomes 10000000.

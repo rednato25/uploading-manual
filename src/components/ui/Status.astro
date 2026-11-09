@@ -1,0 +1,83 @@
+---
+/**
+ * A small status chip: icon, word and the semantic colour. The word is always
+ * present, so colour is never the only carrier. `kind` accepts the table values
+ * yes, no and limited as well as the tone names.
+ */
+import Icon from './Icon.astro';
+
+export type Tone = 'good' | 'bad' | 'careful' | 'info';
+
+interface Props {
+  kind: Tone | 'yes' | 'no' | 'limited';
+  label?: string;
+}
+
+const { kind, label } = Astro.props;
+
+const tone: Tone =
+  kind === 'yes' ? 'good' : kind === 'no' ? 'bad' : kind === 'limited' ? 'careful' : kind;
+
+const word =
+  label ??
+  (kind === 'yes'
+    ? 'Yes'
+    : kind === 'no'
+      ? 'No'
+      : kind === 'limited'
+        ? 'Limited'
+        : kind === 'good'
+          ? 'Good'
+          : kind === 'bad'
+            ? 'Bad'
+            : kind === 'careful'
+              ? 'Check'
+              : 'Fact');
+
+const icon = tone === 'good' ? 'check' : tone === 'bad' ? 'cross' : tone === 'careful' ? 'alert' : 'info';
+---
+
+<span class="ui-status" data-tone={tone}>
+  <Icon name={icon} />
+  <span>{word}</span>
+</span>
+
+<style>
+  .ui-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.28rem;
+    padding: 0.1rem 0.4rem;
+    border: 1px solid var(--c-info-border);
+    border-radius: 0.25rem;
+    background: var(--c-info-tint);
+    color: var(--c-info-ink);
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.35;
+    white-space: nowrap;
+  }
+
+  .ui-status :global(.ui-icon) {
+    width: 0.9rem;
+    height: 0.9rem;
+  }
+
+  .ui-status[data-tone='good'] {
+    border-color: var(--c-good-border);
+    background: var(--c-good-tint);
+    color: var(--c-good-ink);
+  }
+
+  .ui-status[data-tone='bad'] {
+    border-color: var(--c-bad-border);
+    background: var(--c-bad-tint);
+    color: var(--c-bad-ink);
+  }
+
+  .ui-status[data-tone='careful'] {
+    border-color: var(--c-careful-border);
+    background: var(--c-careful-tint);
+    color: var(--c-careful-ink);
+  }
+</style>

@@ -6,8 +6,15 @@ sidebar:
 level: beginner
 ---
 
+import Callout from '../../../components/ui/Callout.astro';
+import DefinitionTable from '../../../components/ui/DefinitionTable.astro';
 import KeyFacts from '../../../components/ui/KeyFacts.astro';
+import Scale from '../../../components/ui/Scale.astro';
 import Shot from '../../../components/Shot.astro';
+
+<Callout variant="answer">
+  Pick a torrent by its seeders and leechers, and check your ratio before you download: most trackers set a minimum.
+</Callout>
 
 <Shot
   name="basics/01-torrent-listing-row.png"
@@ -18,43 +25,59 @@ import Shot from '../../../components/Shot.astro';
 <KeyFacts
   title="The four numbers that matter most"
   items={[
-    { label: 'Seeders (S)', value: 'People with the whole file. More seeders means a faster download. Zero seeders means nobody can give you the file.' },
-    { label: 'Leechers (L)', value: 'People still downloading. They are who you upload to.' },
-    { label: 'Ratio', value: 'Uploaded ÷ Downloaded. Most trackers set a minimum, often between 0.4 and 1.0.' },
-    { label: 'Buffer', value: 'Uploaded minus Downloaded. How much you can download before your ratio drops below 1.0.' },
+    { label: 'Seeders (S)', tone: 'good', value: 'People with the whole file. More seeders means a faster download. Zero seeders means nobody can give you the file.' },
+    { label: 'Leechers (L)', tone: 'info', value: 'People still downloading. They are who you upload to.' },
+    { label: 'Ratio', tone: 'careful', value: 'Uploaded ÷ Downloaded. Most trackers set a minimum, often between 0.4 and 1.0.' },
+    { label: 'Buffer', tone: 'good', value: 'Uploaded minus Downloaded. How much you can download before your ratio drops below 1.0.' },
   ]}
 />
 
 ## The torrent row
 
-| Column | What it counts | What it tells you |
-| --- | --- | --- |
-| **Size** | Total size of the files | How much counts against your download (unless it is freeleech). |
-| **Seeders** (S) | People connected right now who have the whole file and are uploading it | More seeders means a faster download. Zero seeders means nobody can give you the file. |
-| **Leechers** (L) | People connected right now who are still downloading | They are who you upload to. Many leechers and few seeders is where you earn upload fastest. |
-| **Snatches** or **Completed** (C) | How many times the torrent was fully downloaded, ever | Shows how popular it was over time. A high number with few seeders means people downloaded and left. |
-| **Age** | Time since upload | New torrents have the most leechers. |
-| **Peers** | Seeders plus leechers | Total people connected. |
+<details class="ui-reference">
+<summary>Every column in the torrent row (reference)</summary>
 
-<KeyFacts
-  title="Reading health at a glance"
+<DefinitionTable
+  label="Every column in the torrent row"
+  columns={['Column', 'What it counts', 'What it tells you']}
+  rows={[
+    ['Size', 'Total size of the files', 'How much counts against your download (unless it is freeleech).'],
+    ['Seeders (S)', 'People connected right now who have the whole file and are uploading it', 'More seeders means a faster download. Zero seeders means nobody can give you the file.'],
+    ['Leechers (L)', 'People connected right now who are still downloading', 'They are who you upload to. Many leechers and few seeders is where you earn upload fastest.'],
+    ['Snatches or Completed (C)', 'How many times the torrent was fully downloaded, ever', 'Shows how popular it was over time. A high number with few seeders means people downloaded and left.'],
+    ['Age', 'Time since upload', 'New torrents have the most leechers.'],
+    ['Peers', 'Seeders plus leechers', 'Total people connected.'],
+  ]}
+/>
+
+</details>
+
+### Reading health at a glance
+
+<Scale
+  kind="steps"
   items={[
-    { label: 'High demand', value: 'Lots of leechers and few seeders: high demand, and a good torrent to seed if you already have the file.' },
-    { label: 'Low upload', value: 'Lots of seeders and no leechers: easy to download, but you will upload very little from it.' },
+    { label: 'High demand', tone: 'good', text: 'Lots of leechers and few seeders: high demand, and a good torrent to seed if you already have the file.' },
+    { label: 'Even', tone: 'careful', text: 'Seeders and leechers are close. Nothing stands out either way.' },
+    { label: 'Low upload', tone: 'bad', text: 'Lots of seeders and no leechers: easy to download, but you will upload very little from it.' },
   ]}
 />
 
 ## Your account numbers
 
-| Number | Formula or meaning | Why it matters |
-| --- | --- | --- |
-| **Uploaded** | Total data you sent to others | The thing you build up. |
-| **Downloaded** | Total data you received (freeleech does not count) | The thing that costs you. |
-| **Ratio** | Uploaded ÷ Downloaded | Most trackers have a minimum, often somewhere between 0.4 and 1.0. Below it you get a warning and then lose download rights. Check the exact number on each tracker. |
-| **Buffer** | Uploaded minus Downloaded | How much you can download before your ratio drops below 1.0. A 50 GB buffer means you can grab 50 GB without going under. |
-| **Seed time** | How long you kept seeding a torrent | Many trackers require a minimum per torrent. |
-| **Seed size** | Total size of everything you seed right now | Some trackers reward this with bonus points. |
-| **Bonus points** (BP, seedbonus) | Points earned per hour of seeding | Usually spent on upload credit, freeleech tokens or invites. Large and poorly seeded torrents tend to earn more. |
+<DefinitionTable
+  label="Your account numbers"
+  columns={['Number', 'Formula or meaning', 'Why it matters']}
+  rows={[
+    ['Uploaded', 'Total data you sent to others', 'The thing you build up.'],
+    ['Downloaded', 'Total data you received (freeleech does not count)', 'The thing that costs you.'],
+    ['Ratio', 'Uploaded ÷ Downloaded', 'Most trackers have a minimum, often somewhere between 0.4 and 1.0. Below it you get a warning and then lose download rights. Check the exact number on each tracker.'],
+    ['Buffer', 'Uploaded minus Downloaded', 'How much you can download before your ratio drops below 1.0. A 50 GB buffer means you can grab 50 GB without going under.'],
+    ['Seed time', 'How long you kept seeding a torrent', 'Many trackers require a minimum per torrent.'],
+    ['Seed size', 'Total size of everything you seed right now', 'Some trackers reward this with bonus points.'],
+    ['Bonus points (BP, seedbonus)', 'Points earned per hour of seeding', 'Usually spent on upload credit, freeleech tokens or invites. Large and poorly seeded torrents tend to earn more.'],
+  ]}
+/>
 
 ### A worked example
 

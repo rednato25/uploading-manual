@@ -8,17 +8,24 @@ tools: ['StaxRip 2.52', 'MediaInfo']
 ---
 
 import { Steps } from '@astrojs/starlight/components';
+import Callout from '../../../components/ui/Callout.astro';
+import DefinitionTable from '../../../components/ui/DefinitionTable.astro';
 import GoodBad from '../../../components/ui/GoodBad.astro';
 import KeyFacts from '../../../components/ui/KeyFacts.astro';
 import Shot from '../../../components/Shot.astro';
+import Verdict from '../../../components/ui/Verdict.astro';
+
+<Callout variant="answer">
+  Set CRF or 2-pass, keep the preset at slow or slower, and leave only Source and Crop in the filter list.
+</Callout>
 
 <KeyFacts
   title="The short version"
   items={[
-    { label: 'Encoder', value: 'x264. H.264, 1080p SDR.' },
-    { label: 'Rate control', value: 'CRF or 2-pass. 1-pass ABR and CBR are rejected.' },
-    { label: 'Preset', value: 'slow or slower.' },
-    { label: 'Crop', value: 'On, to the picture edge. All other filters off.' },
+    { label: 'Encoder', tone: 'info', value: 'x264. H.264, 1080p SDR.' },
+    { label: 'Rate control', tone: 'careful', value: 'CRF or 2-pass. 1-pass ABR and CBR are rejected.' },
+    { label: 'Preset', tone: 'careful', value: 'slow or slower.' },
+    { label: 'Crop', tone: 'good', value: 'On, to the picture edge. All other filters off.' },
   ]}
 />
 
@@ -39,17 +46,21 @@ When the 1080p x264 slot is free on the tracker and you have a good remux. Read 
 
 ## Settings
 
-| Setting | Value and why |
-| --- | --- |
-| Encoder | x264. |
-| Rate control | CRF from your test (often 17 to 20), or 2-pass at the bitrate from the [calculator](/tools/bitrate-calculator/). Both are accepted. 1-pass ABR and CBR are not. |
-| Preset | slow or slower. Faster presets waste bits. |
-| Tune | film, or grain for grainy films. See [tunes](/encode/encoding-basics/#tune-what-kind-of-picture). |
-| Profile, level | High, 4.1. Plays on everything that does 1080p. |
-| Bit depth | 8-bit. 10-bit H.264 has poor device support. |
-| Crop | On, to the picture edge. Black bars waste bits. |
-| Resize | Off. Source is already 1080p. |
-| Other filters | All off. No denoise, no deinterlace on progressive film. |
+<DefinitionTable
+  label="Settings"
+  columns={['Setting', 'Value and why']}
+  rows={[
+    ['Encoder', 'x264.'],
+    ['Rate control', 'CRF from your test (often 17 to 20), or 2-pass at the bitrate from the <a href="/tools/bitrate-calculator/">calculator</a>. Both are accepted. 1-pass ABR and CBR are not.'],
+    ['Preset', 'slow or slower. Faster presets waste bits.'],
+    ['Tune', 'film, or grain for grainy films. See <a href="/encode/encoding-basics/#tune-what-kind-of-picture">tunes</a>.'],
+    ['Profile, level', 'High, 4.1. Plays on everything that does 1080p.'],
+    ['Bit depth', '8-bit. 10-bit H.264 has poor device support.'],
+    ['Crop', 'On, to the picture edge. Black bars waste bits.'],
+    ['Resize', 'Off. Source is already 1080p.'],
+    ['Other filters', 'All off. No denoise, no deinterlace on progressive film.'],
+  ]}
+/>
 
 ## Filters
 
@@ -106,7 +117,11 @@ When the 1080p x264 slot is free on the tracker and you have a good remux. Read 
 
 ## What good looks like
 
-MediaInfo shows `x264`, `High@L4.1`, the cropped resolution, and `rc=crf` or `rc=2pass` in the settings. The [header checker](/tools/header-checker/) shows no problems. The file name matches every track in the file.
+<Verdict
+  state="pass"
+  title="A clean x264 encode"
+  detail='MediaInfo shows <code>x264</code>, <code>High@L4.1</code>, the cropped resolution, and <code>rc=crf</code> or <code>rc=2pass</code> in the settings. The <a href="/tools/header-checker/">header checker</a> shows no problems. The file name matches every track in the file.'
+/>
 
 ## Related
 

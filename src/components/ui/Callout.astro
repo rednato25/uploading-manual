@@ -1,0 +1,140 @@
+---
+/**
+ * A semantic callout. `variant="answer"` renders the L1 answer: the one
+ * sentence to remember at the top of a page. The note variant carries a
+ * single warning, check or fact. The label is always a word, so the colour is
+ * never the only signal.
+ */
+import Icon from './Icon.astro';
+
+export type Tone = 'good' | 'bad' | 'careful' | 'info';
+
+interface Props {
+  variant?: 'answer' | 'note';
+  tone?: Tone;
+  label?: string;
+  title?: string;
+}
+
+const { variant = 'note', tone = 'info', label, title } = Astro.props;
+
+const defaultLabel =
+  variant === 'answer'
+    ? 'The answer'
+    : tone === 'good'
+      ? 'Good'
+      : tone === 'bad'
+        ? 'Problem'
+        : tone === 'careful'
+          ? 'Check'
+          : 'Note';
+
+const icon = variant === 'answer' ? 'key' : tone === 'good' ? 'check' : tone === 'bad' ? 'cross' : tone === 'careful' ? 'alert' : 'info';
+---
+
+<div class="ui-callout" data-variant={variant} data-tone={tone} role={variant === 'note' ? 'note' : undefined}>
+  <p class="ui-callout-head">
+    <Icon name={icon} />
+    <span class="ui-callout-label">{label ?? defaultLabel}</span>
+  </p>
+  {title && <p class="ui-callout-title">{title}</p>}
+  <div class="ui-callout-body"><slot /></div>
+</div>
+
+<style>
+  .ui-callout {
+    --callout-ink: var(--c-info-ink);
+    --callout-tint: var(--c-info-tint);
+    --callout-border: var(--c-info-border);
+    margin-block: 1.5rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--callout-border);
+    border-radius: 0.75rem;
+    background: var(--callout-tint);
+  }
+
+  .ui-callout[data-tone='good'] {
+    --callout-ink: var(--c-good-ink);
+    --callout-tint: var(--c-good-tint);
+    --callout-border: var(--c-good-border);
+  }
+
+  .ui-callout[data-tone='bad'] {
+    --callout-ink: var(--c-bad-ink);
+    --callout-tint: var(--c-bad-tint);
+    --callout-border: var(--c-bad-border);
+  }
+
+  .ui-callout[data-tone='careful'] {
+    --callout-ink: var(--c-careful-ink);
+    --callout-tint: var(--c-careful-tint);
+    --callout-border: var(--c-careful-border);
+  }
+
+  .ui-callout-head {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin: 0;
+    color: var(--callout-ink);
+  }
+
+  .ui-callout-head :global(.ui-icon) {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .ui-callout-label {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .ui-callout-title {
+    margin: 0.55rem 0 0;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--sl-color-white);
+  }
+
+  .ui-callout-body {
+    margin-top: 0.5rem;
+    color: var(--sl-color-text);
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .ui-callout-body :global(p) {
+    margin: 0;
+  }
+
+  .ui-callout-body :global(p + p) {
+    margin-top: 0.5rem;
+  }
+
+  .ui-callout-body :global(a) {
+    color: var(--sl-color-text-accent);
+  }
+
+  .ui-callout[data-variant='answer'] {
+    margin-block: 0 1.75rem;
+    padding: 1.25rem 1.5rem 1.35rem;
+  }
+
+  .ui-callout[data-variant='answer'] .ui-callout-body {
+    margin-top: 0.6rem;
+    color: var(--sl-color-white);
+    font-size: clamp(1.25rem, 1.08rem + 0.55vw, 1.5rem);
+    font-weight: 500;
+    line-height: 1.4;
+    text-wrap: pretty;
+  }
+
+  @media (max-width: 30rem) {
+    .ui-callout[data-variant='answer'] {
+      padding: 1rem 1.1rem 1.15rem;
+    }
+  }
+</style>

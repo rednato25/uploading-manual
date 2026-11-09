@@ -1,72 +1,110 @@
 ---
 /**
- * A compact panel of label and value pairs. Values may contain inline HTML,
- * so inline code works with `set:html`.
+ * The L2 block: three to five facts the page depends on. A fact may carry a
+ * tone (good, bad, careful, info) and then gets a tinted card, an icon and the
+ * tone word. Values may contain inline HTML, so inline code works with set:html.
  */
+import Status from './Status.astro';
+
+export type Tone = 'good' | 'bad' | 'careful' | 'info';
+
 interface Props {
-  items: { label: string; value: string }[];
+  items: { label: string; value: string; tone?: Tone; toneLabel?: string }[];
   title?: string;
 }
 
 const { items, title } = Astro.props;
 ---
 
-<div class="key-facts">
+<section class="key-facts" aria-label={title}>
   {title && <p class="title">{title}</p>}
   <dl class="grid">
     {
       items.map((item) => (
-        <div class="fact">
-          <dt>{item.label}</dt>
+        <div class="fact" data-tone={item.tone ?? 'none'}>
+          <dt>
+            <span class="label">{item.label}</span>
+            {item.tone && <Status kind={item.tone} label={item.toneLabel} />}
+          </dt>
           <dd set:html={item.value} />
         </div>
       ))
     }
   </dl>
-</div>
+</section>
 
 <style>
   .key-facts {
-    border: 1px solid var(--sl-color-gray-5);
-    border-radius: 0.5rem;
-    background: var(--sl-color-gray-7);
-    padding: 1rem 1.25rem;
-    margin-block: 1.5rem;
+    margin-block: 1.75rem;
   }
 
   .title {
     margin: 0 0 0.85rem;
-    font-size: 0.6875rem;
+    font-size: 0.9375rem;
     font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--sl-color-gray-3);
+    line-height: 1.4;
+    color: var(--sl-color-white);
+    text-wrap: balance;
   }
 
   .grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 1rem;
+    gap: 0.6rem;
     margin: 0;
   }
 
   .fact {
+    --fact-tint: var(--sl-color-gray-7);
+    --fact-border: var(--sl-color-gray-5);
     min-width: 0;
     margin: 0;
+    padding: 0.9rem 1rem 1rem;
+    border: 1px solid var(--fact-border);
+    border-radius: 0.75rem;
+    background: var(--fact-tint);
+  }
+
+  .fact[data-tone='good'] {
+    --fact-tint: var(--c-good-tint);
+    --fact-border: var(--c-good-border);
+  }
+
+  .fact[data-tone='bad'] {
+    --fact-tint: var(--c-bad-tint);
+    --fact-border: var(--c-bad-border);
+  }
+
+  .fact[data-tone='careful'] {
+    --fact-tint: var(--c-careful-tint);
+    --fact-border: var(--c-careful-border);
+  }
+
+  .fact[data-tone='info'] {
+    --fact-tint: var(--c-info-tint);
+    --fact-border: var(--c-info-border);
   }
 
   dt {
-    font-size: 0.6875rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.35rem 0.75rem;
+    margin: 0;
+  }
+
+  .label {
+    font-size: 0.875rem;
     font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--sl-color-gray-3);
+    line-height: 1.35;
+    color: var(--sl-color-gray-2);
   }
 
   dd {
-    margin: 0.2rem 0 0;
+    margin: 0.4rem 0 0;
     font-size: var(--sl-text-base);
-    line-height: 1.5;
+    line-height: 1.55;
     color: var(--sl-color-white);
     overflow-wrap: anywhere;
   }
@@ -78,7 +116,7 @@ const { items, title } = Astro.props;
   @media (min-width: 50rem) {
     .grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 1rem 2rem;
+      gap: 0.75rem;
     }
   }
 </style>

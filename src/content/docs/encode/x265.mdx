@@ -8,16 +8,22 @@ tools: ['StaxRip 2.52', 'MediaInfo']
 ---
 
 import { Aside, Steps } from '@astrojs/starlight/components';
+import Callout from '../../../components/ui/Callout.astro';
 import KeyFacts from '../../../components/ui/KeyFacts.astro';
+import Verdict from '../../../components/ui/Verdict.astro';
+
+<Callout variant="answer">
+  Use x265 for UHD sources (several trackers reject live-action x265 from 1080p), and copy the source's HDR metadata into the x265 options.
+</Callout>
 
 <KeyFacts
   title="The short version"
   items={[
-    { label: 'Source', value: 'A UHD remux.' },
-    { label: 'Outputs', value: '2160p or 1080p from the same source.' },
-    { label: 'HDR', value: 'HDR10 only. The DV layer is not carried over.' },
-    { label: 'Tracker rule', value: 'Check the tracker&apos;s x265 rule first. Several trackers only accept x265 for live action when the source was UHD. A 1080p x265 made from a 1080p Blu-ray is rejected there. Animation is often an exception. See the tracker comparison.' },
-    { label: 'SDR 1080p', value: 'Only when the tracker asks. Tonemapping changes the look and may be a lower slot.' },
+    { label: 'Source', tone: 'info', value: 'A UHD remux.' },
+    { label: 'Outputs', tone: 'info', value: '2160p or 1080p from the same source.' },
+    { label: 'HDR', tone: 'careful', value: 'HDR10 only. The DV layer is not carried over.' },
+    { label: 'Tracker rule', tone: 'careful', value: 'Check the tracker&apos;s x265 rule first. Several trackers only accept x265 for live action when the source was UHD. A 1080p x265 made from a 1080p Blu-ray is rejected there. Animation is often an exception. See the tracker comparison.' },
+    { label: 'SDR 1080p', tone: 'careful', value: 'Only when the tracker asks. Tonemapping changes the look and may be a lower slot.' },
   ]}
 />
 
@@ -123,7 +129,11 @@ Compare the result with the HDR source on an HDR screen before you upload.
 
 ## What good looks like
 
-MediaInfo shows `HEVC`, `Main 10`, the cropped resolution, `HDR format` with SMPTE ST 2086 for HDR encodes, and the same mastering display values as the source. The [header checker](/tools/header-checker/) shows `rc=crf`, or `rc=abr` with `stats-read` set for 2-pass, and no problems.
+<Verdict
+  state="pass"
+  title="A clean x265 encode"
+  detail='MediaInfo shows <code>HEVC</code>, <code>Main 10</code>, the cropped resolution, <code>HDR format</code> with SMPTE ST 2086 for HDR encodes, and the same mastering display values as the source. The <a href="/tools/header-checker/">header checker</a> shows <code>rc=crf</code>, or <code>rc=abr</code> with <code>stats-read</code> set for 2-pass, and no problems.'
+/>
 
 ## Related
 

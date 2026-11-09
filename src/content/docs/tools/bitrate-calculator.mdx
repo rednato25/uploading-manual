@@ -6,17 +6,23 @@ sidebar:
 ---
 
 import BitrateCalculator from '../../../components/tools/BitrateCalculator.vue';
+import Callout from '../../../components/ui/Callout.astro';
 import KeyFacts from '../../../components/ui/KeyFacts.astro';
+import Scale from '../../../components/ui/Scale.astro';
+
+<Callout variant="answer">
+  Enter a bitrate or a target size to get the other value, the bits per pixel and the tracker tier.
+</Callout>
 
 <BitrateCalculator client:load />
 
 <KeyFacts
   items={[
-    { label: 'Size', value: 'Video and audio kbps × seconds ÷ 8, plus about 0.5% for the MKV container.' },
-    { label: '2-pass', value: 'The same formula backwards: target size minus audio.' },
-    { label: 'Bits per pixel', value: 'Video bitrate ÷ (width × height × frame rate). Only compares encodes of similar films at the same resolution.' },
-    { label: 'Resolution class', value: 'Uses the width, so 1920×800 counts as 1080p.' },
-    { label: 'Units', value: 'GB is what trackers show. GiB is what Windows shows.' },
+    { label: 'Size', tone: 'info', value: 'Video and audio kbps × seconds ÷ 8, plus about 0.5% for the MKV container.' },
+    { label: '2-pass', tone: 'info', value: 'The same formula backwards: target size minus audio.' },
+    { label: 'Bits per pixel', tone: 'careful', value: 'Video bitrate ÷ (width × height × frame rate). Only compares encodes of similar films at the same resolution.' },
+    { label: 'Resolution class', tone: 'info', value: 'Uses the width, so 1920×800 counts as 1080p.' },
+    { label: 'Units', tone: 'info', value: 'GB is what trackers show. GiB is what Windows shows.' },
   ]}
 />
 
@@ -24,3 +30,20 @@ import KeyFacts from '../../../components/ui/KeyFacts.astro';
 
 - Audio must be the total of every audio track you keep. A TrueHD 7.1 track can be 4,000 kbps or more, so read the real value from MediaInfo.
 - GB is what trackers show. GiB is what Windows calls GB. The same file shows a smaller number in Windows.
+
+### Where the compact tier sits
+
+<Scale
+  max={30}
+  unit="Mb/s"
+  caption="Above these values the tier is Transparent."
+  groups={[
+    {
+      label: 'Compact tier, at or below this bitrate',
+      items: [
+        { label: '1080p', min: 0, max: 12, value: 'Up to 12 Mb/s' },
+        { label: '2160p', min: 0, max: 18, value: 'Up to 18 Mb/s' },
+      ],
+    },
+  ]}
+/>

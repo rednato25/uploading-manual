@@ -6,16 +6,22 @@ sidebar:
 level: beginner
 ---
 
-import { Aside, Steps } from '@astrojs/starlight/components';
+import { Steps } from '@astrojs/starlight/components';
+import Callout from '../../../components/ui/Callout.astro';
+import DefinitionTable from '../../../components/ui/DefinitionTable.astro';
 import KeyFacts from '../../../components/ui/KeyFacts.astro';
+
+<Callout variant="answer">
+  Check that the slot is free before you start: a second release in a taken slot is rejected unless it trumps the first.
+</Callout>
 
 <KeyFacts
   title="The short version"
   items={[
-    { label: 'One page per film', value: 'Each film or episode has one page on the tracker.' },
-    { label: 'One slot per release', value: 'Each release fills a <strong>slot</strong>. Two releases that would fill the same slot are <strong>dupes</strong>, and the second one is rejected.' },
-    { label: 'Check first', value: 'Before any work, check that the slot you want is still free.' },
-    { label: 'Trump', value: 'A new release can replace one in the same slot when the tracker rules allow it.' },
+    { label: 'One page per film', tone: 'info', value: 'Each film or episode has one page on the tracker.' },
+    { label: 'One slot per release', tone: 'careful', value: 'Each release fills a <strong>slot</strong>. Two releases that would fill the same slot are <strong>dupes</strong>, and the second one is rejected.' },
+    { label: 'Check first', tone: 'good', value: 'Before any work, check that the slot you want is still free.' },
+    { label: 'Trump', tone: 'info', value: 'A new release can replace one in the same slot when the tracker rules allow it.' },
   ]}
 />
 
@@ -23,14 +29,18 @@ import KeyFacts from '../../../components/ui/KeyFacts.astro';
 
 Most trackers split slots along the same lines. The exact list differs per tracker, so check the tracker page before you start.
 
-| Axis | Examples | Why it makes a different slot |
-| --- | --- | --- |
-| Release type | Full disc, remux, encode, WEB-DL | Different size and quality |
-| Resolution | 720p, 1080p, 2160p | Different picture |
-| Video codec | x264, x265 | Different file and compatibility |
-| Dynamic range | SDR, HDR10, Dolby Vision | Different picture on HDR screens |
-| Edition | Theatrical, Director's Cut, Extended | Different film |
-| Size tier (some trackers) | Compact, Transparent | Different target audience |
+<DefinitionTable
+  label="What defines a slot"
+  columns={['Axis', 'Examples', 'Why it makes a different slot']}
+  rows={[
+    ['Release type', 'Full disc, remux, encode, WEB-DL', 'Different size and quality'],
+    ['Resolution', '720p, 1080p, 2160p', 'Different picture'],
+    ['Video codec', 'x264, x265', 'Different file and compatibility'],
+    ['Dynamic range', 'SDR, HDR10, Dolby Vision', 'Different picture on HDR screens'],
+    ['Edition', "Theatrical, Director's Cut, Extended", 'Different film'],
+    ['Size tier (some trackers)', 'Compact, Transparent', 'Different target audience'],
+  ]}
+/>
 
 Example: a page that already has a 1080p x264 encode can still take a 2160p x265 HDR encode, because resolution, codec and dynamic range all differ.
 
@@ -43,9 +53,9 @@ Example: a page that already has a 1080p x264 encode can still take a 2160p x265
 | **REPACK** | A fixed version from the same group, for example after a bad audio sync. It replaces the group's own release. |
 | **PROPER** | A fix by a different group for a broken release. |
 
-<Aside type="caution" title="Better quality is not always a valid trump">
+<Callout tone="careful" label="Check" title="Better quality is not always a valid trump">
   Some trackers let a better encode replace a worse one. Others keep the first release in the slot unless it is broken. Read the trump rules on each tracker before you spend a weekend on an encode.
-</Aside>
+</Callout>
 
 ## Before you start any work
 

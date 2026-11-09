@@ -5,16 +5,21 @@ sidebar:
   order: 30
 ---
 
+import Callout from '../../../components/ui/Callout.astro';
 import GoodBad from '../../../components/ui/GoodBad.astro';
 import KeyFacts from '../../../components/ui/KeyFacts.astro';
+
+<Callout variant="answer">
+  Use these sites to compare editions, check a release name and learn the settings.
+</Callout>
 
 <KeyFacts
   title="The short version"
   items={[
-    { label: 'Compare editions', value: 'blu-ray.com, DVDCompare, caps-a-holic, slow.pics.' },
-    { label: 'Check a release name', value: 'srrdb, predb.me, TRaSH Guides.' },
-    { label: 'Learn encoding', value: 'Doom9, the x264 settings reference, the x265 documentation.' },
-    { label: 'Software', value: 'MediaInfo, MakeMKV, MKVToolNix, StaxRip, Subtitle Edit, Upload Assistant, qBittorrent.' },
+    { label: 'Compare editions', tone: 'info', value: 'blu-ray.com, DVDCompare, caps-a-holic, slow.pics.' },
+    { label: 'Check a release name', tone: 'info', value: 'srrdb, predb.me, TRaSH Guides.' },
+    { label: 'Learn encoding', tone: 'info', value: 'Doom9, the x264 settings reference, the x265 documentation.' },
+    { label: 'Software', tone: 'info', value: 'MediaInfo, MakeMKV, MKVToolNix, StaxRip, Subtitle Edit, Upload Assistant, qBittorrent.' },
   ]}
 />
 

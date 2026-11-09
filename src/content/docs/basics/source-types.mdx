@@ -7,15 +7,21 @@ level: beginner
 ---
 
 import { Aside } from '@astrojs/starlight/components';
+import Callout from '../../../components/ui/Callout.astro';
 import KeyFacts from '../../../components/ui/KeyFacts.astro';
+import Scale from '../../../components/ui/Scale.astro';
+
+<Callout variant="answer">
+  Start from the best source you can get, because every step down the ladder loses quality for good.
+</Callout>
 
 <KeyFacts
   title="The short version"
   items={[
-    { label: 'Same master', value: 'Full disc and remux keep the picture from the disc.' },
-    { label: 'Encode', value: 'Close to the disc if done well.' },
-    { label: 'WEB-DL', value: 'Good, but the service already compressed it hard.' },
-    { label: 'No upscale', value: 'An encode made from an encode is rejected everywhere.' },
+    { label: 'Same master', tone: 'good', value: 'Full disc and remux keep the picture from the disc.' },
+    { label: 'Encode', tone: 'careful', value: 'Close to the disc if done well.' },
+    { label: 'WEB-DL', tone: 'careful', value: 'Good, but the service already compressed it hard.' },
+    { label: 'No upscale', tone: 'bad', value: 'An encode made from an encode is rejected everywhere.' },
   ]}
 />
 
@@ -23,15 +29,74 @@ Quality only goes down as you move away from the original master. Nothing you do
 
 ## The ladder
 
-| Type | What it is and typical size (2-hour film) | Quality |
-| --- | --- | --- |
-| **Full disc** (BDMV, ISO) | The whole Blu-ray: menus, extras, every playlist, untouched. 25 to 50 GB (1080p), 50 to 100 GB (UHD). | Same as the disc |
-| **Remux** | The main film taken off the disc and put in an MKV. Video and audio are copied, not re-encoded. 20 to 40 GB (1080p), 40 to 80 GB (UHD). | Same as the disc |
-| **Encode** | A remux or disc squeezed with x264 or x265 to a smaller size. 5 to 20 GB (1080p), 15 to 40 GB (UHD). | Close to the disc if done well |
-| **WEB-DL** | The file a streaming service sends, saved without changes. 4 to 10 GB (1080p), 12 to 25 GB (UHD). | Good, but the service already compressed it hard |
-| **WEBRip** | A screen capture or re-encode of a stream. Varies. | Worse than WEB-DL |
-| **HDTV** | Recorded from a TV broadcast. Varies. | Often has logos and lower bitrate |
-| **DVD** | DVD disc or remux of one. 4 to 9 GB. | Standard definition only |
+<Scale
+  max={100}
+  unit="GB"
+  valueWidth="9rem"
+  groups={[
+    {
+      label: 'Typical size at 1080p for a 2-hour film',
+      items: [
+        {
+          label: 'Full disc (BDMV, ISO)',
+          min: 25,
+          max: 50,
+          value: '25 to 50 GB',
+          value2: 'UHD 50 to 100 GB',
+          note: 'The whole Blu-ray: menus, extras, every playlist, untouched. Same as the disc.',
+          tone: 'good',
+        },
+        {
+          label: 'Remux',
+          min: 20,
+          max: 40,
+          value: '20 to 40 GB',
+          value2: 'UHD 40 to 80 GB',
+          note: 'The main film taken off the disc and put in an MKV. Video and audio are copied, not re-encoded. Same as the disc.',
+          tone: 'good',
+        },
+        {
+          label: 'Encode',
+          min: 5,
+          max: 20,
+          value: '5 to 20 GB',
+          value2: 'UHD 15 to 40 GB',
+          note: 'A remux or disc squeezed with x264 or x265 to a smaller size. Close to the disc if done well.',
+          tone: 'careful',
+        },
+        {
+          label: 'WEB-DL',
+          min: 4,
+          max: 10,
+          value: '4 to 10 GB',
+          value2: 'UHD 12 to 25 GB',
+          note: 'The file a streaming service sends, saved without changes. Good, but the service already compressed it hard.',
+          tone: 'careful',
+        },
+        {
+          label: 'WEBRip',
+          value: 'Varies',
+          note: 'A screen capture or re-encode of a stream. Worse than WEB-DL.',
+          tone: 'bad',
+        },
+        {
+          label: 'HDTV',
+          value: 'Varies',
+          note: 'Recorded from a TV broadcast. Often has logos and lower bitrate.',
+          tone: 'bad',
+        },
+        {
+          label: 'DVD',
+          min: 4,
+          max: 9,
+          value: '4 to 9 GB',
+          note: 'DVD disc or remux of one. Standard definition only.',
+          tone: 'bad',
+        },
+      ],
+    },
+  ]}
+/>
 
 The sizes are typical ranges, not rules. Long films, grainy films and animation all move them.
 

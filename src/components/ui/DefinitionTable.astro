@@ -1,0 +1,176 @@
+---
+/**
+ * A definition table: one named row per item, with the other columns as
+ * explanatory cells. Above 50rem it is a normal table with the name in a
+ * `th scope="row"`. Below 50rem each row becomes a stacked card, with the
+ * name as the card title and each cell labelled with its column header.
+ *
+ * The explicit ARIA roles keep the table semantics when the CSS changes the
+ * display to cards. Cells accept inline HTML, so inline code works.
+ */
+interface Props {
+  columns: string[];
+  rows: [name: string, ...cells: string[]][];
+  label?: string;
+}
+
+const { columns, rows, label } = Astro.props;
+---
+
+<div class="definition-wrap">
+  <table class="definition-table" role="table">
+    {label && <caption class="definition-caption">{label}</caption>}
+    <thead>
+      <tr role="row">
+        {columns.map((column) => <th scope="col" role="columnheader" set:html={column} />)}
+      </tr>
+    </thead>
+    <tbody>
+      {
+        rows.map(([name, ...cells]) => (
+          <tr role="row">
+            <th scope="row" role="rowheader" set:html={name} />
+            {cells.map((cell, index) => (
+              <td role="cell">
+                <span class="cell-label" aria-hidden="true">{columns[index + 1]}</span>
+                <span class="cell-value" set:html={cell} />
+              </td>
+            ))}
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</div>
+
+<style>
+  .definition-wrap {
+    margin-block: 1.75rem;
+  }
+
+  .definition-table {
+    display: table;
+    width: 100%;
+    overflow: visible;
+    border-collapse: collapse;
+    border-spacing: 0;
+  }
+
+  .definition-caption {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .definition-table :is(th, td) {
+    padding: 0.55rem 1rem;
+    border-bottom: 1px solid var(--sl-color-gray-5);
+    text-align: start;
+    vertical-align: top;
+    line-height: 1.55;
+  }
+
+  .definition-table :is(th:first-child, td:first-child) {
+    padding-inline-start: 0;
+  }
+
+  .definition-table :is(th:last-child, td:last-child) {
+    padding-inline-end: 0;
+  }
+
+  .definition-table thead th {
+    color: var(--sl-color-white);
+    font-weight: 600;
+    border-bottom-color: var(--sl-color-gray-4);
+  }
+
+  .definition-table tbody th {
+    color: var(--sl-color-white);
+    font-weight: 600;
+  }
+
+  .definition-table .cell-label {
+    display: none;
+  }
+
+  .definition-table .cell-value {
+    display: inline;
+  }
+
+  @media (max-width: 49.99rem) {
+    .definition-table {
+      display: block;
+    }
+
+    .definition-table thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      margin: -1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      clip-path: inset(50%);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .definition-table tbody {
+      display: block;
+    }
+
+    .definition-table tr[role='row'] {
+      display: block;
+      padding: 0.9rem 1rem 1rem;
+      border: 1px solid var(--sl-color-gray-5);
+      border-radius: 0.75rem;
+      background: var(--sl-color-gray-7);
+    }
+
+    .definition-table tr[role='row'] + tr[role='row'] {
+      margin-top: 0.6rem;
+    }
+
+    .definition-table :is(th[scope='row'], td[role='cell']) {
+      display: block;
+      padding: 0;
+      border: 0;
+    }
+
+    .definition-table th[scope='row'] {
+      margin-bottom: 0.65rem;
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: 1.35;
+      color: var(--sl-color-white);
+    }
+
+    .definition-table td[role='cell'] + td[role='cell'] {
+      margin-top: 0.6rem;
+    }
+
+    .definition-table .cell-label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--sl-color-gray-2);
+    }
+
+    .definition-table .cell-value {
+      display: block;
+      margin-top: 0.1rem;
+      font-size: 0.9375rem;
+      line-height: 1.55;
+      color: var(--sl-color-white);
+    }
+  }
+</style>

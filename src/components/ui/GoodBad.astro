@@ -12,20 +12,20 @@ const { goodLabel = 'Right', badLabel = 'Wrong' } = Astro.props;
 ---
 
 <div class="good-bad">
-  <div class="side good">
+  <div class="side" data-tone="good">
     <p class="heading">
       <svg viewBox="0 0 24 24" aria-hidden="true">
-        <circle cx="12" cy="12" r="10"></circle>
+        <circle cx="12" cy="12" r="9"></circle>
         <path d="m8 12 3 3 5-6"></path>
       </svg>
       <span>{goodLabel}</span>
     </p>
     <div class="body"><slot name="good" /></div>
   </div>
-  <div class="side bad">
+  <div class="side" data-tone="bad">
     <p class="heading">
       <svg viewBox="0 0 24 24" aria-hidden="true">
-        <circle cx="12" cy="12" r="10"></circle>
+        <circle cx="12" cy="12" r="9"></circle>
         <path d="m15 9-6 6M9 9l6 6"></path>
       </svg>
       <span>{badLabel}</span>
@@ -39,51 +39,59 @@ const { goodLabel = 'Right', badLabel = 'Wrong' } = Astro.props;
     display: grid;
     grid-template-columns: 1fr;
     gap: 0.75rem;
-    margin-block: 1.5rem;
+    margin-block: 1.75rem;
   }
 
   .side {
-    border: 1px solid var(--sl-color-gray-5);
-    border-radius: 0.5rem;
-    background: var(--sl-color-gray-7);
-    padding: 1rem 1.25rem;
+    --side-ink: var(--c-info-ink);
+    --side-tint: var(--sl-color-gray-7);
+    --side-border: var(--sl-color-gray-5);
     min-width: 0;
+    padding: 1rem 1.15rem 1.1rem;
+    border: 1px solid var(--side-border);
+    border-radius: 0.75rem;
+    background: var(--side-tint);
+  }
+
+  .side[data-tone='good'] {
+    --side-ink: var(--c-good-ink);
+    --side-tint: var(--c-good-tint);
+    --side-border: var(--c-good-border);
+  }
+
+  .side[data-tone='bad'] {
+    --side-ink: var(--c-bad-ink);
+    --side-tint: var(--c-bad-tint);
+    --side-border: var(--c-bad-border);
   }
 
   .heading {
     display: flex;
     align-items: center;
     gap: 0.45rem;
-    margin: 0 0 0.6rem;
-    font-size: 0.6875rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
+    margin: 0 0 0.55rem;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
+    color: var(--side-ink);
   }
 
   .heading svg {
-    width: 1.1rem;
-    height: 1.1rem;
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
     fill: none;
     stroke: currentColor;
     stroke-width: 2;
     stroke-linecap: round;
     stroke-linejoin: round;
-    flex-shrink: 0;
-  }
-
-  .good .heading {
-    color: var(--sl-color-green-high);
-  }
-
-  .bad .heading {
-    color: var(--sl-color-red-high);
   }
 
   .body {
     color: var(--sl-color-white);
     font-size: var(--sl-text-base);
-    line-height: 1.5;
+    line-height: 1.55;
   }
 
   .body :global(p) {

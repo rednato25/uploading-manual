@@ -8,16 +8,22 @@ tools: ['MakeMKV', 'MKVToolNix GUI', 'MediaInfo']
 ---
 
 import { Steps, Tabs, TabItem } from '@astrojs/starlight/components';
+import Callout from '../../../components/ui/Callout.astro';
 import KeyFacts from '../../../components/ui/KeyFacts.astro';
 import Shot from '../../../components/Shot.astro';
+import Verdict from '../../../components/ui/Verdict.astro';
+
+<Callout variant="answer">
+  Rip the main title with MakeMKV, clean up the tracks and flags in MKVToolNix, and never re-encode the video.
+</Callout>
 
 <KeyFacts
   title="The short version"
   items={[
-    { label: 'Rip with', value: 'MakeMKV.' },
-    { label: 'Clean up with', value: 'MKVToolNix.' },
-    { label: 'Disk space', value: 'About twice the size of the disc.' },
-    { label: 'Output', value: 'One MKV. No re-encode at any point.' },
+    { label: 'Rip with', tone: 'info', value: 'MakeMKV.' },
+    { label: 'Clean up with', tone: 'info', value: 'MKVToolNix.' },
+    { label: 'Disk space', tone: 'careful', value: 'About twice the size of the disc.' },
+    { label: 'Output', tone: 'good', value: 'One MKV. No re-encode at any point.' },
   ]}
 />
 
@@ -123,7 +129,7 @@ When the remux slot for the film is free, or when you need a clean source for an
 
 ## What good looks like
 
-One MKV with the untouched video, the original audio in lossless format, every kept track labelled with a language, sensible default flags, chapters, and a runtime that matches the edition.
+<Verdict state="pass" title="A clean remux" detail="One MKV with the untouched video, the original audio in lossless format, every kept track labelled with a language, sensible default flags, chapters, and a runtime that matches the edition." />
 
 ## Related
 

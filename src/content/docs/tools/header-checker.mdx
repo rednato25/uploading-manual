@@ -5,26 +5,36 @@ sidebar:
   order: 10
 ---
 
+import Callout from '../../../components/ui/Callout.astro';
 import HeaderChecker from '../../../components/tools/HeaderChecker.vue';
 import KeyFacts from '../../../components/ui/KeyFacts.astro';
+
+<Callout variant="answer">
+  Paste an encode header to see whether a moderator would reject it, and what to fix first.
+</Callout>
 
 <HeaderChecker client:load />
 
 <KeyFacts
   items={[
-    { label: 'Accepts', value: 'MediaInfo text, the Encoding settings line, or the raw x264/x265 string.' },
-    { label: 'Runs', value: 'In your browser. Nothing is sent anywhere.' },
-    { label: 'Returns', value: 'A verdict first, then the checks that need attention.' },
+    { label: 'Accepts', tone: 'info', value: 'MediaInfo text, the Encoding settings line, or the raw x264/x265 string.' },
+    { label: 'Runs', tone: 'good', value: 'In your browser. Nothing is sent anywhere.' },
+    { label: 'Returns', tone: 'info', value: 'A verdict first, then the checks that need attention.' },
   ]}
 />
 
 ## What it checks
+
+<details class="ui-reference">
+<summary>The five checks (reference)</summary>
 
 - **Rate control.** CRF and 2-pass pass. 1-pass ABR, CBR, constant QP and first-pass output are flagged.
 - **x265 2-pass.** x265 writes `rc=abr` for both 1-pass and 2-pass. The checker tells them apart with `stats-read`, which is above 0 only on the final pass of a multi-pass encode.
 - **Preset (x264).** Each x264 preset sets a different `subme` value, so the checker can name the likely preset. A custom setting can fool it.
 - **Tune (x264).** Grain and film tunes leave a recognisable set of values.
 - **HDR (x265).** A PQ encode must have `hdr10` and mastering display metadata.
+
+</details>
 
 ## Where the rules come from
 

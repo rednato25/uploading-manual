@@ -8,17 +8,22 @@ tools: ['MediaInfo', 'blu-ray.com', 'DVDCompare', 'caps-a-holic']
 ---
 
 import { Steps } from '@astrojs/starlight/components';
+import Callout from '../../../components/ui/Callout.astro';
 import GoodBad from '../../../components/ui/GoodBad.astro';
 import KeyFacts from '../../../components/ui/KeyFacts.astro';
 import Verdict from '../../../components/ui/Verdict.astro';
 
+<Callout variant="answer">
+  Pick the best disc first, then check the file against the red flags before you spend hours on it.
+</Callout>
+
 <KeyFacts
   title="The short version"
   items={[
-    { label: 'Best disc', value: 'Usually the newest restoration from a respected label.' },
-    { label: 'Keep', value: 'Full frame, untouched video, lossless original audio, subtitles with languages.' },
-    { label: 'Check', value: 'Run the remux checker on the MediaInfo text.' },
-    { label: 'Runtime', value: 'Must match the edition on DVDCompare.' },
+    { label: 'Best disc', tone: 'good', value: 'Usually the newest restoration from a respected label.' },
+    { label: 'Keep', tone: 'info', value: 'Full frame, untouched video, lossless original audio, subtitles with languages.' },
+    { label: 'Check', tone: 'careful', value: 'Run the remux checker on the MediaInfo text.' },
+    { label: 'Runtime', tone: 'careful', value: 'Must match the edition on DVDCompare.' },
   ]}
 />
 

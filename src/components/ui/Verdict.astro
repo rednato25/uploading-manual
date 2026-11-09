@@ -1,7 +1,8 @@
 ---
 /**
- * One result line: pass, check or problem. Static use. The Vue tools render
- * the same markup through ToolVerdict.vue and share the .ui-verdict classes.
+ * One result line: pass, check or problem. Static use. The detail may contain
+ * inline HTML, so inline code and links work. The Vue tools render the same
+ * markup through ToolVerdict.vue and share the .ui-verdict classes.
  */
 interface Props {
   state: 'pass' | 'check' | 'problem';
@@ -35,7 +36,7 @@ const word = state === 'pass' ? 'OK' : state === 'check' ? 'Check' : 'Problem';
   }
   <span class="ui-verdict-word">{word}</span>
   <span class="ui-verdict-title">{title}</span>
-  {detail && <span class="ui-verdict-detail">{detail}</span>}
+  {detail && <span class="ui-verdict-detail" set:html={detail} />}
 </div>
 
 

@@ -5,20 +5,28 @@ sidebar:
   order: 15
 ---
 
+import Callout from '../../../components/ui/Callout.astro';
 import RemuxChecker from '../../../components/tools/RemuxChecker.vue';
 import KeyFacts from '../../../components/ui/KeyFacts.astro';
+
+<Callout variant="answer">
+  Paste a MediaInfo dump to see whether the file is a real remux, and which checks need a second look.
+</Callout>
 
 <RemuxChecker client:load />
 
 <KeyFacts
   items={[
-    { label: 'Accepts', value: 'The full MediaInfo text, in View → Text form.' },
-    { label: 'Checks', value: 'Video format, re-encode, bitrate, frame, HDR, audio, languages, PCM and chapters.' },
-    { label: 'Runs', value: 'In your browser. Nothing is sent anywhere.' },
+    { label: 'Accepts', tone: 'info', value: 'The full MediaInfo text, in View → Text form.' },
+    { label: 'Checks', tone: 'info', value: 'Video format, re-encode, bitrate, frame, HDR, audio, languages, PCM and chapters.' },
+    { label: 'Runs', tone: 'good', value: 'In your browser. Nothing is sent anywhere.' },
   ]}
 />
 
 ## What it checks
+
+<details class="ui-reference">
+<summary>The nine checks (reference)</summary>
 
 - **Video format.** AVC, HEVC, VC-1 and MPEG Video come from discs. Anything else is a red flag.
 - **Re-encode.** An x264 or x265 settings line means someone re-encoded the file.
@@ -29,5 +37,7 @@ import KeyFacts from '../../../components/ui/KeyFacts.astro';
 - **Languages.** Every audio and text track needs a language.
 - **PCM audio.** Convert PCM to FLAC to save space.
 - **Chapters.** The Menu section should be present.
+
+</details>
 
 These are the same checks as [Part 2 of Finding a good remux](/remux/finding-a-good-remux/#part-2-check-the-remux-file), run for you.

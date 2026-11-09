@@ -1,5 +1,9 @@
 ---
-/** An inline rule level: a thin left rule and the word, no fill. */
+/**
+ * An inline rule level: a small solid badge. MUST is red, SHOULD is amber,
+ * RECOMMENDED is blue. The word is inside the badge, so colour is never the
+ * only signal.
+ */
 interface Props {
   level: 'MUST' | 'SHOULD' | 'RECOMMENDED';
 }
@@ -11,30 +15,28 @@ const { level } = Astro.props;
 
 <style>
   .rule-level {
-    display: inline-block;
-    padding-left: 0.45rem;
-    border-left: 2px solid var(--sl-color-gray-4);
+    display: inline-flex;
+    align-items: center;
+    padding: 0.12rem 0.42rem;
+    border-radius: 0.25rem;
+    background: var(--c-info-solid);
+    color: var(--c-info-on);
     font-family: var(--sl-font-mono);
-    font-size: 0.6875rem;
-    line-height: 1.2;
-    letter-spacing: 0.04em;
-    color: var(--sl-color-gray-3);
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1.35;
+    letter-spacing: 0.02em;
     white-space: nowrap;
+    vertical-align: 0.08em;
   }
 
   .rule-level[data-level='MUST'] {
-    border-color: var(--sl-color-gray-2);
-    color: var(--sl-color-white);
-    font-weight: 600;
+    background: var(--c-bad-solid);
+    color: var(--c-bad-on);
   }
 
   .rule-level[data-level='SHOULD'] {
-    border-color: var(--sl-color-gray-3);
-    color: var(--sl-color-gray-2);
-  }
-
-  .rule-level[data-level='RECOMMENDED'] {
-    border-color: var(--sl-color-gray-4);
-    color: var(--sl-color-gray-3);
+    background: var(--c-careful-solid);
+    color: var(--c-careful-on);
   }
 </style>

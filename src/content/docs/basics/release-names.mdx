@@ -6,28 +6,39 @@ sidebar:
 level: beginner
 ---
 
+import Callout from '../../../components/ui/Callout.astro';
+import DefinitionTable from '../../../components/ui/DefinitionTable.astro';
 import GoodBad from '../../../components/ui/GoodBad.astro';
 import KeyFacts from '../../../components/ui/KeyFacts.astro';
 import Specimen from '../../../components/ui/Specimen.astro';
+import Status from '../../../components/ui/Status.astro';
+
+<Callout variant="answer">
+  Read the name left to right, and check the video codec: AVC or HEVC means a copy, x264 or x265 means a re-encode.
+</Callout>
 
 <KeyFacts
   title="The short version"
   items={[
-    { label: 'Remux', value: 'Video codec before audio.' },
-    { label: 'Encode', value: 'Audio before video, and the encoder last.' },
-    { label: 'Video codec', value: '<code>AVC</code> or <code>HEVC</code> means a straight copy. <code>x264</code> or <code>x265</code> means a re-encode.' },
-    { label: 'Group', value: 'If you are not in a group, use what the tracker says, usually <code>NoGroup</code>. Never your username.' },
+    { label: 'Remux', tone: 'info', value: 'Video codec before audio.' },
+    { label: 'Encode', tone: 'info', value: 'Audio before video, and the encoder last.' },
+    { label: 'Video codec', tone: 'careful', value: '<code>AVC</code> or <code>HEVC</code> means a straight copy. <code>x264</code> or <code>x265</code> means a re-encode.' },
+    { label: 'Group', tone: 'careful', value: 'If you are not in a group, use what the tracker says, usually <code>NoGroup</code>. Never your username.' },
   ]}
 />
 
 ## Four real-world shapes
 
-```txt
-Remux     A.Sixth.Part.of.the.World.1926.1080p.BluRay.REMUX.AVC.FLAC.2.0-NoGroup
-Encode    A.Sixth.Part.of.the.World.1926.1080p.BluRay.FLAC.2.0.x264-NoGroup
-UHD remux Some.Film.2019.2160p.UHD.BluRay.REMUX.DV.HDR.HEVC.TrueHD.7.1.Atmos-GROUP
-WEB-DL    Some.Show.S01E01.1080p.NF.WEB-DL.DDP5.1.H.264-GROUP
-```
+<DefinitionTable
+  label="Four real-world shapes"
+  columns={['Shape', 'Release name']}
+  rows={[
+    ['Remux', '<code>A.Sixth.<wbr>Part.<wbr>of.<wbr>the.<wbr>World.<wbr>1926.<wbr>1080p.<wbr>BluRay.<wbr>REMUX.<wbr>AVC.<wbr>FLAC.<wbr>2.0-NoGroup</code>'],
+    ['Encode', '<code>A.Sixth.<wbr>Part.<wbr>of.<wbr>the.<wbr>World.<wbr>1926.<wbr>1080p.<wbr>BluRay.<wbr>FLAC.<wbr>2.0.<wbr>x264-NoGroup</code>'],
+    ['UHD remux', '<code>Some.<wbr>Film.<wbr>2019.<wbr>2160p.<wbr>UHD.<wbr>BluRay.<wbr>REMUX.<wbr>DV.<wbr>HDR.<wbr>HEVC.<wbr>TrueHD.<wbr>7.1.<wbr>Atmos-GROUP</code>'],
+    ['WEB-DL', '<code>Some.<wbr>Show.<wbr>S01E01.<wbr>1080p.<wbr>NF.<wbr>WEB-DL.<wbr>DDP5.1.<wbr>H.264-GROUP</code>'],
+  ]}
+/>
 
 Most trackers use this P2P order. Remuxes put the video codec before the audio. Encodes put the audio first and end with the encoder. Each tracker has its own exact rules, so check the tracker page before you name anything.
 
@@ -48,24 +59,33 @@ Most trackers use this P2P order. Remuxes put the video codec before the audio. 
   ]}
 />
 
-| Part and examples | What it means |
-| --- | --- |
-| **Title** `A.Sixth.Part.of.the.World` | As on TMDb or IMDb. Some trackers use dots, others spaces. |
-| **Year** `1926` | Release year of the film. For series, the year is often left out. |
-| **Episode** `S01E01`, `S01` | Season and episode. A season pack has only `S01`. |
-| **Edition** `Directors.Cut`, `Extended` | Only real cuts of the film. "Remastered" or "Restoration" is usually not an edition. |
-| **Resolution** `720p`, `1080p`, `2160p` | Resolution class. Based on the width, so a 1920×800 scope film is still `1080p`. |
-| **Source** `BluRay`, `UHD.BluRay`, `WEB-DL`, `WEBRip`, `HDTV`, `DVD` | Where the video came from, not what you did to it. |
-| **Streaming service** `NF`, `AMZN`, `ATVP`, `DSNP`, `HMAX` | Only for web sources. Netflix, Amazon, Apple TV+, Disney+, Max. |
-| **Release type** `REMUX` | Present only for remuxes. |
-| **HDR** `HDR`, `HDR10+`, `DV` | Dynamic range. `DV` is Dolby Vision. No tag means SDR. |
-| **Video codec** `AVC`, `HEVC`, `VC-1`, `MPEG-2` | Used for untouched video (remux, full disc). Names the format. |
-| `H.264`, `H.265` | Used for untouched web video. |
-| `x264`, `x265` | Used for encodes. Names the encoder you ran. |
-| **Audio codec** `FLAC`, `TrueHD`, `DTS-HD.MA`, `DD`, `DDP`, `AAC`, `Opus` | Main audio track. |
-| **Channels** `1.0`, `2.0`, `5.1`, `7.1` | Speakers. The `.1` is the subwoofer channel (LFE). |
-| **Atmos** `Atmos` | Height channels on top of TrueHD or DDP. |
-| **Group** `-GROUP`, `-NoGroup` | Who made it. If you are not in a group, use what the tracker says, usually `NoGroup`. Never your username. |
+<details class="ui-reference">
+<summary>Every part and its examples (reference)</summary>
+
+<DefinitionTable
+  label="Every part, left to right"
+  columns={['Part and examples', 'What it means']}
+  rows={[
+    ['Title <code>A.Sixth.Part.of.the.World</code>', 'As on TMDb or IMDb. Some trackers use dots, others spaces.'],
+    ['Year <code>1926</code>', 'Release year of the film. For series, the year is often left out.'],
+    ['Episode <code>S01E01</code>, <code>S01</code>', 'Season and episode. A season pack has only <code>S01</code>.'],
+    ['Edition <code>Directors.Cut</code>, <code>Extended</code>', 'Only real cuts of the film. "Remastered" or "Restoration" is usually not an edition.'],
+    ['Resolution <code>720p</code>, <code>1080p</code>, <code>2160p</code>', 'Resolution class. Based on the width, so a 1920×800 scope film is still <code>1080p</code>.'],
+    ['Source <code>BluRay</code>, <code>UHD.BluRay</code>, <code>WEB-DL</code>, <code>WEBRip</code>, <code>HDTV</code>, <code>DVD</code>', 'Where the video came from, not what you did to it.'],
+    ['Streaming service <code>NF</code>, <code>AMZN</code>, <code>ATVP</code>, <code>DSNP</code>, <code>HMAX</code>', 'Only for web sources. Netflix, Amazon, Apple TV+, Disney+, Max.'],
+    ['Release type <code>REMUX</code>', 'Present only for remuxes.'],
+    ['HDR <code>HDR</code>, <code>HDR10+</code>, <code>DV</code>', 'Dynamic range. <code>DV</code> is Dolby Vision. No tag means SDR.'],
+    ['Video codec <code>AVC</code>, <code>HEVC</code>, <code>VC-1</code>, <code>MPEG-2</code>', 'Used for untouched video (remux, full disc). Names the format.'],
+    ['<code>H.264</code>, <code>H.265</code>', 'Used for untouched web video.'],
+    ['<code>x264</code>, <code>x265</code>', 'Used for encodes. Names the encoder you ran.'],
+    ['Audio codec <code>FLAC</code>, <code>TrueHD</code>, <code>DTS-HD.MA</code>, <code>DD</code>, <code>DDP</code>, <code>AAC</code>, <code>Opus</code>', 'Main audio track.'],
+    ['Channels <code>1.0</code>, <code>2.0</code>, <code>5.1</code>, <code>7.1</code>', 'Speakers. The <code>.1</code> is the subwoofer channel (LFE).'],
+    ['Atmos <code>Atmos</code>', 'Height channels on top of TrueHD or DDP.'],
+    ['Group <code>-GROUP</code>, <code>-NoGroup</code>', 'Who made it. If you are not in a group, use what the tracker says, usually <code>NoGroup</code>. Never your username.'],
+  ]}
+/>
+
+</details>
 
 ### The video codec rule in one line
 
@@ -80,16 +100,16 @@ Untouched web video is `H.264`. `x264` means it was re-encoded, so the bad examp
 
 ## Common audio names
 
-| Name | Full name | Lossless? |
-| --- | --- | --- |
-| `TrueHD` | Dolby TrueHD | Yes |
-| `DTS-HD.MA` | DTS-HD Master Audio | Yes |
-| `FLAC` | Free Lossless Audio Codec | Yes |
-| `LPCM` | Uncompressed PCM | Yes, but large. Usually converted to FLAC. |
-| `DD` or `AC3` | Dolby Digital | No |
-| `DD+`, `DDP` or `EAC3` | Dolby Digital Plus | No |
-| `DTS` | DTS core | No |
-| `AAC`, `Opus` | | No |
+| Name | Lossless? |
+| --- | --- |
+| `TrueHD`<br />Dolby TrueHD | <Status kind="yes" /> |
+| `DTS-HD.MA`<br />DTS-HD Master Audio | <Status kind="yes" /> |
+| `FLAC`<br />Free Lossless Audio Codec | <Status kind="yes" /> |
+| `LPCM`<br />Uncompressed PCM | <Status kind="limited" label="Yes, but large." /> Usually converted to FLAC. |
+| `DD` or `AC3`<br />Dolby Digital | <Status kind="no" /> |
+| `DD+`, `DDP` or `EAC3`<br />Dolby Digital Plus | <Status kind="no" /> |
+| `DTS`<br />DTS core | <Status kind="no" /> |
+| `AAC`, `Opus` | <Status kind="no" /> |
 
 Site titles on the shared template write `DD+`. File names usually write `DDP`.
 

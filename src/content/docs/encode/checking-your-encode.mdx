@@ -8,17 +8,22 @@ tools: ['MediaInfo', 'mpv']
 ---
 
 import { Aside } from '@astrojs/starlight/components';
+import Callout from '../../../components/ui/Callout.astro';
 import Checklist from '../../../components/ui/Checklist.vue';
 import KeyFacts from '../../../components/ui/KeyFacts.astro';
 import Verdict from '../../../components/ui/Verdict.astro';
 
+<Callout variant="answer">
+  Run the six checks before every upload, so a moderator does not have to.
+</Callout>
+
 <KeyFacts
   title="The short version"
   items={[
-    { label: 'When', value: 'Every time, before the upload.' },
-    { label: 'Tools', value: 'MediaInfo, the header checker, and slow.pics.' },
-    { label: 'Checks', value: 'Settings, video lines, duration, playback, frames, name.' },
-    { label: 'Time', value: 'About ten minutes.' },
+    { label: 'When', tone: 'careful', value: 'Every time, before the upload.' },
+    { label: 'Tools', tone: 'info', value: 'MediaInfo, the header checker, and slow.pics.' },
+    { label: 'Checks', tone: 'info', value: 'Settings, video lines, duration, playback, frames, name.' },
+    { label: 'Time', tone: 'info', value: 'About ten minutes.' },
   ]}
 />
 
@@ -55,10 +60,15 @@ Take screenshots of the same frames from source and encode, and compare them, fo
 
 ## What the settings line shows
 
+<details class="ui-reference">
+<summary>What the settings line shows (reference)</summary>
+
 | Encoder | CRF shows | 2-pass shows |
 | --- | --- | --- |
 | x264 | `rc=crf` and `crf=` | `rc=2pass` and `bitrate=` |
 | x265 | `rc=crf` and `crf=` | `rc=abr`, `bitrate=` and `stats-read=` above 0 |
+
+</details>
 
 x265 never writes `2pass`. An `rc=abr` line with `stats-read=0` is a 1-pass encode, which most trackers reject.
 

@@ -1,0 +1,422 @@
+---
+/**
+ * A scale in two shapes.
+ *
+ * kind="range": one horizontal bar per row, so a 4 to 10 Mb/s range and a
+ * 40 to 100 Mb/s range are comparable without reading the numbers. Rows can be
+ * grouped. The bar is decoration; the numbers stay as text.
+ *
+ * kind="steps": a good, check, bad scale for a qualitative reading, rendered as
+ * three tinted steps with an icon and a word.
+ */
+import Status from './Status.astro';
+
+export type Tone = 'good' | 'bad' | 'careful' | 'info';
+
+interface RangeItem {
+  label: string;
+  min?: number;
+  max?: number;
+  value?: string;
+  value2?: string;
+  note?: string;
+  tone?: Tone;
+}
+
+interface RangeGroup {
+  label?: string;
+  tone?: Tone;
+  items: RangeItem[];
+}
+
+interface StepItem {
+  label: string;
+  tone: Tone;
+  text: string;
+}
+
+interface Props {
+  kind?: 'range' | 'steps';
+  title?: string;
+  caption?: string;
+  unit?: string;
+  max?: number;
+  valueWidth?: string;
+  ticks?: number[];
+  groups?: RangeGroup[];
+  items?: StepItem[];
+}
+
+const {
+  kind = 'range',
+  title,
+  caption,
+  unit = '',
+  max = 100,
+  valueWidth,
+  ticks,
+  groups = [],
+  items = [],
+} = Astro.props;
+
+const axisTicks = ticks ?? [0, Math.round(max * 0.25), Math.round(max * 0.5), Math.round(max * 0.75), max];
+const left = (value: number) => `${Math.max(0, Math.min(100, (value / max) * 100))}%`;
+const width = (min: number, maxValue: number) =>
+  `${Math.max(1.5, Math.min(100, ((maxValue - min) / max) * 100))}%`;
+const tickLeft = (value: number) => `${Math.max(0, Math.min(100, (value / max) * 100))}%`;
+---
+
+<figure class="scale" data-kind={kind}>
+  {title && <figcaption class="scale-title">{title}</figcaption>}
+
+  {
+    kind === 'range' && (
+      <div class="range" style={valueWidth ? `--scale-value:${valueWidth}` : undefined}>
+        <div class="range-axis" aria-hidden="true">
+          <span class="axis-spacer" />
+          <div class="axis-track">
+            {axisTicks.map((tick) => (
+              <span class="axis-tick" style={`left:${tickLeft(tick)}`}>
+                {tick}
+              </span>
+            ))}
+          </div>
+          <span class="axis-unit">{unit}</span>
+        </div>
+        {groups.map((group) => (
+          <div class="range-group">
+            {group.label && (
+              <p class="range-group-label">
+                <span>{group.label}</span>
+                <span class="rule" aria-hidden="true" />
+              </p>
+            )}
+            {group.items.map((item) => (
+              <div class="range-row" data-tone={item.tone ?? group.tone ?? 'info'}>
+                <p class="range-label">{item.label}</p>
+                {item.min !== undefined && item.max !== undefined ? (
+                  <div class="range-track" aria-hidden="true">
+                    <span class="range-bar" style={`left:${left(item.min)};width:${width(item.min, item.max)}`} />
+                  </div>
+                ) : (
+                  <div class="range-track range-track-none" aria-hidden="true" />
+                )}
+                <p class="range-value">
+                  {item.value ??
+                    (item.min !== undefined && item.max !== undefined
+                      ? `${item.min} to ${item.max} ${unit}`.trim()
+                      : 'Varies')}
+                  {item.value2 && <span class="range-value-sub">{item.value2}</span>}
+                </p>
+                {item.note && <p class="range-note">{item.note}</p>}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  {
+    kind === 'steps' && (
+      <div class="steps">
+        {items.map((item) => (
+          <div class="step" data-tone={item.tone}>
+            <Status kind={item.tone} />
+            <p class="step-label">{item.label}</p>
+            <p class="step-text">{item.text}</p>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  {caption && <p class="scale-caption">{caption}</p>}
+</figure>
+
+<style>
+  .scale {
+    margin-block: 1.75rem;
+    padding: 0;
+  }
+
+  .scale-title {
+    margin: 0 0 0.85rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--sl-color-white);
+  }
+
+  .scale-caption {
+    margin: 0.75rem 0 0;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--sl-color-gray-2);
+  }
+
+  /* Range */
+  .range {
+    --scale-label: 15rem;
+    --scale-value: 7.5rem;
+  }
+
+  .range-axis,
+  .range-row {
+    display: grid;
+    grid-template-columns: var(--scale-label) minmax(0, 1fr) var(--scale-value);
+    column-gap: 1rem;
+    align-items: center;
+  }
+
+  .range-axis {
+    align-items: end;
+    margin-bottom: 0.35rem;
+  }
+
+  .axis-track {
+    position: relative;
+    height: 1.15rem;
+    border-bottom: 1px solid var(--sl-color-gray-4);
+  }
+
+  .axis-tick {
+    position: absolute;
+    bottom: 0;
+    transform: translateX(-50%);
+    font-family: var(--sl-font-mono);
+    font-size: 0.75rem;
+    line-height: 1.2;
+    color: var(--sl-color-gray-3);
+    white-space: nowrap;
+  }
+
+  .axis-tick:first-child {
+    transform: none;
+  }
+
+  .axis-tick:last-child {
+    transform: translateX(-100%);
+  }
+
+  .axis-unit {
+    padding-bottom: 0.1rem;
+    font-family: var(--sl-font-mono);
+    font-size: 0.75rem;
+    color: var(--sl-color-gray-3);
+    text-align: end;
+    white-space: nowrap;
+  }
+
+  .range-group + .range-group {
+    margin-top: 1.35rem;
+  }
+
+  .range-group-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0 0 0.45rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--sl-color-gray-2);
+  }
+
+  .range-group-label .rule {
+    flex: 1 1 auto;
+    height: 1px;
+    background: var(--sl-color-gray-5);
+  }
+
+  .range-row + .range-row {
+    margin-top: 0.45rem;
+  }
+
+  .range-label {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.45;
+    color: var(--sl-color-gray-2);
+  }
+
+  .range-track {
+    position: relative;
+    height: 0.55rem;
+    border-radius: 0.25rem;
+    background: var(--sl-color-gray-6);
+    overflow: hidden;
+  }
+
+  .range-bar {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    border-radius: 0.25rem;
+    background: var(--c-info-solid);
+  }
+
+  .range-track-none {
+    height: 1px;
+    border-radius: 0;
+    border-top: 1px dashed var(--sl-color-gray-5);
+    background: transparent;
+    overflow: visible;
+    align-self: center;
+  }
+
+  .range-value {
+    margin: 0;
+    font-family: var(--sl-font-mono);
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: var(--sl-color-gray-2);
+    text-align: end;
+    white-space: nowrap;
+  }
+
+  .range-value-sub {
+    display: block;
+    margin-top: 0.1rem;
+    font-size: 0.75rem;
+    line-height: 1.35;
+    color: var(--sl-color-gray-3);
+  }
+
+  .range-note {
+    grid-column: 1 / -1;
+    margin: 0.25rem 0 0;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: var(--sl-color-gray-2);
+  }
+
+  .range-row:has(.range-note) .range-label {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--sl-color-white);
+  }
+
+  .range-row:has(.range-note) {
+    padding-bottom: 0.7rem;
+    border-bottom: 1px solid var(--sl-color-gray-6);
+  }
+
+  .range-row:has(.range-note) + .range-row {
+    margin-top: 0.7rem;
+  }
+
+  .range-row[data-tone='good'] .range-bar {
+    background: var(--c-good-solid);
+  }
+
+  .range-row[data-tone='bad'] .range-bar {
+    background: var(--c-bad-solid);
+  }
+
+  .range-row[data-tone='careful'] .range-bar {
+    background: var(--c-careful-solid);
+  }
+
+  /* Steps */
+  .steps {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+  }
+
+  .step {
+    --step-tint: var(--c-info-tint);
+    --step-border: var(--c-info-border);
+    min-width: 0;
+    padding: 0.9rem 1rem 1rem;
+    border: 1px solid var(--step-border);
+    border-radius: 0.75rem;
+    background: var(--step-tint);
+  }
+
+  .step[data-tone='good'] {
+    --step-tint: var(--c-good-tint);
+    --step-border: var(--c-good-border);
+  }
+
+  .step[data-tone='bad'] {
+    --step-tint: var(--c-bad-tint);
+    --step-border: var(--c-bad-border);
+  }
+
+  .step[data-tone='careful'] {
+    --step-tint: var(--c-careful-tint);
+    --step-border: var(--c-careful-border);
+  }
+
+  .step-label {
+    margin: 0.55rem 0 0;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--sl-color-white);
+  }
+
+  .step-text {
+    margin: 0.3rem 0 0;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: var(--sl-color-gray-2);
+  }
+
+  @media (min-width: 56rem) {
+    .steps {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.75rem;
+    }
+  }
+
+  @media (max-width: 47.99rem) {
+    .range-axis {
+      grid-template-columns: minmax(0, 1fr) auto;
+      column-gap: 0.75rem;
+    }
+
+    .axis-spacer {
+      display: none;
+    }
+
+    .axis-track {
+      grid-column: 1;
+      height: 1rem;
+    }
+
+    .axis-unit {
+      grid-column: 2;
+      padding-bottom: 0;
+    }
+
+    .axis-tick:nth-child(2),
+    .axis-tick:nth-child(4) {
+      display: none;
+    }
+
+    .range-row {
+      grid-template-columns: minmax(0, 1fr) auto;
+      column-gap: 0.75rem;
+      row-gap: 0.3rem;
+    }
+
+    .range-label {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .range-value {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    .range-track {
+      grid-column: 1 / -1;
+      grid-row: 2;
+    }
+  }
+</style>

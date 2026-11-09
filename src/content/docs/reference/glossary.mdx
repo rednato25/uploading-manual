@@ -5,7 +5,12 @@ sidebar:
   order: 20
 ---
 
+import Callout from '../../../components/ui/Callout.astro';
 import GlossaryFilter from '../../../components/ui/GlossaryFilter.vue';
+
+<Callout variant="answer">
+  Type a term or jump to a category; every term used in the manual is here.
+</Callout>
 
 <GlossaryFilter client:load>
 

@@ -1,0 +1,59 @@
+---
+/**
+ * The shared icon set for the semantic UI. One stroke weight, one box.
+ * Icons are decoration: the meaning always sits next to them as a word.
+ */
+export type IconName = 'check' | 'cross' | 'alert' | 'info' | 'key';
+
+interface Props {
+  name: IconName;
+  class?: string;
+}
+
+const { name, class: className } = Astro.props;
+---
+
+<svg class:list={['ui-icon', className]} viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+  {
+    name === 'check' && (
+      <>
+        <circle cx="12" cy="12" r="9" />
+        <path d="m8 12 3 3 5-6" />
+      </>
+    )
+  }
+  {
+    name === 'cross' && (
+      <>
+        <circle cx="12" cy="12" r="9" />
+        <path d="m15 9-6 6M9 9l6 6" />
+      </>
+    )
+  }
+  {
+    name === 'alert' && (
+      <>
+        <path d="M10.3 3.9 2.6 17.2a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" />
+        <path d="M12 9.5v4" />
+        <circle cx="12" cy="17" r="0.6" fill="currentColor" stroke="none" />
+      </>
+    )
+  }
+  {
+    name === 'info' && (
+      <>
+        <circle cx="12" cy="12" r="9" />
+        <path d="M12 11v5.5" />
+        <circle cx="12" cy="7.8" r="0.6" fill="currentColor" stroke="none" />
+      </>
+    )
+  }
+  {
+    name === 'key' && (
+      <>
+        <circle cx="8.5" cy="12" r="3.5" />
+        <path d="M12 12h8.5M20.5 12v2.5M17.5 12v2" />
+      </>
+    )
+  }
+</svg>

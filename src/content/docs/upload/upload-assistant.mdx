@@ -8,17 +8,23 @@ tools: ['Upload Assistant', 'qBittorrent']
 ---
 
 import { Aside, Steps } from '@astrojs/starlight/components';
+import Callout from '../../../components/ui/Callout.astro';
 import GoodBad from '../../../components/ui/GoodBad.astro';
 import KeyFacts from '../../../components/ui/KeyFacts.astro';
 import Shot from '../../../components/Shot.astro';
+import Verdict from '../../../components/ui/Verdict.astro';
+
+<Callout variant="answer">
+  Upload to one tracker per run, and check the title, the duplicate check and the screenshots before you confirm.
+</Callout>
 
 <KeyFacts
   title="The short version"
   items={[
-    { label: 'One tracker per run', value: 'Until you know each tracker&apos;s rules well, upload to one tracker per run. One wrong guess can fail several uploads at once.' },
-    { label: 'Title', value: 'Check the title UA proposes. Remove anything that does not belong. Never rename the file.' },
-    { label: 'Duplicate check', value: 'If a release already fills your slot, stop.' },
-    { label: 'Screenshots', value: 'At least three, at the release&apos;s own resolution, showing real picture.' },
+    { label: 'One tracker per run', tone: 'careful', value: 'Until you know each tracker&apos;s rules well, upload to one tracker per run. One wrong guess can fail several uploads at once.' },
+    { label: 'Title', tone: 'careful', value: 'Check the title UA proposes. Remove anything that does not belong. Never rename the file.' },
+    { label: 'Duplicate check', tone: 'careful', value: 'If a release already fills your slot, stop.' },
+    { label: 'Screenshots', tone: 'good', value: 'At least three, at the release&apos;s own resolution, showing real picture.' },
   ]}
 />
 
@@ -103,7 +109,7 @@ Notes:  <anything that could look wrong to a moderator: silent film, burned-in
 
 ## What good looks like
 
-The torrent is approved without questions, the site title follows the naming rules, the file keeps its original name, and qBittorrent seeds it from the original location.
+<Verdict state="pass" title="A clean upload" detail="The torrent is approved without questions, the site title follows the naming rules, the file keeps its original name, and qBittorrent seeds it from the original location." />
 
 ## Related
 

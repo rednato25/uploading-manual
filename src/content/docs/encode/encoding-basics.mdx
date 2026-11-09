@@ -7,15 +7,22 @@ level: beginner
 ---
 
 import { Steps } from '@astrojs/starlight/components';
+import Callout from '../../../components/ui/Callout.astro';
 import KeyFacts from '../../../components/ui/KeyFacts.astro';
+import Scale from '../../../components/ui/Scale.astro';
+import Status from '../../../components/ui/Status.astro';
+
+<Callout variant="answer">
+  Use CRF or 2-pass, keep the preset at slow or slower, and pick the value with a test encode.
+</Callout>
 
 <KeyFacts
   title="The short version"
   items={[
-    { label: 'x264', value: 'H.264, 1080p SDR. Fast, plays everywhere.' },
-    { label: 'x265', value: 'H.265, 2160p and HDR. 3 to 10 times slower.' },
-    { label: 'Rate control', value: 'CRF for quality, 2-pass for a set size. 1-pass ABR and CBR are rejected almost everywhere.' },
-    { label: 'Preset', value: 'slow at minimum. slower and veryslow help a little more.' },
+    { label: 'x264', tone: 'info', value: 'H.264, 1080p SDR. Fast, plays everywhere.' },
+    { label: 'x265', tone: 'info', value: 'H.265, 2160p and HDR. 3 to 10 times slower.' },
+    { label: 'Rate control', tone: 'careful', value: 'CRF for quality, 2-pass for a set size. 1-pass ABR and CBR are rejected almost everywhere.' },
+    { label: 'Preset', tone: 'careful', value: 'slow at minimum. slower and veryslow help a little more.' },
   ]}
 />
 
@@ -37,10 +44,10 @@ This is the setting moderators check first.
 
 | Mode | You choose and you get | Accepted? |
 | --- | --- | --- |
-| **CRF** (constant rate factor) | A quality level. Steady quality. The file size depends on the film. | Yes |
-| **2-pass** | A bitrate, so a file size. That exact size. Pass 1 studies the film, pass 2 spends bits where they help most. | Yes |
-| **1-pass ABR** | A bitrate. That size, but bits are spent badly because the encoder cannot look ahead. | Rejected almost everywhere |
-| **CBR** | A fixed bitrate. Wasted bits on easy scenes, too few on hard ones. | Rejected almost everywhere |
+| **CRF** (constant rate factor) | A quality level. Steady quality. The file size depends on the film. | <Status kind="yes" /> |
+| **2-pass** | A bitrate, so a file size. That exact size. Pass 1 studies the film, pass 2 spends bits where they help most. | <Status kind="yes" /> |
+| **1-pass ABR** | A bitrate. That size, but bits are spent badly because the encoder cannot look ahead. | <Status kind="no" label="Rejected" /> almost everywhere |
+| **CBR** | A fixed bitrate. Wasted bits on easy scenes, too few on hard ones. | <Status kind="no" label="Rejected" /> almost everywhere |
 
 At the same file size, CRF and 2-pass look about the same. Use **CRF** when you care about quality and not the exact size. Use **2-pass** when you need a set size or must stay under a tracker's size tier.
 
@@ -48,7 +55,21 @@ At the same file size, CRF and 2-pass look about the same. Use **CRF** when you 
 
 - Lower CRF means better quality and a bigger file.
 - With x264, raising CRF by about 6 roughly halves the bitrate.
-- Usual release range: x264 at 1080p, 16 to 22. x265, 16 to 22 as well, but the same number does not mean the same quality as x264.
+
+<Scale
+  max={51}
+  unit="CRF"
+  caption="The same CRF does not mean the same quality in x264 and x265."
+  groups={[
+    {
+      label: 'Usual release range',
+      items: [
+        { label: 'x264 at 1080p', min: 16, max: 22, value: '16 to 22' },
+        { label: 'x265', min: 16, max: 22, value: '16 to 22' },
+      ],
+    },
+  ]}
+/>
 
 ## Preset: how hard the encoder works
 

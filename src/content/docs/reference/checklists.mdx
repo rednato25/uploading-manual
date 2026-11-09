@@ -5,16 +5,21 @@ sidebar:
   order: 10
 ---
 
-import { Aside, Tabs, TabItem } from '@astrojs/starlight/components';
+import { Tabs, TabItem } from '@astrojs/starlight/components';
+import Callout from '../../../components/ui/Callout.astro';
 import Checklist from '../../../components/ui/Checklist.vue';
 import KeyFacts from '../../../components/ui/KeyFacts.astro';
+
+<Callout variant="answer">
+  Go through the nine every-upload checks first, then open the list for your release type.
+</Callout>
 
 <KeyFacts
   title="The short version"
   items={[
-    { label: 'Every upload', value: 'Nine checks. Go through these first.' },
-    { label: 'Release type', value: 'Then open the Remux, Encode or WEB-DL list.' },
-    { label: 'Progress', value: 'Ticks are saved in this browser. Reset clears them.' },
+    { label: 'Every upload', tone: 'careful', value: 'Nine checks. Go through these first.' },
+    { label: 'Release type', tone: 'info', value: 'Then open the Remux, Encode or WEB-DL list.' },
+    { label: 'Progress', tone: 'good', value: 'Ticks are saved in this browser. Reset clears them.' },
   ]}
 />
 
@@ -94,6 +99,6 @@ Go through **Every upload** first, then the list for your release type. Tracker-
 </TabItem>
 </Tabs>
 
-<Aside type="caution" title="Before you delete anything">
+<Callout tone="careful" label="Check" title="Before you delete anything">
   If your downloads and library share files through hard links, deleting one name does not free space, and writing over one name changes all of them. Check the link count first (`stat -c %h file` on Linux).
-</Aside>
+</Callout>
