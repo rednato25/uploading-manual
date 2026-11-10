@@ -1,0 +1,137 @@
+---
+title: Test encodes and comparing them
+description: Pick the preset and CRF on a short sample before a long encode. Cut a sample, encode it a few ways, read the numbers and compare frames.
+sidebar:
+  order: 15
+level: beginner
+tools: ['ffmpeg 5.1 or newer', 'MediaInfo', 'slow.pics']
+---
+
+import { Steps } from '@astrojs/starlight/components';
+import Callout from '../../../components/ui/Callout.astro';
+import DefinitionTable from '../../../components/ui/DefinitionTable.astro';
+import KeyFacts from '../../../components/ui/KeyFacts.astro';
+import Scale from '../../../components/ui/Scale.astro';
+import Verdict from '../../../components/ui/Verdict.astro';
+
+<Callout variant="answer">
+  Encode the same 1 to 2 minute sample with two or three presets at one CRF, then pick from the size, the speed and the frames.
+</Callout>
+
+<KeyFacts
+  title="The short version"
+  items={[
+    { label: 'Why', tone: 'info', value: 'A full encode takes hours. A sample takes minutes and shows the size and look you will get.' },
+    { label: 'Sample', tone: 'info', value: 'One 1 to 2 minute segment, cut once from the source. Every test uses the same file.' },
+    { label: 'Change one thing', tone: 'careful', value: 'Same CRF and tune in every test. Only the preset changes.' },
+    { label: 'Fair size test', tone: 'careful', value: 'A slower preset can come out larger. Raise its CRF by 1 and compare again.' },
+    { label: 'Frames', tone: 'careful', value: 'Same frame numbers from every file, side by side on slow.pics.' },
+  ]}
+/>
+
+## Who this is for
+
+Anyone about to start an x264 or x265 encode who has not yet picked the preset and CRF. **CRF** (constant rate factor) is the quality target: lower means better quality and a bigger file. The **preset** is how hard the encoder works: slower presets take longer and usually save bits.
+
+## When you use this
+
+Before every encode of a new source. Grain, darkness and motion change what a CRF gives you, so a value from another film is only a starting point.
+
+## Before you start
+
+- The source, usually a remux
+- [ffmpeg](https://ffmpeg.org/) 5.1 or newer. Check with `ffmpeg -version`. The frame-grab command in step 5 needs 5.1 or newer.
+- MediaInfo
+- Your crop values, if you will crop. Every test uses the same crop as the final encode.
+
+## Steps
+
+<Steps>
+
+1. **Cut the sample.** Pick a busy part of the film: faces, dark scenes, grain or fast motion. This cuts about 90 seconds starting at 30 minutes, video only, without re-encoding:
+
+   ```bash wrap
+   ffmpeg -ss 00:30:00 -i source.mkv -t 90 -map 0:v:0 -c copy sample.mkv
+   ```
+
+   The cut starts at the keyframe before `-ss`, so the sample can be a few seconds longer than 90. Read its real length in MediaInfo.
+
+2. **Encode the sample with two or three presets.** Keep the CRF and tune the same. Audio is off (`-an`), so the size is video only:
+
+   ```bash wrap
+   ffmpeg -i sample.mkv -map 0:v:0 -an -c:v libx264 -preset slow -crf 18 -tune film test-slow.mkv
+   ffmpeg -i sample.mkv -map 0:v:0 -an -c:v libx264 -preset slower -crf 18 -tune film test-slower.mkv
+   ffmpeg -i sample.mkv -map 0:v:0 -an -c:v libx264 -preset veryslow -crf 18 -tune film test-veryslow.mkv
+   ```
+
+   If you crop, add the same crop to each command, for example `-vf crop=1920:800:0:140`. For x265, use `-c:v libx265` and leave out `-tune film`, which x265 does not have.
+
+3. **Write down the numbers.** For each file: the size in MB, the fps and the time from ffmpeg's last progress line. Work out the bitrate as in [Reading the result](#reading-the-result).
+
+4. **If a slower preset came out larger, test it again one CRF higher.** For example, `-crf 19` instead of 18. Now the files are close in size, and the frames show which preset uses the bits better.
+
+5. **Grab the same frames from each file.** Pick three to five frame numbers. This saves frames 300, 1200 and 2000 as PNG:
+
+   ```bash wrap
+   ffmpeg -i test-slow.mkv -vf "select='eq(n\,300)+eq(n\,1200)+eq(n\,2000)'" -fps_mode passthrough -frames:v 3 slow-%02d.png
+   ```
+
+   Run it on every test file with the same numbers, and change the output name each time. `-fps_mode` needs ffmpeg 5.1 or newer. Grab the same frames from `sample.mkv` to have the source next to them.
+
+6. **Compare on slow.pics.** On [slow.pics](https://slow.pics/), make a new comparison and upload the frames, one group per frame number. Name each image after its file (source, slow, slower). Flip between them on faces, grain, dark areas and edges.
+
+7. **Pick.** Take the slowest preset you can afford in time that looks as good as or better than the others. Use its CRF for the full encode.
+
+</Steps>
+
+All test files come from the same sample, so frame 1200 is the same picture in each. Two releases from different sources are often not aligned: the same frame number shows a different picture. For those, a tool called Pear can line them up.
+
+## Reading the result
+
+<DefinitionTable
+  label="Reading the result"
+  columns={['Number', 'Where it comes from', 'What it tells you']}
+  rows={[
+    ['Size (MB)', 'The file size, or MediaInfo.', 'Compare tests with each other. Audio is off, so this is the video alone.'],
+    ['Bitrate (Mbps)', 'MB x 8 / seconds. Seconds is the sample length in MediaInfo.', 'What the full film will average. 450 MB over 90 seconds is 40 Mbps.'],
+    ['GB per hour', '1 Mbps is about 0.45 GB per hour (1,000,000 bits x 3,600 / 8).', 'The full film size. 10 Mbps for 2 hours is about 9 GB of video.'],
+    ['fps', "ffmpeg's last progress line.", 'Frames encoded per second. A 2-hour film at 24 fps has about 173,000 frames.'],
+    ['Time', 'How long the test took.', 'Multiply by the film length over the sample length for the full encode.'],
+  ]}
+/>
+
+The bitrate is a guess for the whole film. A sample from a busy scene usually runs higher than the average.
+
+## Reading the frames
+
+<Scale
+  kind="steps"
+  title="Comparing a test frame with the source"
+  items={[
+    { label: 'Keep', tone: 'good', text: 'Grain, skin texture and edges look like the source when you flip between them.' },
+    { label: 'Look closer', tone: 'careful', text: 'Small differences in dark areas or fine grain. Check two more frames before you decide.' },
+    { label: 'Lower the CRF', tone: 'bad', text: 'Smeared grain, blocks in dark areas, or banding in skies the source does not have.' },
+  ]}
+/>
+
+## Stop and ask someone if
+
+- Every preset still looks clearly worse than the source after you lower the CRF by 2.
+- The sample length in MediaInfo is far from what you cut.
+- The frames from two test files show different pictures at the same frame number.
+
+## What good looks like
+
+<Verdict
+  state="pass"
+  title="Settings picked"
+  detail="You have a preset and CRF, the expected size for the full film, and a slow.pics comparison where the test frames hold up next to the source."
+/>
+
+## Related
+
+- [Encoding basics](/encode/encoding-basics/)
+- [x264 encode](/encode/x264/)
+- [x265 encode](/encode/x265/)
+- [Bitrate calculator](/tools/bitrate-calculator/)
+- [Checking your encode](/encode/checking-your-encode/)

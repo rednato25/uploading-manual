@@ -42,7 +42,7 @@ When the 1080p x264 slot is free on the tracker and you have a good remux. Read 
 - [StaxRip](https://github.com/staxrip/staxrip) installed
 - A remux that passed [Finding a good remux](/remux/finding-a-good-remux/)
 - The tracker's encode rules from the tracker page
-- Your CRF or bitrate, picked with a test encode
+- Your preset and CRF, picked with a [test encode](/encode/test-and-compare/), or a bitrate from the calculator
 
 ## Settings
 
@@ -55,12 +55,65 @@ When the 1080p x264 slot is free on the tracker and you have a good remux. Read 
     ['Preset', 'slow or slower. Faster presets waste bits.'],
     ['Tune', 'film, or grain for grainy films. See <a href="/encode/encoding-basics/#tune-what-kind-of-picture">tunes</a>.'],
     ['Profile, level', 'High, 4.1. Plays on everything that does 1080p.'],
+    ['Reference frames', 'Leave unset and let x264 fit them to level 4.1. See <a href="#reference-frames-and-level-41">reference frames</a>.'],
     ['Bit depth', '8-bit. 10-bit H.264 has poor device support.'],
     ['Crop', 'On, to the picture edge. Black bars waste bits.'],
     ['Resize', 'Off. Source is already 1080p.'],
     ['Other filters', 'All off. No denoise, no deinterlace on progressive film.'],
   ]}
 />
+
+<details class="ui-reference">
+<summary>What each tune changes (reference)</summary>
+
+A tune changes a few settings on top of the preset. Values are from the x264 source (`common/base.c`) and `x264 --fullhelp`. Without a tune, x264 uses the defaults in the first row.
+
+| Tune | Deblock | psy-rd | aq-strength | qcomp | Other changes |
+| --- | --- | --- | --- | --- | --- |
+| none (defaults) | 0:0 | 1.0:0.0 | 1.0 | 0.6 | ipratio 1.4, pbratio 1.3, deadzone-inter 21, deadzone-intra 11 |
+| `film` | -1:-1 | 1.0:0.15 | 1.0 | 0.6 | none |
+| `grain` | -2:-2 | 1.0:0.25 | 0.5 | 0.8 | `--no-dct-decimate`, deadzone-inter 6, deadzone-intra 6, ipratio 1.1, pbratio 1.1 |
+| `animation` | 1:1 | 0.4:0.0 | 0.6 | 0.6 | 2 more B-frames, reference frames doubled (1 if it was 1) |
+| `stillimage` | -3:-3 | 2.0:0.7 | 1.2 | 0.6 | none |
+| `psnr` | 0:0 | off | 1.0 | 0.6 | `--aq-mode 0` (AQ off), `--no-psy` |
+| `ssim` | 0:0 | off | 1.0 | 0.6 | `--aq-mode 2`, `--no-psy` |
+| `fastdecode` | off | 1.0:0.0 | 1.0 | 0.6 | `--no-cabac`, `--no-deblock`, `--no-weightb`, `--weightp 0` |
+| `zerolatency` | 0:0 | 1.0:0.0 | 1.0 | 0.6 | `--bframes 0`, `--rc-lookahead 0`, `--sync-lookahead 0`, `--sliced-threads`, `--no-mbtree`, `--force-cfr` |
+
+What the settings do:
+
+- **Deblock**: smooths block edges. Negative values smooth less and keep more fine detail.
+- **psy-rd**: two numbers. The first keeps detail and sharpness the eye notices. The second (psy-trellis) keeps fine texture such as grain.
+- **aq-strength**: how much AQ moves bits between flat and detailed areas of a frame.
+- **qcomp**: how much quality may drop in fast, complex scenes. Higher keeps quality more even across scenes, at a higher bitrate.
+- **ipratio, pbratio**: how much better I-frames are than P-frames, and P-frames than B-frames. `grain` keeps them closer.
+- **deadzone, dct-decimate**: both throw away small details to save bits. `grain` turns them down so the grain stays.
+
+Only one of `film`, `grain`, `animation`, `stillimage`, `psnr` and `ssim` can be used at a time. `fastdecode` and `zerolatency` are for playback on weak devices and live streaming, not for releases.
+
+</details>
+
+## AQ mode
+
+AQ (adaptive quantization) moves bits inside each frame, toward flat areas such as skies and walls. x264 uses mode 1 by default.
+
+x264 describes mode 3 as "Auto-variance AQ with bias to dark scenes" (`x264 --fullhelp`). If your film has a lot of dark scenes, try `--aq-mode 3` on a [test encode](/encode/test-and-compare/) next to one with the default. Keep it only if the frames look better.
+
+## Reference frames and level 4.1
+
+Reference frames are earlier frames the encoder can copy from. More need more decoder memory, so each level has a cap. At level 4.1 the cap depends on the frame size:
+
+| Resolution | Max reference frames at level 4.1 |
+| --- | --- |
+| 1920x1080 | 4 |
+| 1920x800 | 5 |
+
+The x264 program handles this in two ways (`x264.c`, `encoder/set.c`):
+
+- **`--ref` not set**: x264 lowers the reference frames to fit the level. Preset slow asks for 5 and slower asks for 8; at 1920x1080 both become 4.
+- **`--ref` set**: x264 keeps your value even if it breaks the level, and only prints a warning (`DPB size ... > level limit`). The file then claims level 4.1 but needs more memory than a 4.1 player has.
+
+So leave `--ref` unset, or set it no higher than the table. After the encode, check `ref=` in the settings line in MediaInfo.
 
 ## Filters
 
